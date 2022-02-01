@@ -1,0 +1,1 @@
+This folder contains our backend services for the project. The implementation will be part of our Assignment 2 submission. 
