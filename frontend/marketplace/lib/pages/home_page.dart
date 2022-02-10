@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import '../widgets/home/horizontal_listview.dart';
+//import 'package:carousel_slider/carousel_slider.dart';
 import '../widgets/home/products.dart';
+import '../widgets/home/horizontal_listview.dart';
 
 //import 'package:carousel_slider/carousel_slider.dart';
 
@@ -42,7 +43,7 @@ class HomePage extends StatelessWidget {
                   "Categories",
                   style: new TextStyle(fontSize: 20.0),
                 )),
-            HorizontaList(),
+            HorizontalList(),
             new Padding(
                 padding: const EdgeInsets.fromLTRB(22, 30, 0, 10),
                 child: new Text(
@@ -50,7 +51,6 @@ class HomePage extends StatelessWidget {
                   style: new TextStyle(fontSize: 20.0),
                 )),
             Container(
-              height: 320.0,
               child: Products(),
             )
           ],
