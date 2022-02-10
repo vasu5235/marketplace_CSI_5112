@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketplace/constants/route_names.dart';
 
 class Products extends StatefulWidget {
   @override
@@ -47,12 +48,11 @@ class _ProductsState extends State<Products> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        //physics: NeverScrollableScrollPhysics(),
-        //shrinkWrap: true,
-
+        physics: ScrollPhysics(), // to disable GridView's scrolling
+        shrinkWrap: true,
         itemCount: product_list.length,
-        gridDelegate:
-            new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3, crossAxisSpacing: 50),
         itemBuilder: (BuildContext context, int index) {
           return Single_prod(
             prod_name: product_list[index]['name'],
@@ -84,7 +84,9 @@ class Single_prod extends StatelessWidget {
           tag: prod_name,
           child: Material(
               child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, RouteNames.product);
+            },
             child: GridTile(
                 footer: Container(
                   color: Colors.white70,
@@ -92,12 +94,16 @@ class Single_prod extends StatelessWidget {
                     leading: Text(prod_name,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20.0)),
-                    trailing: Text(
+                    title: Text(
                       "\$$prod_price",
                       style: TextStyle(
                           color: Colors.blueGrey,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w800),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.add_box_rounded),
+                      onPressed: () => print('select'),
                     ),
                   ),
                 ),
