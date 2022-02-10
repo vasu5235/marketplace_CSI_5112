@@ -5,4 +5,5 @@ class RouteNames {
   static const String cart = '/cart';
   static const String discussion_forum = '/discussionForum';
   static const String settings = '/settings';
+  static const String product = '/product';
 }

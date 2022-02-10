@@ -5,4 +5,5 @@ class PageTitles {
   static const String cart = 'Cart';
   static const String discussion_forum = 'Discussion Forum';
   static const String settings = 'Settings';
+  static const String product = 'Product';
 }
