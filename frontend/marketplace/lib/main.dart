@@ -9,6 +9,7 @@ import 'pages/home_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/orders_page.dart';
 import 'widgets/app_route_observer.dart';
+import 'pages/product_page.dart';
 
 void main() => runApp(MarketPlace());
 
@@ -37,7 +38,8 @@ class MarketPlace extends StatelessWidget {
         RouteNames.orders: (_) => const OrdersPage(),
         RouteNames.cart: (_) => const CartPage(),
         RouteNames.discussion_forum: (_) => const DiscussionForumPage(),
-        RouteNames.settings: (_) => const SettingsPage()
+        RouteNames.settings: (_) => const SettingsPage(),
+        RouteNames.product: (_) => const ProductPage()
       },
     );
   }
