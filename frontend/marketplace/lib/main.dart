@@ -9,6 +9,7 @@ import 'pages/home_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/orders_page.dart';
 import 'widgets/app_route_observer.dart';
+import 'pages/product_page.dart';
 
 void main() => runApp(MarketPlace());
 
@@ -20,6 +21,7 @@ class MarketPlace extends StatelessWidget {
       title: Constants.APP_NAME,
       theme: ThemeData(
         primarySwatch: Constants.APP_BAR_COLOR,
+        highlightColor: Colors.black.withOpacity(0.5),
         pageTransitionsTheme: PageTransitionsTheme(
           // makes all platforms that can run Flutter apps display routes without any animation
           builders: Map<TargetPlatform,
@@ -37,7 +39,8 @@ class MarketPlace extends StatelessWidget {
         RouteNames.orders: (_) => const OrdersPage(),
         RouteNames.cart: (_) => const CartPage(),
         RouteNames.discussion_forum: (_) => const DiscussionForumPage(),
-        RouteNames.settings: (_) => const SettingsPage()
+        RouteNames.settings: (_) => const SettingsPage(),
+        RouteNames.product: (_) => const ProductPage()
       },
     );
   }
