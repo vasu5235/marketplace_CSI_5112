@@ -21,6 +21,7 @@ class MarketPlace extends StatelessWidget {
       title: Constants.APP_NAME,
       theme: ThemeData(
         primarySwatch: Constants.APP_BAR_COLOR,
+        highlightColor: Colors.black.withOpacity(0.5),
         pageTransitionsTheme: PageTransitionsTheme(
           // makes all platforms that can run Flutter apps display routes without any animation
           builders: Map<TargetPlatform,
