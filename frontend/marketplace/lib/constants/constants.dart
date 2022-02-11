@@ -4,6 +4,8 @@ const APP_NAME = 'Shoppers';
 
 const APP_BAR_COLOR = Colors.indigo;
 
+Color kPrimaryColor = APP_BAR_COLOR;
+
 var SAMPLE_ORDERS = [
   [
     {

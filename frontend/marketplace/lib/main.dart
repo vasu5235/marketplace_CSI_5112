@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:marketplace/pages/cart_page.dart';
 import 'package:marketplace/pages/discussion_forum_page.dart';
+import 'package:marketplace/pages/merchant_add_product.dart';
+import 'package:marketplace/pages/merchant_edit_product.dart';
 
 import 'constants/constants.dart' as Constants;
 import 'constants/route_names.dart';
@@ -34,13 +36,18 @@ class MarketPlace extends StatelessWidget {
       initialRoute: RouteNames.home,
       navigatorObservers: [AppRouteObserver()],
       routes: {
+        //Customer related routes
         RouteNames.home: (_) => const HomePage(),
         RouteNames.myAccount: (_) => const MyAccountPage(),
         RouteNames.orders: (_) => OrdersPage(),
         RouteNames.cart: (_) => const CartPage(),
         RouteNames.discussion_forum: (_) => const DiscussionForumPage(),
         RouteNames.settings: (_) => const SettingsPage(),
-        RouteNames.product: (_) => const ProductPage()
+        RouteNames.product: (_) => const ProductPage(),
+
+        //Merchant related routes
+        RouteNames.mAddProduct: (_) => const MerchantAddProducts(),
+        RouteNames.mEditProduct: (_) => const MerchantEditProducts()
       },
     );
   }
