@@ -5,6 +5,7 @@ const APP_NAME = 'Shoppers';
 const APP_BAR_COLOR = Colors.indigo;
 
 Color kPrimaryColor = APP_BAR_COLOR;
+enum Option { LogIn, SignUp }
 
 var SAMPLE_ORDERS = [
   [

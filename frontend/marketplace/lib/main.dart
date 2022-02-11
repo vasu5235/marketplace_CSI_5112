@@ -12,6 +12,7 @@ import 'pages/settings_page.dart';
 import 'pages/orders_page.dart';
 import 'widgets/app_route_observer.dart';
 import 'pages/product_page.dart';
+import 'pages/start.dart';
 
 void main() => runApp(MarketPlace());
 
@@ -33,7 +34,7 @@ class MarketPlace extends StatelessWidget {
               value: (dynamic _) => const _InanimatePageTransitionsBuilder()),
         ),
       ),
-      initialRoute: RouteNames.home,
+      initialRoute: RouteNames.start,
       navigatorObservers: [AppRouteObserver()],
       routes: {
         //Customer related routes
@@ -44,6 +45,7 @@ class MarketPlace extends StatelessWidget {
         RouteNames.discussion_forum: (_) => const DiscussionForumPage(),
         RouteNames.settings: (_) => const SettingsPage(),
         RouteNames.product: (_) => const ProductPage(),
+        RouteNames.start: (_) => StartPage(),
 
         //Merchant related routes
         RouteNames.mAddProduct: (_) => const MerchantAddProducts(),

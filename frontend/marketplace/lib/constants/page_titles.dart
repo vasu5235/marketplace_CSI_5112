@@ -7,6 +7,7 @@ class PageTitles {
   static const String discussion_forum = 'Discussion Forum';
   static const String settings = 'Settings';
   static const String product = 'Product';
+  static const String start = 'Start';
 
   //Merchant related constants
   static const String mAddProduct = 'Add Product';
