@@ -135,7 +135,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                     SizedBox(
                       height: 64,
                     ),
-                    actionButton("Submit"),
+                    actionButton(context, "Submit"),
                     SizedBox(
                       height: 32,
                     ),
