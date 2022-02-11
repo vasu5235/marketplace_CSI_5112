@@ -36,7 +36,7 @@ class MarketPlace extends StatelessWidget {
       routes: {
         RouteNames.home: (_) => const HomePage(),
         RouteNames.myAccount: (_) => const MyAccountPage(),
-        RouteNames.orders: (_) => const OrdersPage(),
+        RouteNames.orders: (_) => OrdersPage(),
         RouteNames.cart: (_) => const CartPage(),
         RouteNames.discussion_forum: (_) => const DiscussionForumPage(),
         RouteNames.settings: (_) => const SettingsPage(),
