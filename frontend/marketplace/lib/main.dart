@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:marketplace/pages/cart_page.dart';
 import 'package:marketplace/pages/discussion_forum_page.dart';
+import 'package:marketplace/pages/merchant_add_product.dart';
+import 'package:marketplace/pages/merchant_edit_product.dart';
 
 import 'constants/constants.dart' as Constants;
 import 'constants/route_names.dart';
@@ -10,6 +12,7 @@ import 'pages/settings_page.dart';
 import 'pages/orders_page.dart';
 import 'widgets/app_route_observer.dart';
 import 'pages/product_page.dart';
+import 'pages/start.dart';
 
 void main() => runApp(MarketPlace());
 
@@ -31,16 +34,22 @@ class MarketPlace extends StatelessWidget {
               value: (dynamic _) => const _InanimatePageTransitionsBuilder()),
         ),
       ),
-      initialRoute: RouteNames.home,
+      initialRoute: RouteNames.start,
       navigatorObservers: [AppRouteObserver()],
       routes: {
+        //Customer related routes
         RouteNames.home: (_) => const HomePage(),
         RouteNames.myAccount: (_) => const MyAccountPage(),
-        RouteNames.orders: (_) => const OrdersPage(),
+        RouteNames.orders: (_) => OrdersPage(),
         RouteNames.cart: (_) => const CartPage(),
         RouteNames.discussion_forum: (_) => const DiscussionForumPage(),
         RouteNames.settings: (_) => const SettingsPage(),
-        RouteNames.product: (_) => const ProductPage()
+        RouteNames.product: (_) => const ProductPage(),
+        RouteNames.start: (_) => StartPage(),
+
+        //Merchant related routes
+        RouteNames.mAddProduct: (_) => const MerchantAddProducts(),
+        RouteNames.mEditProduct: (_) => const MerchantEditProducts()
       },
     );
   }

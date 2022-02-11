@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/constants.dart' as Constants;
 
 class CartProducts extends StatefulWidget {
   const CartProducts({Key key}) : super(key: key);
@@ -8,58 +9,7 @@ class CartProducts extends StatefulWidget {
 }
 
 class _CartProductsState extends State<CartProducts> {
-  var _productList = [
-    {
-      'name': 'iPhone 123',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
-    },
-    {
-      'name': 'iPhone 13',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
-    },
-    {
-      'name': 'iPhone 13',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
-    },
-    {
-      'name': 'iPhone 13',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
-    },
-    {
-      'name': 'iPhone 13',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
-    },
-    {
-      'name': 'iPhone 13',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
-    },
-    {
-      'name': 'iPhone 13',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
-    },
-    {
-      'name': 'iPhone 13',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
-    },
-    {
-      'name': 'iPhone 13',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
-    },
-    {
-      'name': 'iPhone 14',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 200
-    },
-  ];
+  var _productList = Constants.SAMPLE_CART_PRODUCTS;
 
   @override
   Widget build(BuildContext context) {
