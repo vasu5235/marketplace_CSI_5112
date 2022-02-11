@@ -42,6 +42,8 @@ class _HorizontalListState extends State<HorizontalList> {
   ];
   @override
   Widget build(BuildContext context) {
+
+    // ListView of 
     return Container(
         height: 100.0,
         child: RawScrollbar(
@@ -67,7 +69,8 @@ class Category extends StatelessWidget {
   final image_caption;
 
   Category({this.image_caption, this.image_location});
-
+  
+  // Product Card for GridView using ListTile
   @override
   Widget build(BuildContext context) {
     return Container(

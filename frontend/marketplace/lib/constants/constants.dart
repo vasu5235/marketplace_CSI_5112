@@ -4,9 +4,13 @@ const APP_NAME = 'Shoppers';
 
 const APP_BAR_COLOR = Colors.indigo;
 
+// Primary color used by forms
 Color kPrimaryColor = APP_BAR_COLOR;
+
+// Used in start.dart
 enum Option { LogIn, SignUp }
 
+// Used in orders_page.dart
 var SAMPLE_ORDERS = [
   [
     {
@@ -107,6 +111,7 @@ var SAMPLE_ORDERS = [
   ]
 ];
 
+// Used in cart_products.dart
 var SAMPLE_CART_PRODUCTS = [
   {
     'name': 'iPhone 123',

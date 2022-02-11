@@ -13,6 +13,7 @@ class _CartProductsState extends State<CartProducts> {
 
   @override
   Widget build(BuildContext context) {
+    // Return all products displayed using Card in a SizedBox. Iterate using ListView
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.8,
       width: MediaQuery.of(context).size.width * 0.6,
@@ -47,6 +48,7 @@ class _SingleCartProductState extends State<SingleCartProduct> {
 
   @override
   Widget build(BuildContext context) {
+    // Return new card containing all product details
     return Container(
       child: Card(
           shape: RoundedRectangleBorder(
@@ -105,21 +107,6 @@ class _SingleCartProductState extends State<SingleCartProduct> {
                                 _decrementButton(),
                                 SizedBox(width: 6),
                                 _incrementButton(),
-                                // Wrap(
-                                //   spacing: 2,
-                                //   children: [
-
-                                //     _decrementButton(),
-                                //     _incrementButton(),
-                                //   ],
-                                // ),
-                                // SizedBox(
-                                //   width: 6,
-                                // ),
-                                // TextButton(
-                                //   child: Text("ADD TO QUEUE"),
-                                //   onPressed: () {},
-                                // ),
                               ],
                             ),
                           ),
@@ -135,6 +122,7 @@ class _SingleCartProductState extends State<SingleCartProduct> {
     );
   }
 
+  // Increment button (todo: can be shifted to widgets folder)
   Widget _incrementButton() {
     return SizedBox(
       width: 30,
@@ -153,6 +141,7 @@ class _SingleCartProductState extends State<SingleCartProduct> {
     );
   }
 
+  // Decrement button (todo: can be shifted to widgets folder)
   Widget _decrementButton() {
     return SizedBox(
       width: 30,
@@ -170,17 +159,3 @@ class _SingleCartProductState extends State<SingleCartProduct> {
     );
   }
 }
-
-// Card(child: ListTile(title: Text(productName)));
-
-//InkWell(
-//   splashColor: Colors.blue.withAlpha(30),
-//   onTap: () {
-//     debugPrint('Card tapped.');
-//   },
-//   child: const SizedBox(
-//     width: 700,
-//     height: 100,
-//     child: Text('A card that can be tapped'),
-//   ),
-// ),

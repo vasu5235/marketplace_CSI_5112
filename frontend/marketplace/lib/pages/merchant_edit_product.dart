@@ -33,6 +33,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
   Widget editProductForm() {
     Size size = MediaQuery.of(context).size;
 
+    //Simple login form using TextFields and buttons from action_button.dart
     return Center(
       child: Card(
         elevation: 4,

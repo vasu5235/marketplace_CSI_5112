@@ -13,6 +13,7 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  //Simple login form using TextFields and buttons from action_button.dart
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

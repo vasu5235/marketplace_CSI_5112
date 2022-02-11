@@ -1,29 +1,7 @@
 import 'package:flutter/material.dart';
-//import 'package:google_fonts/google_fonts.dart';
 import 'signup.dart';
 import 'login.dart';
-//import 'package:marketplace/widgets/action_button.dart';
 import 'package:marketplace/constants/constants.dart';
-
-// void main() {
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Web',
-//       theme: ThemeData(
-//         primaryColor: kPrimaryColor,
-//         visualDensity: VisualDensity.adaptivePlatformDensity,
-//         textTheme: GoogleFonts.secularOneTextTheme(),
-//       ),
-//       debugShowCheckedModeBanner: false,
-//       home: StartPage(),
-//     );
-//   }
-// }
 
 class StartPage extends StatefulWidget {
   @override
@@ -60,20 +38,6 @@ class _StartPageState extends State<StartPage> {
               ],
             ),
             Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: EdgeInsets.all(32),
-                child: Text(
-                  "Welcome to Shoppers",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            Align(
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: EdgeInsets.all(32),
@@ -82,45 +46,30 @@ class _StartPageState extends State<StartPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Let's Connect Now !",
+                      "Welcome to Shoppers!",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      "It's easy and takes less than 30 seconds",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: EdgeInsets.all(32),
-                child: Icon(
-                  Icons.menu,
-                  color: Color(0xFF1976D2),
-                  size: 28,
-                ),
-              ),
-            ),
+            // Align(
+            //   alignment: Alignment.topRight,
+            //   child: Padding(
+            //     padding: EdgeInsets.all(32),
+            //     child: Icon(
+            //       Icons.menu,
+            //       color: Color(0xFF1976D2),
+            //       size: 28,
+            //     ),
+            //   ),
+            // ),
             AnimatedSwitcher(
               duration: Duration(milliseconds: 500),
-
-              //Animation 1
-              //transitionBuilder: (widget, animation) => RotationTransition(
-              //  turns: animation,
-              //  child: widget,
-              //),
-              //switchOutCurve: Curves.easeInOutCubic,
-              //switchInCurve: Curves.fastLinearToSlowEaseIn,
 
               //Animation 2
               transitionBuilder: (widget, animation) =>

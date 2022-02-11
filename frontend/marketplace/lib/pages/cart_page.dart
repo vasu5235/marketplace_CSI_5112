@@ -13,6 +13,7 @@ class CartPage extends StatelessWidget {
       pageTitle: PageTitles.cart,
       body: Column(
         children: <Widget>[
+          // Layout: Row: Text (Row: Total+Checkout) -> Row: cartProducts + Summary View
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -28,16 +29,6 @@ class CartPage extends StatelessWidget {
               ),
               Row(
                 children: <Widget>[
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Text(
-                  //     "Total: \$1500",
-                  //     style: TextStyle(
-                  //       fontSize: MediaQuery.of(context).size.height * 0.023,
-                  //       fontWeight: FontWeight.w800,
-                  //     ),
-                  //   ),
-                  // ),
                   Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton.icon(
@@ -101,16 +92,6 @@ class CartPage extends StatelessWidget {
                             style:
                                 ElevatedButton.styleFrom(primary: Colors.blue),
                           )),
-                          // SizedBox(height: 20),
-                          // Center(
-                          //   child: ElevatedButton.icon(
-                          //     label: Text('Checkout'),
-                          //     icon: Icon(Icons.shopping_bag),
-                          //     onPressed: () {},
-                          //     style:
-                          //         ElevatedButton.styleFrom(primary: Colors.red),
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
