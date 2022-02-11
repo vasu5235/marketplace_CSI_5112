@@ -36,6 +36,7 @@ dependencies:
   carousel_pro: ^1.0.0
   cupertino_icons: ^1.0.2
   appbar_textfield: ^1.0.1+1
+  google_fonts: ^1.1.0
   #carousel_slider: ^4.0.0
   #cupertino_icons: ^1.0.0
 
@@ -66,25 +67,10 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - images/carousel_images/01.jpeg
-    - images/carousel_images/02.jpeg
-    - images/carousel_images/03.jpeg
-    - images/carousel_images/04.jpeg
-    - images/category_images/01.png
-    - images/category_images/02.png
-    - images/category_images/03.png
-    - images/category_images/04.png
-    - images/category_images/05.png
-    - images/category_images/06.png
-    - images/category_images/07.png
-    - images/category_images/08.png
-    
-    - images/recent_images/01.jpeg
-    - images/recent_images/02.jpeg
-    - images/recent_images/03.jpeg
-    - images/recent_images/04.jpeg
-    - images/recent_images/05.jpeg
-    - images/recent_images/06.jpeg
+    - images/product_images/
+    - images/recent_images/
+    - images/category_images/
+    - images/carousel_images/
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
