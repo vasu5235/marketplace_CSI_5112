@@ -95,6 +95,22 @@ class _AppDrawerState extends State<AppDrawer> with RouteAware {
                   },
                   selected: _selectedRoute == RouteNames.cart,
                 ),
+                ListTile(
+                  leading: const Icon(Icons.change_circle),
+                  title: const Text(PageTitles.mAddProduct),
+                  onTap: () async {
+                    await _navigateTo(context, RouteNames.mAddProduct);
+                  },
+                  selected: _selectedRoute == RouteNames.mAddProduct,
+                ),
+                ListTile(
+                  leading: const Icon(Icons.edit),
+                  title: const Text(PageTitles.mEditProduct),
+                  onTap: () async {
+                    await _navigateTo(context, RouteNames.mEditProduct);
+                  },
+                  selected: _selectedRoute == RouteNames.mEditProduct,
+                ),
                 const Divider(),
                 ListTile(
                   leading: const Icon(Icons.chat),
