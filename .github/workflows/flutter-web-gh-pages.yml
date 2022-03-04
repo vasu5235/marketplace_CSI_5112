@@ -1,0 +1,35 @@
+name: Flutter Web - GH Pages
+on:
+  push:
+    branches:
+      - test/continous-deployment
+jobs:
+  build:
+    name: Build Web
+    env:
+      my_secret: ${{secrets.COMMIT_SECRET}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+      - run: flutter config --enable-web
+      - run: flutter pub get
+      - run: flutter build web --release
+      - run: |
+          cd build/web
+          git init
+          # type configurations: your user.email and user.name followed lines 
+          # git config --global user.email your_email 
+          # git config --global user.name your_name 
+          git config --global user.email vasu5235@gmail.com
+          git config --global user.name vasu5235
+          git status
+          # change this remote url for examle your remote url is https://github.com/onatcipli/flutter_web.git then the following:
+          # https://github.com/vasu5235/marketplace_CSI_5112.git
+          git remote add origin https://${{secrets.commit_secret}}@github.com/vasu5235/marketplace_CSI_5112.git
+          git checkout -b gh-pages
+          git add --all
+          git commit -m "update"
+          git push origin gh-pages -f
