@@ -18,7 +18,7 @@ jobs:
       - working-directory: ./frontend/marketplace
         run: flutter pub get
       - working-directory: ./frontend/marketplace
-        run: flutter build web --release
+        run: flutter build web --release --base-href "/marketplace_CSI_5112/"
       - run: |
           cd frontend/marketplace/build/web
           git init
