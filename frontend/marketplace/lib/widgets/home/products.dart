@@ -45,6 +45,8 @@ class _ProductsState extends State<Products> {
       "price": 80,
     }
   ];
+
+  //Grid View of products using Category() to build Product ListTiles
   @override
   Widget build(BuildContext context) {
     return GridView.builder(

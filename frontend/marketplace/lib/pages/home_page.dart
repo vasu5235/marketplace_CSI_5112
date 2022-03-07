@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-//import 'package:carousel_slider/carousel_slider.dart';
 import '../widgets/home/products.dart';
 import '../widgets/home/horizontal_listview.dart';
-
-//import 'package:carousel_slider/carousel_slider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -28,10 +25,10 @@ class HomePage extends StatelessWidget {
           animationCurve: Curves.fastOutSlowIn,
           animationDuration: Duration(milliseconds: 1000),
         ),
-        //decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         margin: EdgeInsets.all(25.0));
 
     //=========================================================
+    // Layout: Carousel + HorizontalListView + Product Grid View with scroll bars
     return AppScaffold(
         pageTitle: PageTitles.home,
         body: new ListView(
@@ -61,6 +58,7 @@ class HomePage extends StatelessWidget {
         );
   }
 
+  // utility function for images on home page
   Widget buildImage(String urlImage, int index) => Container(
         margin: EdgeInsets.symmetric(horizontal: 12),
         color: Colors.grey,

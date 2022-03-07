@@ -47,6 +47,7 @@ class _AppDrawerState extends State<AppDrawer> with RouteAware {
     _updateSelectedRoute();
   }
 
+  // Left side Navigation Drawers with all page routing configured in ListTiles
   @override
   Widget build(BuildContext context) {
     return Drawer(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:marketplace/constants/constants.dart';
 import 'package:marketplace/constants/route_names.dart';
 
+// Simple button with input "text" as buttonText for all forms
 Widget actionButton(BuildContext context, String text) {
   return new GestureDetector(
       onTap: () {

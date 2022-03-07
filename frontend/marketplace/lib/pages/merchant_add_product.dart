@@ -28,7 +28,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 
   Widget addProductForm() {
     Size size = MediaQuery.of(context).size;
-
+    //Simple form using TextFields and buttons from action_button.dart
     return Center(
       child: Card(
         elevation: 4,

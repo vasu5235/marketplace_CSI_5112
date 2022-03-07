@@ -15,6 +15,13 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Data from Constants.SAMPLE_ORDERS
+    // Layout:
+    // Container with BoxDecoration
+    //   Column:
+    //     Row (OrderId) + Column (Total+Invoice button)
+    //     Card
+    //       ListView of Card(ListTile)
     return AppScaffold(
       pageTitle: PageTitles.orders,
       body: Column(
@@ -123,7 +130,6 @@ class _OrdersPageState extends State<OrdersPage> {
     );
   }
 }
-
 
 /*
 Card(

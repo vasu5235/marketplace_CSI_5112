@@ -12,6 +12,8 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  //Simple signUp form using TextFields and buttons from action_button.dart
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
