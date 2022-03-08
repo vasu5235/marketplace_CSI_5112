@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   appbar_textfield: ^1.0.1+1
   google_fonts: ^1.1.0
+  http: ^0.12.2
   #carousel_slider: ^4.0.0
   #cupertino_icons: ^1.0.0
 
