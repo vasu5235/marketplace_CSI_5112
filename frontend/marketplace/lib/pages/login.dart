@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:marketplace/widgets/action_button.dart';
+import 'package:flutter_session/flutter_session.dart';
+import 'package:marketplace/constants/api_url.dart';
+// import 'package:marketplace/widgets/action_button.dart';
 import 'package:marketplace/constants/constants.dart';
 //import 'package:marketplace/constants/route_names.dart';
+import 'package:http/http.dart' as http;
+import 'package:marketplace/constants/route_names.dart';
 
 class LogIn extends StatefulWidget {
   final Function onSignUpSelected;
@@ -14,6 +18,9 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   //Simple login form using TextFields and buttons from action_button.dart
+  var emailTextFieldController = TextEditingController();
+  var passwordFieldController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -70,6 +77,7 @@ class _LogInState extends State<LogIn> {
                         height: 32,
                       ),
                       TextField(
+                        controller: emailTextFieldController,
                         decoration: InputDecoration(
                           hintText: 'Email',
                           labelText: 'Email',
@@ -82,6 +90,7 @@ class _LogInState extends State<LogIn> {
                         height: 32,
                       ),
                       TextField(
+                        controller: passwordFieldController,
                         decoration: InputDecoration(
                           hintText: 'Password',
                           labelText: 'Password',
@@ -93,7 +102,77 @@ class _LogInState extends State<LogIn> {
                       SizedBox(
                         height: 64,
                       ),
-                      actionButton(context, "Log In"),
+                      GestureDetector(
+                          onTap: () async {
+                            // var test = _LogInState.getEmailTextControllerValue();
+                            var email = emailTextFieldController.text;
+                            var password = passwordFieldController.text;
+
+                            // print("email: " + emailTextFieldController.text);
+                            // print("password: " + passwordFieldController.text);
+                            String uri = ApiUrl.envUrl;
+                            final url = Uri.encodeFull(
+                                "${uri}/user/${email}/${password}");
+
+                            // print("===URL===" + url);
+
+                            var response = await http.post(url,
+                                headers: {'Content-Type': 'application/json'});
+                            print("Response\n" + response.body);
+
+                            if (response.body == "true") {
+                              var session = FlutterSession();
+                              await session.set("user_name", "Vasu Mistry2");
+                              await session.set("isLoggedIn", true);
+                              Navigator.pushNamed(context, RouteNames.home);
+                            } else {
+                              AlertDialog signUpFailure = AlertDialog(
+                                // Retrieve the text the that user has entered by using the
+                                // TextEditingController.
+                                content: Text("Invalid credentials!"),
+                              );
+
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return signUpFailure;
+                                },
+                              );
+                            }
+                          },
+                          child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: kPrimaryColor.withOpacity(0.2),
+                                  spreadRadius: 4,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, RouteNames.home);
+                                },
+                                child: Text(
+                                  "LOG IN",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )),
                       SizedBox(
                         height: 32,
                       ),
