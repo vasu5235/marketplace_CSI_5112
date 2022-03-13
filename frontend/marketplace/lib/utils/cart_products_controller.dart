@@ -31,6 +31,13 @@ class CartProductsController {
   // }
 
   addProductToCart(String _name, String _imageURL, double _price) {
+    for (var i = 0; i < cartProducts.length; i++) {
+      if (cartProducts[i]["name"] == _name) {
+        cartProducts[i]["name"] = _name + "UPDATED";
+        return;
+      }
+    }
+
     cartProducts.add({'name': _name, 'image': _imageURL, 'price': _price});
   }
 
