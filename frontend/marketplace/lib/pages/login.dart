@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_session/flutter_session.dart';
 import 'package:marketplace/constants/api_url.dart';
@@ -118,12 +120,21 @@ class _LogInState extends State<LogIn> {
 
                             var response = await http.post(url,
                                 headers: {'Content-Type': 'application/json'});
-                            print("Response\n" + response.body);
+                            int statusCode = response.statusCode;
 
-                            if (response.body == "true") {
+                            if (statusCode == 200) {
+                              var responseBodyData = jsonDecode(response.body);
+
                               var session = FlutterSession();
-                              await session.set("user_name", "Vasu Mistry");
-                              await session.set("user_email", email);
+                              await session.set(
+                                  "user_name", responseBodyData["name"]);
+                              await session.set(
+                                  "user_email", responseBodyData["email"]);
+                              await session.set(
+                                  "user_id", responseBodyData["id"]);
+                              await session.set("user_is_merchant",
+                                  responseBodyData["isMerchant"]);
+
                               await session.set("isLoggedIn", true);
 
                               Navigator.pushNamed(context, RouteNames.home);
@@ -141,6 +152,28 @@ class _LogInState extends State<LogIn> {
                                 },
                               );
                             }
+
+                            // if (response.body == "true") {
+                            //   var session = FlutterSession();
+                            //   await session.set("user_name", "Vasu Mistry");
+                            //   await session.set("user_email", email);
+                            //   await session.set("isLoggedIn", true);
+
+                            //   Navigator.pushNamed(context, RouteNames.home);
+                            // } else {
+                            //   AlertDialog signUpFailure = AlertDialog(
+                            //     // Retrieve the text the that user has entered by using the
+                            //     // TextEditingController.
+                            //     content: Text("Invalid credentials!"),
+                            //   );
+
+                            //   showDialog(
+                            //     context: context,
+                            //     builder: (BuildContext context) {
+                            //       return signUpFailure;
+                            //     },
+                            //   );
+                            // }
                           },
                           child: Container(
                             height: 50,
