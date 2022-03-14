@@ -14,7 +14,7 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      pageTitle: PageTitles.discussion_forum,
+      pageTitle: PageTitles.merchant_home_page,
       body: Center(
         child: Text('This is the merchant home page'),
       ),

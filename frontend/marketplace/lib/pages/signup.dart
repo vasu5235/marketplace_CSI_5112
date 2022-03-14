@@ -129,7 +129,8 @@ class _SignUpState extends State<SignUp> {
                               "id": randomId,
                               "name": name,
                               "email": email,
-                              "password": password
+                              "password": password,
+                              "isMerchant": false
                             };
 
                             var body = json.encode(bodyData);
