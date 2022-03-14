@@ -131,9 +131,17 @@ class _AppDrawerState extends State<AppDrawer> with RouteAware {
                             title: const Text(PageTitles.logout),
                             onTap: () async {
                               //ToDo: display alert and reset session variables
-                              await _navigateTo(context, RouteNames.settings);
+                              var session = FlutterSession();
+                              await session.set("user_name", "Default user");
+                              await session.set(
+                                  "user_email", "defaultUser@marketplace.ca");
+                              await session.set("user_id", 0);
+                              await session.set("user_is_merchant", false);
+
+                              await session.set("isLoggedIn", false);
+                              await _navigateTo(context, RouteNames.start);
                             },
-                            selected: _selectedRoute == RouteNames.settings,
+                            selected: _selectedRoute == RouteNames.start,
                           ),
                         ],
                       );
@@ -187,7 +195,16 @@ class _AppDrawerState extends State<AppDrawer> with RouteAware {
                             leading: const Icon(Icons.logout),
                             title: const Text(PageTitles.logout),
                             onTap: () async {
-                              await _navigateTo(context, RouteNames.settings);
+                              //ToDo: display alert and reset session variables
+                              var session = FlutterSession();
+                              await session.set("user_name", "Default user");
+                              await session.set(
+                                  "user_email", "defaultUser@marketplace.ca");
+                              await session.set("user_id", 0);
+                              await session.set("user_is_merchant", false);
+
+                              await session.set("isLoggedIn", false);
+                              await _navigateTo(context, RouteNames.start);
                             },
                             selected: _selectedRoute == RouteNames.settings,
                           ),
