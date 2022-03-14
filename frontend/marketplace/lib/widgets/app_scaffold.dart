@@ -75,6 +75,7 @@ class _AppScaffoldState extends State<AppScaffold> {
 
   void _onSearchSubmitted(String value) {
     //navigator.push -> new page and display products
+    if (value.isEmpty) return;
     Navigator.push(
         context,
         MaterialPageRoute(
