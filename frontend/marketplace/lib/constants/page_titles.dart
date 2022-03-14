@@ -1,4 +1,5 @@
 class PageTitles {
+  static const String searchResults = "Search Results";
   //Customer related constants
   static const String home = 'Home';
   static const String myAccount = 'My Account';

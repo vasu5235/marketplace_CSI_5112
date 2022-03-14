@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:appbar_textfield/appbar_textfield.dart';
 import 'package:marketplace/constants/route_names.dart';
+import 'package:marketplace/pages/search_results_page.dart';
 
 import 'app_drawer.dart';
 
@@ -46,6 +47,8 @@ class _AppScaffoldState extends State<AppScaffold> {
               onBackPressed: _onRestoreAllData,
               onClearPressed: _onRestoreAllData,
               onChanged: _onSearchChanged,
+              onSubmitted: _onSearchSubmitted,
+              defaultHintText: "Search Products",
               trailingActionButtons: <Widget>[
                 new IconButton(
                     onPressed: () {
@@ -69,4 +72,13 @@ class _AppScaffoldState extends State<AppScaffold> {
   void _onSearchChanged(String value) {}
 
   void _onRestoreAllData() {}
+
+  void _onSearchSubmitted(String value) {
+    //navigator.push -> new page and display products
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SearchResultsPage(value),
+        ));
+  }
 }
