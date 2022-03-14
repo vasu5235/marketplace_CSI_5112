@@ -24,15 +24,19 @@ class _AppDrawerState extends State<AppDrawer> with RouteAware {
   var session = FlutterSession();
   var _userName = "User";
   var _userEmail = "user@uottawa.ca";
+  var _userIsMerchant = false;
 
   Future<dynamic> _loadSession() async {
     _userName = await session.get("user_name");
     _userEmail = await session.get("user_email");
+    _userIsMerchant = await session.get("user_is_merchant");
+
     if (_userName == null || _userEmail == null) {
       _userName = "User";
       _userEmail = "user@uotttawa.ca";
+      _userIsMerchant = false;
     }
-    print("_loadSession called = " + _userName);
+    print("_loadSession called isMerchant? = " + _userIsMerchant.toString());
   }
 
   @override
@@ -73,84 +77,123 @@ class _AppDrawerState extends State<AppDrawer> with RouteAware {
             child: Row(
               children: [
                 Expanded(
-                  child: ListView(
-                    // padding: EdgeInsets.only(top: 55),
-                    children: [
-                      UserAccountsDrawerHeader(
-                        accountName: Text(_userName),
-                        accountEmail: Text(_userEmail),
-                        currentAccountPicture: CircleAvatar(
-                          child: Icon(Icons.android),
-                        ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.home),
-                        title: const Text(PageTitles.home),
-                        onTap: () async {
-                          await _navigateTo(context, RouteNames.home);
-                        },
-                        selected: _selectedRoute == RouteNames.home,
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.account_box),
-                        title: const Text(PageTitles.myAccount),
-                        onTap: () async {
-                          await _navigateTo(context, RouteNames.myAccount);
-                        },
-                        selected: _selectedRoute == RouteNames.myAccount,
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.list),
-                        title: const Text(PageTitles.orders),
-                        onTap: () async {
-                          await _navigateTo(context, RouteNames.orders);
-                        },
-                        selected: _selectedRoute == RouteNames.orders,
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.shopping_cart),
-                        title: const Text(PageTitles.cart),
-                        onTap: () async {
-                          await _navigateTo(context, RouteNames.cart);
-                        },
-                        selected: _selectedRoute == RouteNames.cart,
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.change_circle),
-                        title: const Text(PageTitles.mAddProduct),
-                        onTap: () async {
-                          await _navigateTo(context, RouteNames.mAddProduct);
-                        },
-                        selected: _selectedRoute == RouteNames.mAddProduct,
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.edit),
-                        title: const Text(PageTitles.mEditProduct),
-                        onTap: () async {
-                          await _navigateTo(context, RouteNames.mEditProduct);
-                        },
-                        selected: _selectedRoute == RouteNames.mEditProduct,
-                      ),
-                      const Divider(),
-                      ListTile(
-                        leading: const Icon(Icons.chat),
-                        title: const Text(PageTitles.discussion_forum),
-                        onTap: () async {
-                          await _navigateTo(
-                              context, RouteNames.discussion_forum);
-                        },
-                        selected: _selectedRoute == RouteNames.discussion_forum,
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.settings),
-                        title: const Text(PageTitles.settings),
-                        onTap: () async {
-                          await _navigateTo(context, RouteNames.settings);
-                        },
-                        selected: _selectedRoute == RouteNames.settings,
-                      ),
-                    ],
-                  ),
+                  child: Builder(builder: (context) {
+                    if (_userIsMerchant)
+                      return ListView(
+                        // padding: EdgeInsets.only(top: 55),
+                        children: [
+                          UserAccountsDrawerHeader(
+                            accountName: Text(_userName),
+                            accountEmail: Text(_userEmail),
+                            currentAccountPicture: CircleAvatar(
+                              child: Icon(Icons.android),
+                            ),
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.home),
+                            title: const Text(PageTitles.home),
+                            onTap: () async {
+                              await _navigateTo(context, RouteNames.home);
+                            },
+                            selected: _selectedRoute == RouteNames.home,
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.change_circle),
+                            title: const Text(PageTitles.mAddProduct),
+                            onTap: () async {
+                              await _navigateTo(
+                                  context, RouteNames.mAddProduct);
+                            },
+                            selected: _selectedRoute == RouteNames.mAddProduct,
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.edit),
+                            title: const Text(PageTitles.mEditProduct),
+                            onTap: () async {
+                              await _navigateTo(
+                                  context, RouteNames.mEditProduct);
+                            },
+                            selected: _selectedRoute == RouteNames.mEditProduct,
+                          ),
+                          const Divider(),
+                          ListTile(
+                            leading: const Icon(Icons.chat),
+                            title: const Text(PageTitles.discussion_forum),
+                            onTap: () async {
+                              await _navigateTo(
+                                  context, RouteNames.discussion_forum);
+                            },
+                            selected:
+                                _selectedRoute == RouteNames.discussion_forum,
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.logout),
+                            title: const Text(PageTitles.logout),
+                            onTap: () async {
+                              //ToDo: display alert and reset session variables
+                              await _navigateTo(context, RouteNames.settings);
+                            },
+                            selected: _selectedRoute == RouteNames.settings,
+                          ),
+                        ],
+                      );
+                    else
+                      return ListView(
+                        // padding: EdgeInsets.only(top: 55),
+                        children: [
+                          UserAccountsDrawerHeader(
+                            accountName: Text(_userName),
+                            accountEmail: Text(_userEmail),
+                            currentAccountPicture: CircleAvatar(
+                              child: Icon(Icons.android),
+                            ),
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.home),
+                            title: const Text(PageTitles.home),
+                            onTap: () async {
+                              await _navigateTo(context, RouteNames.home);
+                            },
+                            selected: _selectedRoute == RouteNames.home,
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.list),
+                            title: const Text(PageTitles.orders),
+                            onTap: () async {
+                              await _navigateTo(context, RouteNames.orders);
+                            },
+                            selected: _selectedRoute == RouteNames.orders,
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.shopping_cart),
+                            title: const Text(PageTitles.cart),
+                            onTap: () async {
+                              await _navigateTo(context, RouteNames.cart);
+                            },
+                            selected: _selectedRoute == RouteNames.cart,
+                          ),
+                          const Divider(),
+                          ListTile(
+                            leading: const Icon(Icons.chat),
+                            title: const Text(PageTitles.discussion_forum),
+                            onTap: () async {
+                              await _navigateTo(
+                                  context, RouteNames.discussion_forum);
+                            },
+                            selected:
+                                _selectedRoute == RouteNames.discussion_forum,
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.logout),
+                            title: const Text(PageTitles.logout),
+                            onTap: () async {
+                              await _navigateTo(context, RouteNames.settings);
+                            },
+                            selected: _selectedRoute == RouteNames.settings,
+                          ),
+                        ],
+                      );
+                  }),
                 ),
                 if (widget.permanentlyDisplay)
                   const VerticalDivider(

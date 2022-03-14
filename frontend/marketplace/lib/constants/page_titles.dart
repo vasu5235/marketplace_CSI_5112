@@ -1,5 +1,6 @@
 class PageTitles {
   static const String searchResults = "Search Results";
+  static const String logout = "Log Out";
   //Customer related constants
   static const String home = 'Home';
   static const String myAccount = 'My Account';
