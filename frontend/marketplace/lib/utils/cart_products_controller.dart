@@ -33,6 +33,7 @@ class CartProductsController {
   addProductToCart(String _name, String _imageURL, double _price) {
     for (var i = 0; i < cartProducts.length; i++) {
       if (cartProducts[i]["name"] == _name) {
+        //ToDo: if name/id exists in cart, update its quantity and return;
         cartProducts[i]["name"] = _name + "UPDATED";
         return;
       }
