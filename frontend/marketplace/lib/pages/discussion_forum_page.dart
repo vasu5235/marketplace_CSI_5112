@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:marketplace/constants/route_names.dart';
 
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
