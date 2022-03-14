@@ -122,8 +122,10 @@ class _LogInState extends State<LogIn> {
 
                             if (response.body == "true") {
                               var session = FlutterSession();
-                              await session.set("user_name", "Vasu Mistry2");
+                              await session.set("user_name", "Vasu Mistry");
+                              await session.set("user_email", email);
                               await session.set("isLoggedIn", true);
+
                               Navigator.pushNamed(context, RouteNames.home);
                             } else {
                               AlertDialog signUpFailure = AlertDialog(
