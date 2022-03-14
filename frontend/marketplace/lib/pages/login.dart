@@ -9,6 +9,8 @@ import 'package:marketplace/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:marketplace/constants/route_names.dart';
 
+import 'merchant_home_page.dart';
+
 class LogIn extends StatefulWidget {
   final Function onSignUpSelected;
 
@@ -137,7 +139,15 @@ class _LogInState extends State<LogIn> {
 
                               await session.set("isLoggedIn", true);
 
-                              Navigator.pushNamed(context, RouteNames.home);
+                              if (responseBodyData["isMerchant"] == true) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MerchantHomePage()),
+                                );
+                              } else {
+                                Navigator.pushNamed(context, RouteNames.home);
+                              }
                             } else {
                               AlertDialog signUpFailure = AlertDialog(
                                 // Retrieve the text the that user has entered by using the
