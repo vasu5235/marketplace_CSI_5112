@@ -4,17 +4,25 @@ import 'package:marketplace/constants/route_names.dart';
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
 import '../constants/constants.dart' as Constants;
-import 'discussion_forum_single_page.dart';
 
-class DiscussionForumPage extends StatefulWidget {
-  const DiscussionForumPage({Key key}) : super(key: key);
+class DiscussionForumSinglePage extends StatefulWidget {
+  final int questionId;
+  final String questionTitle;
+  final String questionDescription;
+  final String questionUserName;
+
+  const DiscussionForumSinglePage(this.questionId, this.questionTitle,
+      this.questionDescription, this.questionUserName,
+      {Key key})
+      : super(key: key);
 
   @override
-  State<DiscussionForumPage> createState() => _DiscussionForumPageState();
+  State<DiscussionForumSinglePage> createState() =>
+      _DiscussionForumSinglePageState();
 }
 
-class _DiscussionForumPageState extends State<DiscussionForumPage> {
-  var _sampleForumQuestions = Constants.SAMPLE_QUESTIONS;
+class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
+  var _sampleForumQuestions = Constants.SAMPLE_ANSWERS_DF2;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +38,26 @@ class _DiscussionForumPageState extends State<DiscussionForumPage> {
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton.icon(
-                      label: Text('New question'),
-                      icon: Icon(Icons.add),
-                      onPressed: () {},
+                      label: Text('Back'),
+                      icon: Icon(Icons.navigate_before),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, RouteNames.discussion_forum);
+                      },
                       style: ElevatedButton.styleFrom(primary: Colors.red),
                     )),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton.icon(
+                          label: Text('New answer'),
+                          icon: Icon(Icons.add),
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(primary: Colors.red),
+                        ))
+                  ],
+                ),
               ],
             ),
           ),
@@ -46,7 +69,7 @@ class _DiscussionForumPageState extends State<DiscussionForumPage> {
               child: ListView.builder(
                 itemCount: _sampleForumQuestions.length,
                 itemBuilder: (context, index) {
-                  return SingleQuestionCard(
+                  return SingleQuestionCard2(
                     _sampleForumQuestions[index]['questionId'],
                     _sampleForumQuestions[index]['questionTitle'],
                     _sampleForumQuestions[index]['questionDescription'],
@@ -61,7 +84,7 @@ class _DiscussionForumPageState extends State<DiscussionForumPage> {
     );
   }
 
-  Widget SingleQuestionCard(int questionId, var questionTitle,
+  Widget SingleQuestionCard2(int questionId, var questionTitle,
       var questionDescription, var questionUserName) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -83,17 +106,17 @@ class _DiscussionForumPageState extends State<DiscussionForumPage> {
                         title: Text(questionTitle),
                         subtitle: Text(questionDescription),
                         isThreeLine: false,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DiscussionForumSinglePage(
-                                    questionId,
-                                    questionTitle,
-                                    questionDescription,
-                                    questionUserName)),
-                          );
-                        },
+                        // onTap: () {
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => DiscussionForumSinglePage(
+                        //             questionTitle,
+                        //             questionDescription,
+                        //             questionId,
+                        //             questionUserName)),
+                        //   );
+                        // },
                       ),
                     ),
                   ],
