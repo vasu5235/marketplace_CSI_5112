@@ -1,4 +1,6 @@
 class PageTitles {
+  static const String searchResults = "Search Results";
+  static const String logout = "Log Out";
   //Customer related constants
   static const String home = 'Home';
   static const String myAccount = 'My Account';
@@ -10,6 +12,7 @@ class PageTitles {
   static const String start = 'Start';
 
   //Merchant related constants
+  static const String merchant_home_page = "Merchant Home";
   static const String mAddProduct = 'Add Product';
   static const String mEditProduct = 'Edit Product';
 }
