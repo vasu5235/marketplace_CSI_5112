@@ -24,6 +24,7 @@ class _HorizontalListState extends State<HorizontalList> {
     //   User user = User(u["imageURL"], u["name"]);
     //   users.add(user);
     // }
+    print(jsonData);
     return jsonData;
   }
 
