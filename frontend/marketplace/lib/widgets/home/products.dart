@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/route_names.dart';
 import 'package:http/http.dart' as http;
+import 'package:marketplace/utils/cart_products_controller.dart';
 import '../../constants/api_url.dart';
 import 'dart:convert';
 
@@ -67,7 +68,8 @@ class _ProductsState extends State<Products> {
               child: Text("Loading..."),
             ),
           );
-        } else
+        } else {
+          CartProductsController cartController = new CartProductsController();
           return GridView.builder(
               physics: ScrollPhysics(), // to disable GridView's scrolling
               shrinkWrap: true,
@@ -80,8 +82,10 @@ class _ProductsState extends State<Products> {
                   prod_name: snapshot.data[index]['name'],
                   prod_picture: snapshot.data[index]['imageUrl'],
                   prod_price: snapshot.data[index]['price'],
+                  cartController: cartController,
                 );
               });
+        }
       },
     );
   }
@@ -108,9 +112,13 @@ class Single_prod extends StatelessWidget {
   final prod_name;
   final prod_picture;
   final prod_price;
-
+  final CartProductsController cartController;
   Single_prod(
-      {this.prod_id, this.prod_name, this.prod_picture, this.prod_price});
+      {this.prod_id,
+      this.prod_name,
+      this.prod_picture,
+      this.prod_price,
+      this.cartController});
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +148,10 @@ class Single_prod extends StatelessWidget {
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.add_box_rounded),
-                      onPressed: () => print('select'),
+                      onPressed: () {
+                        cartController.addProductToCart(
+                            prod_name, prod_picture, prod_price);
+                      },
                     ),
                   ),
                 ),

@@ -15,8 +15,8 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    print(size.height);
-    print(size.width);
+    // print(size.height);
+    // print(size.width);
 
     return Scaffold(
       body: Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../constants/constants.dart' as Constants;
+import 'package:marketplace/constants/route_names.dart';
+import 'package:marketplace/utils/cart_products_controller.dart';
 
 class CartProducts extends StatefulWidget {
   const CartProducts({Key key}) : super(key: key);
@@ -9,11 +10,13 @@ class CartProducts extends StatefulWidget {
 }
 
 class _CartProductsState extends State<CartProducts> {
-  var _productList = Constants.SAMPLE_CART_PRODUCTS;
-
+  // var _productList = Constants.SAMPLE_CART_PRODUCTS;
+  // var _productList = CartProductsController().getProducts();
   @override
   Widget build(BuildContext context) {
     // Return all products displayed using Card in a SizedBox. Iterate using ListView
+    var _productList = CartProductsController().getProducts();
+    // print("fetching products:" + _productList.length.toString());
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.8,
       width: MediaQuery.of(context).size.width * 0.6,
@@ -66,8 +69,8 @@ class _SingleCartProductState extends State<SingleCartProduct> {
                       maxWidth: MediaQuery.of(context).size.width * 0.08,
                       maxHeight: MediaQuery.of(context).size.height * 0.1,
                     ),
-                    child: Image.asset('images/product_images/iphone.jpg',
-                        fit: BoxFit.fill),
+                    child:
+                        Image.asset(widget.productImageURL, fit: BoxFit.fill),
                   ),
                 ),
                 Expanded(
@@ -107,6 +110,17 @@ class _SingleCartProductState extends State<SingleCartProduct> {
                                 _decrementButton(),
                                 SizedBox(width: 6),
                                 _incrementButton(),
+                                FloatingActionButton(
+                                    onPressed: () {
+                                      CartProductsController()
+                                          .removeProductFromCart(
+                                              widget.productName);
+                                      Navigator.pushNamed(
+                                          context, RouteNames.cart);
+                                    },
+                                    child: new Icon(Icons.close,
+                                        color: Colors.black87),
+                                    backgroundColor: Colors.white),
                               ],
                             ),
                           ),

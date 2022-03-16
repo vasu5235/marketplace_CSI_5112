@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:marketplace/pages/category_filtered_products_page.dart';
 import '../../constants/api_url.dart';
 import 'dart:convert';
 
@@ -104,7 +105,14 @@ class Category extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(10, 4, 10, 25),
       margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    CategoryFilteredProductsPage(image_caption),
+              ));
+        },
         child: Container(
           width: 100.0,
           child: ListTile(
