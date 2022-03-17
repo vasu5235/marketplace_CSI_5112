@@ -87,7 +87,8 @@ class Single_prod extends StatelessWidget {
           child: Material(
               child: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, RouteNames.product);
+              //Navigator.pushNamed(context, RouteNames.product);
+              showDialog(context: context, builder: (BuildContext context) => PopupDialog(context),);
             },
             child: GridTile(
                 footer: Container(
@@ -114,6 +115,32 @@ class Single_prod extends StatelessWidget {
                   fit: BoxFit.cover,
                 )),
           ))),
+    );
+  }
+
+  Widget PopupDialog(BuildContext context) {
+    return new AlertDialog(
+      title: Text(prod_name),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("Price: \$ ${prod_price.toString()}",),
+          //Text(prod_price.toString()),
+          Flexible(
+              child: Text('Description: abc'),
+          )
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Close'),
+        ),
+      ],
     );
   }
 }
