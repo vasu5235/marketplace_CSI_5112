@@ -39,6 +39,7 @@ dependencies:
   google_fonts: ^1.1.0
   http: ^0.12.2
   flutter_session: ^0.1.1
+  printing: ^5.0.0
   #carousel_slider: ^4.0.0
   #cupertino_icons: ^1.0.0
 
