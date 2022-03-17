@@ -3,6 +3,7 @@ import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../constants/api_url.dart';
 
 class OrdersPage extends StatefulWidget {
   OrdersPage({Key key}) : super(key: key);
@@ -18,7 +19,7 @@ class _OrdersPageState extends State<OrdersPage> {
   var total_price = List.filled(4, 0);
 
   Future getOrders() async {
-    var response = await http.get('https://localhost:7136/api/Order');
+    var response = await http.get(ApiUrl.get_my_orders);
     var jsonData = jsonDecode(response.body);
 
     //print(jsonData);
