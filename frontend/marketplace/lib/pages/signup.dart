@@ -1,5 +1,11 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:marketplace/widgets/action_button.dart';
+import 'package:marketplace/constants/api_url.dart';
+import 'package:marketplace/constants/route_names.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:marketplace/constants/constants.dart';
 
 class SignUp extends StatefulWidget {
@@ -13,6 +19,9 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   //Simple signUp form using TextFields and buttons from action_button.dart
+  var emailTextFieldController = TextEditingController();
+  var passwordFieldController = TextEditingController();
+  var nameFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +79,7 @@ class _SignUpState extends State<SignUp> {
                         height: 32,
                       ),
                       TextField(
+                        controller: nameFieldController,
                         decoration: InputDecoration(
                           hintText: 'Name',
                           labelText: 'Name',
@@ -82,6 +92,7 @@ class _SignUpState extends State<SignUp> {
                         height: 32,
                       ),
                       TextField(
+                        controller: emailTextFieldController,
                         decoration: InputDecoration(
                           hintText: 'Email',
                           labelText: 'Email',
@@ -94,6 +105,7 @@ class _SignUpState extends State<SignUp> {
                         height: 32,
                       ),
                       TextField(
+                        controller: passwordFieldController,
                         decoration: InputDecoration(
                           hintText: 'Password',
                           labelText: 'Password',
@@ -105,7 +117,99 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                         height: 64,
                       ),
-                      actionButton(context, "Create Account"),
+                      GestureDetector(
+                          onTap: () async {
+                            // var test = _LogInState.getEmailTextControllerValue();
+                            var email = emailTextFieldController.text;
+                            var password = passwordFieldController.text;
+                            var name = nameFieldController.text;
+                            int randomId = Random().nextInt(99999);
+
+                            Map bodyData = {
+                              "id": randomId,
+                              "name": name,
+                              "email": email,
+                              "password": password,
+                              "isMerchant": false
+                            };
+
+                            var body = json.encode(bodyData);
+
+                            // print("email: " + emailTextFieldController.text);
+                            // print("password: " + passwordFieldController.text);
+                            String uri = ApiUrl.envUrl;
+                            final url = Uri.encodeFull("${uri}/user");
+
+                            // print("===URL===" + url);
+
+                            var response = await http.post(url,
+                                headers: {'Content-Type': 'application/json'},
+                                body: body);
+                            print("Response\n" + response.body);
+
+                            if (response.body == "true") {
+                              AlertDialog signUpResultDialog = AlertDialog(
+                                // Retrieve the text the that user has entered by using the
+                                // TextEditingController.
+                                content: Text(
+                                    "Success!, please Login with your credentials"),
+                              );
+
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return signUpResultDialog;
+                                },
+                              );
+                            } else {
+                              AlertDialog signUpFailure = AlertDialog(
+                                // Retrieve the text the that user has entered by using the
+                                // TextEditingController.
+                                content: Text(
+                                    "Oops! Failed to register, please try again"),
+                              );
+
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return signUpFailure;
+                                },
+                              );
+                            }
+                          },
+                          child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: kPrimaryColor.withOpacity(0.2),
+                                  spreadRadius: 4,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, RouteNames.home);
+                                },
+                                child: Text(
+                                  "CREATE ACCOUNT",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )),
                       SizedBox(
                         height: 32,
                       ),

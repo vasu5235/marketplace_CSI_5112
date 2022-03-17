@@ -164,3 +164,80 @@ var SAMPLE_CART_PRODUCTS = [
     'price': 200
   },
 ];
+
+//used in discussion_forums_page.dart
+var SAMPLE_QUESTIONS = [
+  {
+    'questionId': 1,
+    'questionTitle': 'First Question',
+    'questionDescription':
+        'A suit of armor provides excellent sun protection on hot days.',
+    'questionUserName': "Vasu Mistry",
+  },
+  {
+    'questionId': 2,
+    'questionTitle': 'Second Question',
+    'questionDescription':
+        'A suit of armor provides excellent sun protection on hot days.',
+    'questionUserName': "Vasu Mistry",
+  },
+  {
+    'questionId': 3,
+    'questionTitle': 'Third Question',
+    'questionDescription':
+        'A suit of armor provides excellent sun protection on hot days.',
+    'questionUserName': "Vasu Mistry",
+  },
+  {
+    'questionId': 4,
+    'questionTitle': 'Fourth Question',
+    'questionDescription':
+        'A suit of armor provides excellent sun protection on hot days.',
+    'questionUserName': "Vasu Mistry",
+  },
+  {
+    'questionId': 5,
+    'questionTitle': 'Fifth Question',
+    'questionDescription':
+        'A suit of armor provides excellent sun protection on hot days.',
+    'questionUserName': "Vasu Mistry",
+  },
+  {
+    'questionId': 6,
+    'questionTitle': 'Sixth Question',
+    'questionDescription':
+        'A suit of armor provides excellent sun protection on hot days.',
+    'questionUserName': "Vasu Mistry",
+  },
+];
+
+var SAMPLE_ANSWERS_DF2 = [
+  {
+    'questionId': 1,
+    'questionTitle': 'bnFirst Question',
+    'questionDescription':
+        'A suit of armor provides excellent sun protection on hot days.',
+    'questionUserName': "Vasu Mistry",
+  },
+  {
+    'questionId': 2,
+    'questionTitle': 'Second Question',
+    'questionDescription':
+        'A suit of armor provides excellent sun protection on hot days.',
+    'questionUserName': "Vasu Mistry",
+  },
+  {
+    'questionId': 3,
+    'questionTitle': 'Third Question',
+    'questionDescription':
+        'A suit of armor provides excellent sun protection on hot days.',
+    'questionUserName': "Vasu Mistry",
+  },
+  {
+    'questionId': 4,
+    'questionTitle': 'Fourth Question',
+    'questionDescription':
+        'A suit of armor provides excellent sun protection on hot days.',
+    'questionUserName': "Vasu Mistry",
+  },
+];
