@@ -11,29 +11,20 @@ class CartProductsController {
     // },
 
     {
-      'id': 100,
-      'name': 'iPhone 123',
-      'imageUrl': 'images/product_images/iphone.jpg',
-      'description': 'asdasd',
-      'category': 'cloth',
+      'id': 9999999,
+      'name': 'sample Product',
+      'image': 'images/product_images/iphone.jpg',
       'price': 400,
-      'quantity': 1
+      'quantity': 1,
+      'description': 'sample desc'
     },
-    {
-      'id': 101,
-      'name': 'iPhone 13',
-      'imageUrl': 'images/product_images/iphone.jpg',
-      'description': 'asdasd',
-      'category': 'cloth',
-      'price': 400,
-      'quantity': 1
-    },
+    
   ];
 
   CartProductsController() {}
 
   getProducts() {
-    return cartProducts;
+    return cartProducts.sublist(1);
   }
 
   // addProductToCart(int _id, String _name, String _imageURL, String _description,
@@ -48,17 +39,51 @@ class CartProductsController {
   //   });
   // }
 
-  addProductToCart(
-      String _name, String _imageURL, double _price, int _quantity) {
+  incrementProductQuantity(String _name) {
+    for (var i = 0; i < cartProducts.length; i++) {
+      if (cartProducts[i]["name"] == _name) {
+        int currentQuantity = cartProducts[i]["quantity"] as int;
+        cartProducts[i]["quantity"] = currentQuantity + 1;
+        return;
+      }
+    }
+  }
+
+  decrementProductQuantity(String _name) {
+    for (var i = 0; i < cartProducts.length; i++) {
+      if (cartProducts[i]["name"] == _name) {
+        int currentQuantity = cartProducts[i]["quantity"] as int;
+        if (currentQuantity > 1)
+          cartProducts[i]["quantity"] = currentQuantity - 1;
+        return;
+      }
+    }
+  }
+
+  addProductToCart(int _id, String _name, String _imageURL, double _price,
+      double _quantity, String _description) {
     for (var i = 0; i < cartProducts.length; i++) {
       if (cartProducts[i]["name"] == _name) {
         //ToDo: if name/id exists in cart, update its quantity and return;
-        cartProducts[i]["name"] = _name + "UPDATED";
+        print("updating: " + _name);
+        // cartProducts[i]["name"] = _name + "UPDATED";
+        int currentQuantity = cartProducts[i]["quantity"] as int;
+        cartProducts[i]["quantity"] = currentQuantity + 1;
+        print(cartProducts[i]["quantity"]);
         return;
       }
     }
 
-    cartProducts.add({'name': _name, 'imageUrl': _imageURL, 'price': _price});
+    cartProducts.add({
+      'id': _id,
+      'name': _name,
+      'image': _imageURL,
+      'price': _price,
+      'quantity': _quantity,
+      'description': _description
+    });
+    //cartProducts.add({'name': _name, 'imageUrl': _imageURL, 'price': _price});
+
   }
 
   clearCart() {

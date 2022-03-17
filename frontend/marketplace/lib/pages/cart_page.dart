@@ -1,10 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:marketplace/utils/cart_products_controller.dart';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
 import 'cart_products.dart';
-import 'package:marketplace/utils/cart_products_controller.dart';
+
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 import 'package:http/http.dart' as http;
 import '../../constants/api_url.dart';
 import 'package:flutter_session/flutter_session.dart';
@@ -209,7 +214,59 @@ class CartPage extends StatelessWidget {
                               child: ElevatedButton.icon(
                             label: Text('Invoice'),
                             icon: Icon(Icons.download),
-                            onPressed: () {},
+                            onPressed: () async {
+                              List<Map<String, Object>> currentCartProducts =
+                                  CartProductsController().getProducts();
+
+                              List<List<Object>> productInfoSubset = <List>[];
+                              double cartTotal = 0;
+
+                              for (var productInfo in currentCartProducts) {
+                                List<String> temp = [];
+
+                                //ensure correct insertion order with table headers
+                                temp.add(productInfo["name"]);
+                                temp.add(productInfo["price"].toString());
+                                temp.add(productInfo["quantity"].toString());
+
+                                double tempPrice =
+                                    productInfo["price"] as double;
+                                int tempQuantity =
+                                    productInfo["quantity"] as int;
+
+                                cartTotal =
+                                    cartTotal + (tempPrice * tempQuantity);
+
+                                productInfoSubset.add(temp);
+                              }
+
+                              final doc = pw.Document();
+
+                              doc.addPage(pw.Page(
+                                  pageFormat: PdfPageFormat.a4,
+                                  build: (pw.Context context) {
+                                    return pw.Column(
+                                      children: [
+                                        pw.Header(text: "Order Summary"),
+                                        pw.Table.fromTextArray(headers: [
+                                          "Product Name",
+                                          "Price (\$)",
+                                          "Quantity"
+                                        ], data: productInfoSubset),
+                                        pw.Divider(),
+                                        pw.Footer(
+                                            leading: pw.Text(
+                                                "Total: \$ ${cartTotal}"),
+                                            title: pw.Text(
+                                                "Thank you for shopping at Shoppers!"))
+                                      ],
+                                    );
+                                  })); //
+
+                              await Printing.layoutPdf(
+                                  onLayout: (PdfPageFormat format) async =>
+                                      doc.save());
+                            },
                             style:
                                 ElevatedButton.styleFrom(primary: Colors.blue),
                           )),
