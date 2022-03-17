@@ -6,4 +6,5 @@ class ApiUrl {
   static const String get_product_by_id = envUrl + '/Product/';
   static const String get_my_orders = envUrl + '/Order';
   static const String get_product_by_category = envUrl + '/Product/search-cat/';
+  static const String checkout = envUrl + '/Order?id=';
 }

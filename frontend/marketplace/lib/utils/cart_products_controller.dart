@@ -1,5 +1,15 @@
 class CartProductsController {
   static var cartProducts = [
+    // {
+    //   //"id": 10,
+    //   'name': 'iPhone 123',
+    //   'imageUrl': 'images/product_images/iphone.jpg',
+    //   //"description": "asdasd",
+    //   //"category": "cloth",
+    //   'price': 100,
+    //   //"quantity": 1
+    // },
+
     {
       'id': 9999999,
       'name': 'sample Product',
@@ -8,6 +18,7 @@ class CartProductsController {
       'quantity': 1,
       'description': 'sample desc'
     },
+    
   ];
 
   CartProductsController() {}
@@ -71,6 +82,8 @@ class CartProductsController {
       'quantity': _quantity,
       'description': _description
     });
+    //cartProducts.add({'name': _name, 'imageUrl': _imageURL, 'price': _price});
+
   }
 
   clearCart() {
