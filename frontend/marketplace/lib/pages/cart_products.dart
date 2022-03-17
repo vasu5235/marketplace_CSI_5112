@@ -16,13 +16,15 @@ class _CartProductsState extends State<CartProducts> {
   Widget build(BuildContext context) {
     // Return all products displayed using Card in a SizedBox. Iterate using ListView
     var _productList = CartProductsController().getProducts();
-    // print("fetching products:" + _productList.length.toString());
+    print("fetching products:" + _productList.toString());
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.8,
       width: MediaQuery.of(context).size.width * 0.6,
       child: ListView.builder(
         itemCount: _productList.length,
         itemBuilder: (context, index) {
+          // if (index == 0) return Container();
+
           return SingleCartProduct(
               productName: _productList[index]['name'],
               productImageURL: _productList[index]['image'],

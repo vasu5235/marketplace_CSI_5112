@@ -1,23 +1,19 @@
 class CartProductsController {
   static var cartProducts = [
     {
-      'name': 'iPhone 123',
+      'id': 9999999,
+      'name': 'sample Product',
       'image': 'images/product_images/iphone.jpg',
       'price': 400,
-      'quantity': 1
-    },
-    {
-      'name': 'iPhone 13',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400,
-      'quantity': 1
+      'quantity': 1,
+      'description': 'sample desc'
     },
   ];
 
   CartProductsController() {}
 
   getProducts() {
-    return cartProducts;
+    return cartProducts.sublist(1);
   }
 
   // addProductToCart(int _id, String _name, String _imageURL, String _description,
@@ -53,8 +49,8 @@ class CartProductsController {
     }
   }
 
-  addProductToCart(
-      String _name, String _imageURL, double _price, double _quantity) {
+  addProductToCart(int _id, String _name, String _imageURL, double _price,
+      double _quantity, String _description) {
     for (var i = 0; i < cartProducts.length; i++) {
       if (cartProducts[i]["name"] == _name) {
         //ToDo: if name/id exists in cart, update its quantity and return;
@@ -68,10 +64,12 @@ class CartProductsController {
     }
 
     cartProducts.add({
+      'id': _id,
       'name': _name,
       'image': _imageURL,
       'price': _price,
-      'quantity': _quantity
+      'quantity': _quantity,
+      'description': _description
     });
   }
 

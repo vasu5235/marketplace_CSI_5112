@@ -21,16 +21,20 @@ class _OrdersPageState extends State<OrdersPage> {
   Future getOrders() async {
     var response = await http.get(ApiUrl.get_my_orders);
     var jsonData = jsonDecode(response.body);
+    print(jsonData.keys);
 
-    //print(jsonData);
+    // print(jsonData["111-222"]);
 
-    for (var i = 1; i <= jsonData.length; i++) {
-      for (var j = 0; j < jsonData['$i'].length; j++) {
-        total_price[i - 1] += jsonData['$i'][j]['price'];
-      }
-      print(total_price[i - 1]);
-    }
+    // for (var i = 1; i <= jsonData.length; i++) {
+    //   for (var j = 0; j < jsonData['$i'].length; j++) {
+    //     total_price[i - 1] += jsonData['$i'][j]['price'];
+    //   }
+    //   print(total_price[i - 1]);
+    // }
 
+    // print("get api");
+    // print(jsonData);
+    // print(jsonData.length);
     return jsonData;
     // setState(() {
     //   sampleOrders = jsonData;
@@ -85,7 +89,7 @@ class _OrdersPageState extends State<OrdersPage> {
                               //print(snapshot.data['$count'][0]['name']);
                               //print(snapshot.data['$count'][0]);
                               //return BuildOrdersCards(snapshot.data["1"][0]);
-                              return BuildOrdersCards(snapshot.data['$count']);
+                              return BuildOrdersCards(snapshot.data["111-222"]);
                             },
                           );
                       },
@@ -158,7 +162,8 @@ class _OrdersPageState extends State<OrdersPage> {
                           Text(
                             // "Total: \$20",
                             //"Total: \$ $total",
-                            "Total: \$ ${total_price[count - 1]}",
+                            // "Total: \$ ${total_price[count - 1]}",
+                            "Total: \$ 0",
 
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
