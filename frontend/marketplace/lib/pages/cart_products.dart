@@ -25,7 +25,7 @@ class _CartProductsState extends State<CartProducts> {
         itemBuilder: (context, index) {
           return SingleCartProduct(
             productName: _productList[index]['name'],
-            productImageURL: _productList[index]['image'],
+            productImageURL: _productList[index]['imageUrl'],
             productPrice: _productList[index]['price'],
           );
         },
@@ -82,7 +82,6 @@ class _SingleCartProductState extends State<SingleCartProduct> {
                           flex: 4,
                           child: ListTile(
                             title: Text(widget.productName),
-                            subtitle: Text("Sold by: Apple Inc."),
                             trailing: Text(
                               "\$${widget.productPrice}",
                               style: TextStyle(

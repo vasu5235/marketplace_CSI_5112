@@ -1,14 +1,32 @@
 class CartProductsController {
   static var cartProducts = [
+    // {
+    //   //"id": 10,
+    //   'name': 'iPhone 123',
+    //   'imageUrl': 'images/product_images/iphone.jpg',
+    //   //"description": "asdasd",
+    //   //"category": "cloth",
+    //   'price': 100,
+    //   //"quantity": 1
+    // },
+
     {
+      'id': 100,
       'name': 'iPhone 123',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
+      'imageUrl': 'images/product_images/iphone.jpg',
+      'description': 'asdasd',
+      'category': 'cloth',
+      'price': 400,
+      'quantity': 1
     },
     {
+      'id': 101,
       'name': 'iPhone 13',
-      'image': 'images/product_images/iphone.jpg',
-      'price': 400
+      'imageUrl': 'images/product_images/iphone.jpg',
+      'description': 'asdasd',
+      'category': 'cloth',
+      'price': 400,
+      'quantity': 1
     },
   ];
 
@@ -40,7 +58,7 @@ class CartProductsController {
       }
     }
 
-    cartProducts.add({'name': _name, 'image': _imageURL, 'price': _price});
+    cartProducts.add({'name': _name, 'imageUrl': _imageURL, 'price': _price});
   }
 
   clearCart() {
