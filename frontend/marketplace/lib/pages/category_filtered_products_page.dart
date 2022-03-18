@@ -66,6 +66,7 @@ class _CategoryFilteredProductsPageState
                     prod_price: snapshot.data[index]['price'],
                     prod_quantity: snapshot.data[index]['quantity'],
                     prod_description: snapshot.data[index]['description'],
+                    prod_category: snapshot.data[index]['category'],
                     cartController: cartController,
                   );
                 });
@@ -83,6 +84,7 @@ class Single_prod extends StatelessWidget {
   final prod_price;
   final prod_quantity;
   final prod_description;
+  final prod_category;
   final CartProductsController cartController;
   Single_prod(
       {this.prod_id,
@@ -91,7 +93,8 @@ class Single_prod extends StatelessWidget {
       this.prod_price,
       this.cartController,
       this.prod_quantity,
-      this.prod_description});
+      this.prod_description,
+      this.prod_category});
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +132,8 @@ class Single_prod extends StatelessWidget {
                             prod_picture,
                             prod_price,
                             prod_quantity,
-                            prod_description);
+                            prod_description,
+                            prod_category);
                         AlertDialog addToCartSuccess = AlertDialog(
                           // Retrieve the text the that user has entered by using the
                           // TextEditingController.
