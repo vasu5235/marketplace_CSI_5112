@@ -35,7 +35,7 @@ class _CartProductsState extends State<CartProducts> {
             //productName: _productList[index]['name'],
             //productImageURL: _productList[index]['imageUrl'],
             //productPrice: _productList[index]['price'],
-          );
+          
 
         },
       ),
