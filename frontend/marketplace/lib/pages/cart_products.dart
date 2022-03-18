@@ -16,39 +16,61 @@ class _CartProductsState extends State<CartProducts> {
   Widget build(BuildContext context) {
     // Return all products displayed using Card in a SizedBox. Iterate using ListView
     var _productList = CartProductsController().getProducts();
-    // print("fetching products:" + _productList.length.toString());
+    print("fetching products:" + _productList.toString());
+    if (_productList.length == 0) {
+      return Padding(
+          padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
+          child: new Text(
+            "Your cart is empty",
+            style: TextStyle(fontSize: 20),
+          ));
+    }
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.8,
       width: MediaQuery.of(context).size.width * 0.6,
       child: ListView.builder(
         itemCount: _productList.length,
         itemBuilder: (context, index) {
+          // if (index == 0) return Container();
+          // if (_productList == []) {
+          //   return Text("Your cart is empty");
+
+          // }
+          //return Text("Your cart is empty");
+
           return SingleCartProduct(
-            productName: _productList[index]['name'],
-            productImageURL: _productList[index]['image'],
-            productPrice: _productList[index]['price'],
-          );
+              productName: _productList[index]['name'],
+              productImageURL: _productList[index]['imageUrl'],
+              productPrice: _productList[index]['price'],
+              productQuantity: _productList[index]['quantity']);
+
+          //productName: _productList[index]['name'],
+          //productImageURL: _productList[index]['imageUrl'],
+          //productPrice: _productList[index]['price'],
         },
       ),
     );
   }
 }
 
+// ignore: must_be_immutable
 class SingleCartProduct extends StatefulWidget {
   final productName;
   final productImageURL;
   final productPrice;
+  var productQuantity;
 
   SingleCartProduct(
-      {this.productName, this.productImageURL, this.productPrice});
+      {this.productName,
+      this.productImageURL,
+      this.productPrice,
+      this.productQuantity});
 
   @override
   State<SingleCartProduct> createState() => _SingleCartProductState();
 }
 
 class _SingleCartProductState extends State<SingleCartProduct> {
-  var productQuantity = 1;
-
   @override
   Widget build(BuildContext context) {
     // Return new card containing all product details
@@ -82,7 +104,6 @@ class _SingleCartProductState extends State<SingleCartProduct> {
                           flex: 4,
                           child: ListTile(
                             title: Text(widget.productName),
-                            subtitle: Text("Sold by: Apple Inc."),
                             trailing: Text(
                               "\$${widget.productPrice}",
                               style: TextStyle(
@@ -101,7 +122,7 @@ class _SingleCartProductState extends State<SingleCartProduct> {
                               // crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  "Quantity: ${productQuantity}",
+                                  "Quantity: ${widget.productQuantity}",
                                   style: TextStyle(height: 2.0),
                                 ),
                                 SizedBox(
@@ -147,7 +168,9 @@ class _SingleCartProductState extends State<SingleCartProduct> {
           backgroundColor: Colors.white,
           onPressed: () {
             setState(() {
-              productQuantity++;
+              widget.productQuantity++;
+              CartProductsController()
+                  .incrementProductQuantity(widget.productName);
             });
           },
         ),
@@ -164,7 +187,11 @@ class _SingleCartProductState extends State<SingleCartProduct> {
         child: FloatingActionButton(
             onPressed: () {
               setState(() {
-                productQuantity--;
+                if (widget.productQuantity > 1) {
+                  widget.productQuantity--;
+                  CartProductsController()
+                      .decrementProductQuantity(widget.productName);
+                }
               });
             },
             child: new Icon(Icons.remove, color: Colors.black87),

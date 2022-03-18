@@ -46,6 +46,7 @@ class _ProductsState extends State<Products> {
                   prod_price: snapshot.data[index]['price'],
                   prod_quantity: snapshot.data[index]['quantity'],
                   prod_description: snapshot.data[index]['description'],
+                  prod_category: snapshot.data[index]['category'],
                   cartController: cartController,
                 );
               });
@@ -62,6 +63,7 @@ class Single_prod extends StatelessWidget {
   final prod_price;
   final prod_quantity;
   final prod_description;
+  final prod_category;
   final CartProductsController cartController;
   Single_prod(
       {this.prod_id,
@@ -70,7 +72,8 @@ class Single_prod extends StatelessWidget {
       this.prod_price,
       this.cartController,
       this.prod_quantity,
-      this.prod_description});
+      this.prod_description,
+      this.prod_category});
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +108,27 @@ class Single_prod extends StatelessWidget {
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.add_box_rounded),
-                      onPressed: () {
-                        cartController.addProductToCart(
-                            prod_name, prod_picture, prod_price, prod_quantity);
+                      onPressed: () async {
+                        await cartController.addProductToCart(
+                            prod_id,
+                            prod_name,
+                            prod_picture,
+                            prod_price,
+                            prod_quantity,
+                            prod_description,
+                            prod_category);
+                        AlertDialog addToCartSuccess = AlertDialog(
+                          // Retrieve the text the that user has entered by using the
+                          // TextEditingController.
+                          content: Text("Product added to cart!"),
+                        );
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return addToCartSuccess;
+                          },
+                        );
                       },
                     ),
                   ),
