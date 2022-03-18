@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/page_titles.dart';
 import 'package:marketplace/widgets/action_button.dart';
 import 'package:marketplace/widgets/app_scaffold.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+
+import '../constants/api_url.dart';
 
 
 class MerchantAddProducts extends StatefulWidget {
@@ -196,7 +201,65 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                     ),
 
                     ElevatedButton(onPressed: () async {
+                      var name = nameController.text;
+                      var desc = descController.text;
+                      var category = categoryController.text;
+                      var price = priceController.text;
+                      var qty = 1;
+                      int randomId = Random().nextInt(99999);
 
+                      Map bodyData = {
+                        "id": randomId,
+                        "name": name,
+                        "description": desc,
+                        "category": category,
+                        "price": price,
+                        "quantity":qty,
+                      };
+
+                      var body = json.encode(bodyData);
+
+                      // print("email: " + emailTextFieldController.text);
+                      // print("password: " + passwordFieldController.text);
+                      String uri = ApiUrl.envUrl;
+                      final url = Uri.encodeFull("${uri}/Product");
+
+                      // print("===URL===" + url);
+
+                      var response = await http.post(url,
+                          headers: {'Content-Type': 'application/json'},
+                          body: body);
+                      print("Response\n" + response.body);
+
+                      if (response.body == "true") {
+                        AlertDialog signUpResultDialog = AlertDialog(
+                          // Retrieve the text the that user has entered by using the
+                          // TextEditingController.
+                          content: Text(
+                              "Success!, Product added successfully!"),
+                        );
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return signUpResultDialog;
+                          },
+                        );
+                      } else {
+                        AlertDialog signUpFailure = AlertDialog(
+                          // Retrieve the text the that user has entered by using the
+                          // TextEditingController.
+                          content: Text(
+                              "Oops! Failed to add product, please try again"),
+                        );
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return signUpFailure;
+                          },
+                        );
+                      }
                     },
                         child: Text("Submit")),
                     SizedBox(

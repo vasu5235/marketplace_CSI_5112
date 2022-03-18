@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/route_names.dart';
 import 'package:http/http.dart' as http;
@@ -121,15 +122,28 @@ class Single_prod extends StatelessWidget {
 
   Widget PopupDialog(BuildContext context) {
     return new AlertDialog(
-      title: Text(prod_name),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0)
+      ),
+      elevation: 50,
+      title: Text(prod_name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),),
       content: new Column(
+
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("Price: \$ ${prod_price.toString()}",),
+
+          Divider(color: Colors.black,),
+          SizedBox(
+            height: 32,
+          ),
+          Text("Price: \$ ${prod_price.toString()}", style: TextStyle( fontSize: 20) ),
           //Text(prod_price.toString()),
+          SizedBox(
+            height: 16,
+          ),
           Flexible(
-              child: Text('Description: abc'),
+              child: Text(prod_description, style: TextStyle( fontSize: 20)),
           )
         ],
       ),
@@ -138,9 +152,14 @@ class Single_prod extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          textColor: Theme.of(context).primaryColor,
+          textColor: Colors.white,
+          color: Colors.red,
           child: const Text('Close'),
         ),
+        SizedBox(
+          height:64,
+        ),
+
       ],
     );
   }
