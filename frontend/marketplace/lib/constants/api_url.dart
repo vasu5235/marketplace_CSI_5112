@@ -6,4 +6,8 @@ class ApiUrl {
   static const String get_product_by_id = envUrl + '/Product/';
   static const String get_my_orders = envUrl + '/Order';
   static const String get_product_by_category = envUrl + '/Product/search-cat/';
+
+  //Discussion Forum
+  static const String get_questions = envUrl + '/question';
+  static const String get_answers = envUrl + '/answer';
 }
