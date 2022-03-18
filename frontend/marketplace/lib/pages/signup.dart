@@ -7,6 +7,7 @@ import 'package:marketplace/constants/route_names.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:marketplace/constants/constants.dart';
+import 'package:email_validator/email_validator.dart';
 
 class SignUp extends StatefulWidget {
   final Function onLogInSelected;
@@ -22,6 +23,61 @@ class _SignUpState extends State<SignUp> {
   var emailTextFieldController = TextEditingController();
   var passwordFieldController = TextEditingController();
   var nameFieldController = TextEditingController();
+
+  String userName, email, password, confirmPassword, mobile;
+  bool visible = true;
+
+  String message = '';
+
+  void validateEmail(String enteredEmail) {
+    if (EmailValidator.validate(enteredEmail)) {
+      setState(() {
+        message = '';
+      });
+    } else {
+      setState(() {
+        message = 'Please enter a valid email address!';
+      });
+    }
+  }
+
+  // String validateEmail(String value) {
+  //   String pattern =
+  //       r'^\S+@\S+\.\S+$';
+  //   RegExp regExp = new RegExp(pattern);
+  //   if (value.isEmpty) {
+  //     return 'Email is required';
+  //   } else if (!regExp.hasMatch(value)) {
+  //     return 'Invalid email';
+  //   } else {
+  //     return null;
+  //   }
+  // }
+
+  String get _errorText {
+    // at any time, we can get the text from _controller.value.text
+    final text = nameFieldController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 4) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+  }
+
+  String validatePassword(String value) {
+    if (value.isEmpty) {
+      return 'Password is required';
+    } else if (value.length < 4) {
+      return 'Password must be at least 4 characters';
+    }
+    return null;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +134,7 @@ class _SignUpState extends State<SignUp> {
                       SizedBox(
                         height: 32,
                       ),
-                      TextField(
+                      TextFormField(
                         controller: nameFieldController,
                         decoration: InputDecoration(
                           hintText: 'Name',
@@ -86,7 +142,13 @@ class _SignUpState extends State<SignUp> {
                           suffixIcon: Icon(
                             Icons.person_outline,
                           ),
+                          errorText: _errorText,
                         ),
+                        keyboardType: TextInputType.emailAddress,
+                        //validator: UIData.validateEmail,
+                        onSaved: (str) {
+                          userName = str;
+                        },
                       ),
                       SizedBox(
                         height: 32,
@@ -100,23 +162,47 @@ class _SignUpState extends State<SignUp> {
                             Icons.mail_outline,
                           ),
                         ),
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (enteredEmail) => validateEmail(enteredEmail),
                       ),
+                      Text(message, textAlign: TextAlign.left),
                       SizedBox(
                         height: 32,
                       ),
-                      TextField(
+                      TextFormField(
                         controller: passwordFieldController,
+                        obscureText: visible,
+                        validator: validatePassword,
                         decoration: InputDecoration(
                           hintText: 'Password',
                           labelText: 'Password',
                           suffixIcon: Icon(
                             Icons.lock_outline,
                           ),
+                            suffix: InkWell(
+                              child: visible
+                                  ? Icon(
+                                Icons.visibility_off,
+                                size: 18,
+                                color: Colors.blue,
+                              )
+                                  : Icon(
+                                Icons.visibility,
+                                size: 18,
+                                color: Colors.blueAccent,
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  visible = !visible;
+                                });
+                              },
+                            )
                         ),
                       ),
                       SizedBox(
                         height: 64,
                       ),
+
                       GestureDetector(
                           onTap: () async {
                             // var test = _LogInState.getEmailTextControllerValue();
@@ -262,4 +348,6 @@ class _SignUpState extends State<SignUp> {
       ),
     );
   }
+
+
 }
