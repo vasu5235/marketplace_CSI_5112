@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marketplace/constants/page_titles.dart';
 import 'package:marketplace/widgets/action_button.dart';
 import 'package:marketplace/widgets/app_scaffold.dart';
@@ -20,6 +21,13 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
     });
   }
 
+  TextEditingController nameController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+  TextEditingController categoryController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
@@ -29,6 +37,36 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
       ),
     );
   }
+
+  String get _errorText {
+    // at any time, we can get the text from _controller.value.text
+    final text = nameController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 4) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+  }
+  String get errorDesc {
+    // at any time, we can get the text from _controller.value.text
+    final text = nameController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 4) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+  }
+
 
   Widget editProductForm() {
     Size size = MediaQuery.of(context).size;
@@ -78,6 +116,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                         suffixIcon: Icon(
                           Icons.shop,
                         ),
+                        errorText: _errorText,
                       ),
                     ),
                     SizedBox(
@@ -90,16 +129,23 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                         suffixIcon: Icon(
                           Icons.description,
                         ),
+                        errorText: errorDesc,
                       ),
                     ),
                     SizedBox(
                       height: 32,
                     ),
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Price',
-                        labelText: 'Price',
-                        suffixIcon: Icon(Icons.attach_money),
+                    TextFormField(
+                      keyboardType:TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                      ],
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'Enter Price',
+                        suffixIcon: Icon(
+                          Icons.attach_money,
+                        ),
                       ),
                     ),
                     SizedBox(

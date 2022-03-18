@@ -8,6 +8,7 @@ import 'package:marketplace/constants/constants.dart';
 //import 'package:marketplace/constants/route_names.dart';
 import 'package:http/http.dart' as http;
 import 'package:marketplace/constants/route_names.dart';
+import 'package:email_validator/email_validator.dart';
 
 import 'merchant_home_page.dart';
 
@@ -24,6 +25,30 @@ class _LogInState extends State<LogIn> {
   //Simple login form using TextFields and buttons from action_button.dart
   var emailTextFieldController = TextEditingController();
   var passwordFieldController = TextEditingController();
+
+  bool visible =true;
+  String message = '';
+
+  void validateEmail(String enteredEmail) {
+    if (EmailValidator.validate(enteredEmail)) {
+      setState(() {
+        message = '';
+      });
+    } else {
+      setState(() {
+        message = 'Please enter a valid email address!';
+      });
+    }
+  }
+
+  String validatePassword(String value) {
+    if (value.isEmpty) {
+      return 'Password is required';
+    } else if (value.length < 4) {
+      return 'Password must be at least 4 characters';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,18 +114,41 @@ class _LogInState extends State<LogIn> {
                             Icons.mail_outline,
                           ),
                         ),
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (enteredEmail) => validateEmail(enteredEmail),
+
                       ),
+                      Text(message, textAlign: TextAlign.left),
                       SizedBox(
                         height: 32,
                       ),
-                      TextField(
+                      TextFormField(
                         controller: passwordFieldController,
+                        obscureText: visible,
                         decoration: InputDecoration(
                           hintText: 'Password',
                           labelText: 'Password',
                           suffixIcon: Icon(
                             Icons.lock_outline,
                           ),
+                          suffix: InkWell(
+                            child: visible
+                                ? Icon(
+                              Icons.visibility_off,
+                              size: 18,
+                              color: Colors.blue,
+                            )
+                                : Icon(
+                              Icons.visibility,
+                              size: 18,
+                              color: Colors.blueAccent,
+                            ),
+                            onTap: () {
+                              setState(() {
+                                visible = !visible;
+                              });
+                            },
+                          )
                         ),
                       ),
                       SizedBox(

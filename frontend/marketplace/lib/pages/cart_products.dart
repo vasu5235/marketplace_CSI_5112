@@ -17,6 +17,14 @@ class _CartProductsState extends State<CartProducts> {
     // Return all products displayed using Card in a SizedBox. Iterate using ListView
     var _productList = CartProductsController().getProducts();
     print("fetching products:" + _productList.toString());
+    if (_productList.length == 0) {
+      return Padding(
+          padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
+          child: new Text(
+            "Your cart is empty",
+            style: TextStyle(fontSize: 20),
+          ));
+    }
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.8,
       width: MediaQuery.of(context).size.width * 0.6,
@@ -24,19 +32,22 @@ class _CartProductsState extends State<CartProducts> {
         itemCount: _productList.length,
         itemBuilder: (context, index) {
           // if (index == 0) return Container();
+          // if (_productList == []) {
+          //   return Text("Your cart is empty");
+
+          // }
+          //return Text("Your cart is empty");
 
           return SingleCartProduct(
-
               productName: _productList[index]['name'],
-              productImageURL: _productList[index]['image'],
+              productImageURL: _productList[index]['imageUrl'],
               productPrice: _productList[index]['price'],
               productQuantity: _productList[index]['quantity']);
 
-            //productName: _productList[index]['name'],
-            //productImageURL: _productList[index]['imageUrl'],
-            //productPrice: _productList[index]['price'],
-          
 
+          //productName: _productList[index]['name'],
+          //productImageURL: _productList[index]['imageUrl'],
+          //productPrice: _productList[index]['price'],
         },
       ),
     );
