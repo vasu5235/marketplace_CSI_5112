@@ -8,6 +8,9 @@
     "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "permissions": [
+    "https://localhost:7136/api/Category"
+    ],
     "icons": [
         {
             "src": "icons/Icon-192.png",
