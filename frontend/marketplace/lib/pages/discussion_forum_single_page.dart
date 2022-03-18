@@ -130,6 +130,10 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
                                     Expanded(
                                       flex: 4,
                                       child: ListTile(
+                                        leading: CircleAvatar(
+                                          child:
+                                              Text(widget.questionUserName[0]),
+                                        ),
                                         title: Text(widget.questionTitle),
                                         subtitle: Text(
                                             "User: ${widget.questionUserName}"),
@@ -204,6 +208,9 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
                     Expanded(
                       flex: 4,
                       child: ListTile(
+                        leading: CircleAvatar(
+                          child: Text(userName[0]),
+                        ),
                         title: Text("Answer: ${description}"),
                         subtitle: Text("User: ${userName}"),
                         isThreeLine: false,

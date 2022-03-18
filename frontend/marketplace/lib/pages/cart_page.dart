@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:marketplace/utils/cart_products_controller.dart';
 import 'dart:math';
 
-
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
 import 'cart_products.dart';
