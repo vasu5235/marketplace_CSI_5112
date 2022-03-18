@@ -136,9 +136,6 @@ class _DiscussionForumPageState extends State<DiscussionForumPage> {
                       Expanded(
                         flex: 4,
                         child: ListTile(
-                          leading: CircleAvatar(
-                            child: Text(questionUserName[0]),
-                          ),
                           title: Text(questionTitle),
                           subtitle: Text("User: ${questionUserName}"),
                           isThreeLine: false,
