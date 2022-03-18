@@ -44,6 +44,7 @@ class _CartProductsState extends State<CartProducts> {
               productPrice: _productList[index]['price'],
               productQuantity: _productList[index]['quantity']);
 
+
           //productName: _productList[index]['name'],
           //productImageURL: _productList[index]['imageUrl'],
           //productPrice: _productList[index]['price'],
