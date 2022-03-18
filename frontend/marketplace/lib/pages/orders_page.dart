@@ -204,10 +204,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                   leading: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 10.0, right: 20.0),
-                                    child: Expanded(
-                                      child:
-                                          Image.asset(order[index]["imageUrl"]),
-                                    ),
+                                    child:
+                                        Image.asset(order[index]["imageUrl"]),
                                   ),
                                 ),
                               ],
