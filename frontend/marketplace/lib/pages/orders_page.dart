@@ -153,7 +153,7 @@ class _OrdersPageState extends State<OrdersPage> {
                     children: [
                       Text(
                         // "Order Id:\n ${order['id']}",
-                        "Order Id:\n ${count}",
+                        "Order ID:\n ${count}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
