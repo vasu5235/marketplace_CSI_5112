@@ -10,4 +10,5 @@ class ApiUrl {
   //Discussion Forum
   static const String get_questions = envUrl + '/question';
   static const String get_answers = envUrl + '/answer';
+  static const String checkout = envUrl + '/Order?id=';
 }

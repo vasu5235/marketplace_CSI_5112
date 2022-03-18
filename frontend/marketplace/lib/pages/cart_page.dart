@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:marketplace/utils/cart_products_controller.dart';
+import 'dart:math';
+
 
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
 import 'cart_products.dart';
+
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:http/http.dart' as http;
+import '../../constants/api_url.dart';
+import 'package:flutter_session/flutter_session.dart';
+import 'dart:convert';
+import 'package:marketplace/constants/route_names.dart';
+import 'package:uuid/uuid.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({Key key}) : super(key: key);
@@ -38,7 +47,120 @@ class CartPage extends StatelessWidget {
                       child: ElevatedButton.icon(
                         label: Text('Checkout'),
                         icon: Icon(Icons.shopping_bag_rounded),
-                        onPressed: () {},
+                        onPressed: () async {
+                          var _productList =
+                              await CartProductsController().getProducts();
+                          print(_productList);
+                          // var email = emailTextFieldController.text;
+                          // var password = passwordFieldController.text;
+                          // var name = nameFieldController.text;
+                          // int randomId = Random().nextInt(99999);
+
+                          // Map bodyData = {
+                          //   "id": randomId,
+                          //   "name": name,
+                          //   "email": email,
+                          //   "password": password,
+                          //   "isMerchant": false
+                          // };
+
+                          var body = json.encode(_productList);
+                          print(body);
+
+                          // print("email: " + emailTextFieldController.text);
+                          // print("password: " + passwordFieldController.text);
+                          var session = FlutterSession();
+                          var randomId =
+                              await Random().nextInt(99999999).toString();
+                          print(randomId);
+                          //var uuid = Uuid();
+                          var _userId = '0';
+                          _userId = await session.get("user_id").toString();
+                          print(_userId);
+                          //print(_userId);
+
+                          // if (_userId == null) {
+                          //   _userId = 0;
+                          // }
+                          var orderid = _userId + '-' + randomId;
+                          print(orderid);
+                          String uri = ApiUrl.checkout + orderid.toString();
+
+                          //final url = Uri.encodeFull("${uri}");
+                          //print(url);
+                          print("===URL===" + uri);
+
+                          var response = await http.post(uri,
+                              headers: {
+                                'Content-Type': 'application/json',
+                                'accept': 'text/plain'
+                              },
+                              body: body);
+                          print("Response\n" + response.body);
+
+                          if (response.body == "true") {
+                            showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      title: Text('Success: Order Placed'),
+                                      content: Text(''),
+                                      actions: [
+                                        TextButton(
+                                            child: Text('Ok'),
+                                            onPressed: () => {
+                                                  Navigator.pushNamed(
+                                                      context, RouteNames.cart)
+                                                  //Navigator.pop(context)
+                                                  //setState(() {})
+                                                })
+                                      ],
+                                    ));
+
+                            // AlertDialog checkoutSuccess = AlertDialog(
+                            //   // Retrieve the text the that user has entered by using the
+                            //   // TextEditingController.
+
+                            //   content: Text("Success!"),
+                            // );
+
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) {
+                            //     //Future.delayed(Duration(seconds: 2), onDismiss);
+                            //     return checkoutSuccess;
+                            //   },
+                            // );
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      title: Text('Failed'),
+                                      content: Text(''),
+                                      actions: [
+                                        TextButton(
+                                            child: Text('Ok'),
+                                            onPressed: () => {
+                                                  // Navigator.pushNamed(
+                                                  //     context, RouteNames.cart)
+                                                  Navigator.pop(context)
+                                                  //setState(() {})
+                                                })
+                                      ],
+                                    ));
+                            // AlertDialog checkoutFail = AlertDialog(
+                            //   // Retrieve the text the that user has entered by using the
+                            //   // TextEditingController.
+                            //   content: Text("Oops! Failed"),
+                            // );
+
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) {
+                            //     return checkoutFail;
+                            //   },
+                            // );
+                          }
+                        },
                         style: ElevatedButton.styleFrom(primary: Colors.red),
                       ))
                 ],

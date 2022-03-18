@@ -26,10 +26,17 @@ class _CartProductsState extends State<CartProducts> {
           // if (index == 0) return Container();
 
           return SingleCartProduct(
+
               productName: _productList[index]['name'],
               productImageURL: _productList[index]['image'],
               productPrice: _productList[index]['price'],
               productQuantity: _productList[index]['quantity']);
+
+            //productName: _productList[index]['name'],
+            //productImageURL: _productList[index]['imageUrl'],
+            //productPrice: _productList[index]['price'],
+          );
+
         },
       ),
     );
@@ -87,7 +94,6 @@ class _SingleCartProductState extends State<SingleCartProduct> {
                           flex: 4,
                           child: ListTile(
                             title: Text(widget.productName),
-                            subtitle: Text("Sold by: Apple Inc."),
                             trailing: Text(
                               "\$${widget.productPrice}",
                               style: TextStyle(
