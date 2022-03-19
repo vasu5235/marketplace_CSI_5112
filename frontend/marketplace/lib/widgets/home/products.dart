@@ -84,12 +84,13 @@ class Single_prod extends StatelessWidget {
           child: Material(
               child: InkWell(
             onTap: () {
-
               //Navigator.pushNamed(context, RouteNames.product);
-              showDialog(context: context, builder: (BuildContext context) => PopupDialog(context),);
-            //  Navigator.pushNamed(context, RouteNames.product,
-             //     arguments: prod_id);
-
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => PopupDialog(context),
+              );
+              //  Navigator.pushNamed(context, RouteNames.product,
+              //     arguments: prod_id);
             },
             child: GridTile(
                 footer: Container(
@@ -142,28 +143,30 @@ class Single_prod extends StatelessWidget {
 
   Widget PopupDialog(BuildContext context) {
     return new AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 50,
-      title: Text(prod_name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),),
+      title: Text(
+        prod_name,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+      ),
       content: new Column(
-
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-
-          Divider(color: Colors.black,),
+          Divider(
+            color: Colors.black,
+          ),
           SizedBox(
             height: 32,
           ),
-          Text("Price: \$ ${prod_price.toString()}", style: TextStyle( fontSize: 20) ),
+          Text("Price: \$ ${prod_price.toString()}",
+              style: TextStyle(fontSize: 20)),
           //Text(prod_price.toString()),
           SizedBox(
             height: 16,
           ),
           Flexible(
-              child: Text(prod_description, style: TextStyle( fontSize: 20)),
+            child: Text(prod_description, style: TextStyle(fontSize: 20)),
           )
         ],
       ),
@@ -172,12 +175,13 @@ class Single_prod extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
+          // textColor: Colors.white,
+          // color: Colors.red,
           child: const Text('Close'),
         ),
         SizedBox(
-          height:64,
+          height: 64,
         ),
-
       ],
     );
   }

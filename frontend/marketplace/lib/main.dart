@@ -3,6 +3,7 @@ import 'package:marketplace/pages/cart_page.dart';
 import 'package:marketplace/pages/discussion_forum_page.dart';
 import 'package:marketplace/pages/merchant_add_product.dart';
 import 'package:marketplace/pages/merchant_edit_product.dart';
+import 'package:marketplace/pages/merchant_home_page.dart';
 
 import 'constants/constants.dart' as Constants;
 import 'constants/route_names.dart';
@@ -48,6 +49,7 @@ class MarketPlace extends StatelessWidget {
         RouteNames.start: (_) => StartPage(),
 
         //Merchant related routes
+        RouteNames.merchanthome: (_) => const MerchantHomePage(),
         RouteNames.mAddProduct: (_) => const MerchantAddProducts(),
         RouteNames.mEditProduct: (_) => const MerchantEditProducts()
       },

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:marketplace/widgets/home/products.dart';
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
-import '../widgets/home/horizontal_listview_recentproducts.dart';
+//import '../widgets/home/horizontal_listview_recentproducts.dart';
 // import '../widgets/product_details.dart';
 // import 'package:http/http.dart' as http;
 // import '../../constants/api_url.dart';
@@ -20,30 +21,6 @@ class ProductPage extends StatefulWidget {
 // }
 
 class _ProductPageState extends State<ProductPage> {
-  // List<Product> details = [];
-
-  // Future getCategoryList() async {
-
-  //   var response = await http.get(Uri.parse(ApiUrl.get_product_by_id + args));
-  //   var jsonData = jsonDecode(response.body);
-  //   for (var u in jsonData) {
-  //     Product detail = Product(
-  //       u["name"],
-  //       u["imageUrl"],
-  //       u["description"],
-  //       u["category"],
-  //       u["price"],
-  //     );
-  //     details.add(detail);
-  //   }
-  //   print(jsonData);
-  //   //return jsonData;
-  // }
-
-  // ProductPageState() {
-  //   getCategoryList();
-  // }
-
   @override
   Widget build(BuildContext context) {
     // Layout: Row (Column: Product Image) +
