@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_session/flutter_session.dart';
-
 import '../constants/page_titles.dart';
 import '../constants/route_names.dart';
 import 'app_route_observer.dart';
@@ -93,9 +92,16 @@ class _AppDrawerState extends State<AppDrawer> with RouteAware {
                             leading: const Icon(Icons.home),
                             title: const Text(PageTitles.home),
                             onTap: () async {
-                              await _navigateTo(context, RouteNames.home);
+                              await _navigateTo(
+                                  context, RouteNames.merchanthome);
+                              //await _navigateTo(context, RouteNames.home);
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) =>
+                              //             MerchantHomePage()));
                             },
-                            selected: _selectedRoute == RouteNames.home,
+                            selected: _selectedRoute == RouteNames.merchanthome,
                           ),
                           ListTile(
                             leading: const Icon(Icons.change_circle),

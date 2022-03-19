@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_session/flutter_session.dart';
 import '../widgets/app_scaffold.dart';
 import '../../constants/api_url.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,13 @@ class CategoryFilteredProductsPage extends StatefulWidget {
 
 class _CategoryFilteredProductsPageState
     extends State<CategoryFilteredProductsPage> {
+  var session = FlutterSession();
+  var _userIsMerchant = false;
+
+  Future<dynamic> _loadSession() async {
+    _userIsMerchant = await session.get("user_is_merchant");
+  }
+
   Future getProductList() async {
     var response = await http.get(Uri.parse(
         ApiUrl.get_product_by_category + widget._categoryName.toLowerCase()));
@@ -30,49 +38,69 @@ class _CategoryFilteredProductsPageState
   Widget build(BuildContext context) {
     return AppScaffold(
       pageTitle: "${widget._categoryName}",
-      body: Container(
-          child: FutureBuilder(
-        future: getProductList(),
-        builder: (context, snapshot) {
-          if (snapshot.data == null) {
-            return Container(
-              child: Center(
-                child: Text("Loading..."),
-              ),
-            );
-          } else if (snapshot.data.length == 0) {
-            return Container(
-              child: Center(
-                child: Text("No products to display in this category"),
-              ),
-            );
-          } else {
-            CartProductsController cartController =
-                new CartProductsController();
-            //print(snapshot.data);
-            return GridView.builder(
-                physics: ScrollPhysics(), // to disable GridView's scrolling
-                shrinkWrap: true,
-                itemCount: snapshot.data.length,
-                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 10),
-                itemBuilder: (context, index) {
-                  return Single_prod(
-                    prod_id: snapshot.data[index]['id'],
-                    prod_name: snapshot.data[index]['name'],
-                    prod_picture: snapshot.data[index]['imageUrl'],
-                    prod_price: snapshot.data[index]['price'],
-                    prod_quantity: snapshot.data[index]['quantity'],
-                    prod_description: snapshot.data[index]['description'],
-                    prod_category: snapshot.data[index]['category'],
-                    cartController: cartController,
-                  );
-                });
-          }
-        },
-      )),
+      body: Column(children: <Widget>[
+        FutureBuilder(
+            future: _loadSession(),
+            builder: (context, snapshot) {
+              if (_userIsMerchant) {
+                return TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  // textColor: Colors.white,
+                  // color: Colors.red,
+                  child: const Text('Close'),
+                );
+              } else {
+                return SizedBox();
+              }
+            }),
+        Expanded(
+            child: FutureBuilder(
+          future: getProductList(),
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return Container(
+                child: Center(
+                  child: Text("Loading..."),
+                ),
+              );
+            } else if (snapshot.data.length == 0) {
+              return Container(
+                child: Center(
+                  child: Text("No products to display in this category"),
+                ),
+              );
+            } else {
+              CartProductsController cartController =
+                  new CartProductsController();
+              //print(snapshot.data);
+              return GridView.builder(
+                  physics: ScrollPhysics(), // to disable GridView's scrolling
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.length,
+                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 15,
+                      mainAxisSpacing: 10),
+                  itemBuilder: (context, index) {
+                    return Single_prod(
+                      prod_id: snapshot.data[index]['id'],
+                      prod_name: snapshot.data[index]['name'],
+                      prod_picture: snapshot.data[index]['imageUrl'],
+                      prod_price: snapshot.data[index]['price'],
+                      prod_quantity: snapshot.data[index]['quantity'],
+                      prod_description: snapshot.data[index]['description'],
+                      prod_category: snapshot.data[index]['category'],
+                      cartController: cartController,
+                    );
+                  });
+            }
+          },
+        ))
+      ]),
+
+      //),
     );
   }
 }
@@ -108,7 +136,10 @@ class Single_prod extends StatelessWidget {
             onTap: () {
               // Navigator.pushNamed(context, RouteNames.product,
               //     arguments: prod_id);
-              showDialog(context: context, builder: (BuildContext context) => PopupDialog(context),);
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => PopupDialog(context),
+              );
             },
             child: GridTile(
                 footer: Container(
@@ -158,30 +189,33 @@ class Single_prod extends StatelessWidget {
           ))),
     );
   }
+
   Widget PopupDialog(BuildContext context) {
     return new AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 50,
-      title: Text(prod_name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),),
+      title: Text(
+        prod_name,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+      ),
       content: new Column(
-
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-
-          Divider(color: Colors.black,),
+          Divider(
+            color: Colors.black,
+          ),
           SizedBox(
             height: 32,
           ),
-          Text("Price: \$ ${prod_price.toString()}", style: TextStyle( fontSize: 20) ),
+          Text("Price: \$ ${prod_price.toString()}",
+              style: TextStyle(fontSize: 20)),
           //Text(prod_price.toString()),
           SizedBox(
             height: 16,
           ),
           Flexible(
-            child: Text(prod_description, style: TextStyle( fontSize: 20)),
+            child: Text(prod_description, style: TextStyle(fontSize: 20)),
           )
         ],
       ),
@@ -195,9 +229,8 @@ class Single_prod extends StatelessWidget {
           child: const Text('Close'),
         ),
         SizedBox(
-          height:64,
+          height: 64,
         ),
-
       ],
     );
   }
