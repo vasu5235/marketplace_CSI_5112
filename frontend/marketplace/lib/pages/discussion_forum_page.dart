@@ -127,43 +127,33 @@ class _DiscussionForumPageState extends State<DiscussionForumPage> {
             ),
             elevation: 10,
             child: Container(
-              height: 100,
-              child: Expanded(
-                child: Container(
-                  alignment: Alignment.topLeft,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            child: Text(questionUserName[0]),
-                          ),
-                          title: Text(questionTitle),
-                          subtitle: Text("User: ${questionUserName}"),
-                          isThreeLine: false,
-                        ),
+              height: 125,
+              child: Container(
+                alignment: Alignment.topLeft,
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: CircleAvatar(
+                        child: Text(questionUserName[0]),
                       ),
-                      Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(15.0, 8.0, 8.0, 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                questionDescription,
-                                style: TextStyle(height: 2.0),
-                              ),
-                            ],
+                      title: Text(questionTitle),
+                      subtitle: Text("User: ${questionUserName}"),
+                      isThreeLine: false,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15.0, 8.0, 8.0, 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            questionDescription,
+                            style: TextStyle(height: 2.0),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-                flex: 8,
               ),
             )),
       ),

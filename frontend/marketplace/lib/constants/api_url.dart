@@ -1,5 +1,9 @@
 class ApiUrl {
-  static const String envUrl = "https://localhost:7136/api";
+  //local
+ static const String envUrl = "https://localhost:7136/api";
+  //prod
+  //static const String envUrl = "https://services.vlearnings.net/api";
+  
   //API calls related constants
   static const String get_category = envUrl + '/Category';
   static const String get_recent_product = envUrl + '/Product';

@@ -5,7 +5,7 @@ import '../../constants/api_url.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:marketplace/utils/cart_products_controller.dart';
-import 'package:marketplace/constants/route_names.dart';
+//import 'package:marketplace/constants/route_names.dart';
 
 class CategoryFilteredProductsPage extends StatefulWidget {
   final String _categoryName;
@@ -220,12 +220,10 @@ class Single_prod extends StatelessWidget {
         ],
       ),
       actions: <Widget>[
-        new FlatButton(
+        new TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          textColor: Colors.white,
-          color: Colors.red,
           child: const Text('Close'),
         ),
         SizedBox(
