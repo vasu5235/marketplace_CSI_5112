@@ -71,7 +71,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 //   // var _categoryValues;
 
 
-  void _onchanged1(String value) {
+  void _onchanged(String value) {
     setState(() {
       _categoryValue = value;
     });
