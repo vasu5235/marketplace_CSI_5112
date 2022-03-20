@@ -20,3 +20,10 @@ This repository contains our project for CSI 5112 - Software Engineering course 
 
 1. Customer email: `test@uottawa.ca` and password: `123456`
 2. Merchant email: `merchant@marketplace.ca` and password: `123456
+
+# Deployment
+
+1. Cloudfront URL: https://marketplace.vlearnings.net
+2. S3 URL: http://marketplace-s3bucket.s3-website-us-east-1.amazonaws.com
+3. We do not have Cloudfront invalidations setup, so the release is cached for 24 hrs [Reference](https://aws.amazon.com/premiumsupport/knowledge-center/cloudfront-serving-outdated-content-s3/), hence please directly use our S3 IP to view latest code: http://marketplace-s3bucket.s3-website-us-east-1.amazonaws.com. Please note that this may result in an unstable user experience 
+4. Also, since we would be developing part-3 of the project, the environment may be unstable, hence we recommend to run the UI locally and connect to our EC2 hosted services (defined in Quickstart step)
