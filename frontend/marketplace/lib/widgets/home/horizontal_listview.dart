@@ -16,7 +16,7 @@ class User {
 
 class _HorizontalListState extends State<HorizontalList> {
   Future getCategoryList() async {
-    var response = await http.get(Uri.parse(ApiUrl.get_category));
+    var response = await http.get(Uri.parse(ApiUrl.edit_category));
 
     var jsonData = jsonDecode(response.body);
     // List<User> users = [];
@@ -54,6 +54,7 @@ class _HorizontalListState extends State<HorizontalList> {
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     return Category(
+                        id: snapshot.data[index]['id'],
                         image_location: snapshot.data[index]['imageURL'],
                         image_caption: snapshot.data[index]['name']);
                   },
@@ -86,10 +87,11 @@ class _HorizontalListState extends State<HorizontalList> {
 // }
 
 class Category extends StatelessWidget {
+  final id;
   final image_location;
   final image_caption;
 
-  Category({this.image_caption, this.image_location});
+  Category({this.id, this.image_caption, this.image_location});
 
   // Product Card for GridView using ListTile
   @override
@@ -109,8 +111,8 @@ class Category extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    CategoryFilteredProductsPage(image_caption),
+                builder: (context) => CategoryFilteredProductsPage(
+                    id, image_caption, image_location),
               ));
         },
         child: Container(

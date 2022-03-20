@@ -13,4 +13,9 @@ class ApiUrl {
   static const String get_answers = envUrl + '/answer';
   static const String checkout = envUrl + '/Order?id=';
   static const String search_by_product_name = envUrl + '/Product/search/';
+
+  //Category
+  static const String add_category = envUrl + '/Category';
+  static const String edit_category = envUrl + '/Category';
+  static const String delete_category = envUrl + '/Category/';
 }

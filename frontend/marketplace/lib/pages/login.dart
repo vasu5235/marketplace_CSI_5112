@@ -26,7 +26,7 @@ class _LogInState extends State<LogIn> {
   var emailTextFieldController = TextEditingController();
   var passwordFieldController = TextEditingController();
 
-  bool visible =true;
+  bool visible = true;
   String message = '';
 
   void validateEmail(String enteredEmail) {
@@ -115,8 +115,8 @@ class _LogInState extends State<LogIn> {
                           ),
                         ),
                         keyboardType: TextInputType.emailAddress,
-                        onChanged: (enteredEmail) => validateEmail(enteredEmail),
-
+                        onChanged: (enteredEmail) =>
+                            validateEmail(enteredEmail),
                       ),
                       Text(message, textAlign: TextAlign.left),
                       SizedBox(
@@ -126,30 +126,29 @@ class _LogInState extends State<LogIn> {
                         controller: passwordFieldController,
                         obscureText: visible,
                         decoration: InputDecoration(
-                          hintText: 'Password',
-                          labelText: 'Password',
-                          suffixIcon: Icon(
-                            Icons.lock_outline,
-                          ),
-                          suffix: InkWell(
-                            child: visible
-                                ? Icon(
-                              Icons.visibility_off,
-                              size: 18,
-                              color: Colors.blue,
-                            )
-                                : Icon(
-                              Icons.visibility,
-                              size: 18,
-                              color: Colors.blueAccent,
+                            hintText: 'Password',
+                            labelText: 'Password',
+                            suffixIcon: Icon(
+                              Icons.lock_outline,
                             ),
-                            onTap: () {
-                              setState(() {
-                                visible = !visible;
-                              });
-                            },
-                          )
-                        ),
+                            suffix: InkWell(
+                              child: visible
+                                  ? Icon(
+                                      Icons.visibility_off,
+                                      size: 18,
+                                      color: Colors.blue,
+                                    )
+                                  : Icon(
+                                      Icons.visibility,
+                                      size: 18,
+                                      color: Colors.blueAccent,
+                                    ),
+                              onTap: () {
+                                setState(() {
+                                  visible = !visible;
+                                });
+                              },
+                            )),
                       ),
                       SizedBox(
                         height: 64,
@@ -188,11 +187,13 @@ class _LogInState extends State<LogIn> {
                               await session.set("isLoggedIn", true);
 
                               if (responseBodyData["isMerchant"] == true) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MerchantHomePage()),
-                                );
+                                Navigator.pushNamed(
+                                    context, RouteNames.merchanthome);
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) => MerchantHomePage()),
+                                // );
                               } else {
                                 Navigator.pushNamed(context, RouteNames.home);
                               }
