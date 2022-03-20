@@ -1,13 +1,14 @@
 import 'dart:convert';
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/page_titles.dart';
-import 'package:marketplace/widgets/action_button.dart';
+
 import 'package:marketplace/widgets/app_scaffold.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
-
+import 'package:file_picker/file_picker.dart';
 import '../constants/api_url.dart';
 
 
@@ -21,15 +22,60 @@ class MerchantAddProducts extends StatefulWidget {
 
 
 class _MerchantAddProductsState extends State<MerchantAddProducts> {
+  var _categoryValues;
+  var category_keys;
+  var total_price;
+  Future getAllCategories() async {
+    // _loadSession();
+    var response = await http.get(Uri.parse(ApiUrl.get_category));
+    var jsonData = jsonDecode(response.body);
+    print(jsonData);
+    // var data1;
+    // for (data1 in jsonData) {
+    //   print(data1.name);
+    //   _categoryValues.add(data1.name);
+    // }
 
+    category_keys = jsonData.keys.toList();
+    _categoryValues = List.filled(jsonData.keys.length, '');
+    for (var i = 1; i <= jsonData.length; i++) {
+      for (var j = 0; j < jsonData['${category_keys[i - 1]}'].length; j++) {
+        _categoryValues[i - 1].add(jsonData['${category_keys[i - 1]}'][j]['name']);
+      }
+      print(_categoryValues[i - 1]);
+    }
+    return jsonData;
+  }
 
   String _categoryValue = null;
-  var _categoryValues = ["Clothing", "Sports", "Hiking", "Electronics"];
+  // var _categoryValues;
 
   void _onchanged(String value) {
     setState(() {
       _categoryValue = value;
     });
+  }
+
+  Future _pickFile() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    // if(result == null) return;
+    //
+    //
+    // PlatformFile image = result.files.single;
+    //
+    //print(image.path );
+    if(result != null) {
+      final file = result.files.first;
+
+      print(file.name);
+      // print(file.bytes);
+      print(file.size);
+      print(file.extension);
+      print(file.path);
+
+    }
+    else {}
   }
 
   TextEditingController nameController = TextEditingController();
@@ -41,9 +87,23 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-        pageTitle: PageTitles.mAddProduct, body: addProductForm());
+    return FutureBuilder(
+        future: getAllCategories(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return Transform.scale(
+              scale: 0.2,
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return AppScaffold(
+                pageTitle: PageTitles.mAddProduct, body: addProductForm());
+          }
+        }
+    );
+
   }
+
   String get _errorText {
     // at any time, we can get the text from _controller.value.text
     final text = nameController.value.text;
@@ -151,6 +211,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                       height: 32,
                     ),
                     TextFormField(
+                      controller: priceController,
                       keyboardType:TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
@@ -178,6 +239,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         onChanged: (String value) {
                           _onchanged(value);
                         }
+
                     ),
                     SizedBox(
                       height: 32,
@@ -187,10 +249,11 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                       child: ConstrainedBox(
                         constraints: const BoxConstraints.tightFor(
                             width: 200, height: 50),
-                        child: ElevatedButton.icon(
-                          label: Text('Upload Picture'),
-                          icon: Icon(Icons.image),
-                          onPressed: () {},
+                        child: ElevatedButton(
+                           child: Text('Upload Picture'),
+                          onPressed: () {
+                             _pickFile();
+                          },
                           // style: ElevatedButton.styleFrom(primary: Colors.red),
                         ),
                       ),
@@ -206,11 +269,13 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                       var category = categoryController.text;
                       var price = priceController.text;
                       var qty = 1;
+                      var imageUrl = 'images/product_images/oatmeal.jpg';
                       int randomId = Random().nextInt(99999);
 
                       Map bodyData = {
                         "id": randomId,
                         "name": name,
+                        "imageUrl":imageUrl,
                         "description": desc,
                         "category": category,
                         "price": price,
@@ -232,7 +297,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                       print("Response\n" + response.body);
 
                       if (response.body == "true") {
-                        AlertDialog signUpResultDialog = AlertDialog(
+                        AlertDialog addProductDialog = AlertDialog(
                           // Retrieve the text the that user has entered by using the
                           // TextEditingController.
                           content: Text(
@@ -242,11 +307,11 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return signUpResultDialog;
+                            return addProductDialog;
                           },
                         );
                       } else {
-                        AlertDialog signUpFailure = AlertDialog(
+                        AlertDialog addProductFailure = AlertDialog(
                           // Retrieve the text the that user has entered by using the
                           // TextEditingController.
                           content: Text(
@@ -256,7 +321,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return signUpFailure;
+                            return addProductFailure;
                           },
                         );
                       }

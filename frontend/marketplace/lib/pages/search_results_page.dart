@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:marketplace/constants/route_names.dart';
+//import 'package:marketplace/constants/route_names.dart';
 import 'package:marketplace/utils/cart_products_controller.dart';
 
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
-import 'package:flutter_session/flutter_session.dart';
+//import 'package:flutter_session/flutter_session.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../constants/api_url.dart';
@@ -105,8 +105,7 @@ class Single_prod extends StatelessWidget {
           child: Material(
               child: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, RouteNames.product,
-                  arguments: prod_id);
+              showDialog(context: context, builder: (BuildContext context) => PopupDialog(context),);
             },
             child: GridTile(
                 footer: Container(
@@ -154,6 +153,48 @@ class Single_prod extends StatelessWidget {
                   fit: BoxFit.cover,
                 )),
           ))),
+    );
+  }
+
+  Widget PopupDialog(BuildContext context) {
+    return new AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0)
+      ),
+      elevation: 50,
+      title: Text(prod_name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),),
+      content: new Column(
+
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+
+          Divider(color: Colors.black,),
+          SizedBox(
+            height: 32,
+          ),
+          Text("Price: \$ ${prod_price.toString()}", style: TextStyle( fontSize: 20) ),
+          //Text(prod_price.toString()),
+          SizedBox(
+            height: 16,
+          ),
+          Flexible(
+            child: Text(prod_description, style: TextStyle( fontSize: 20)),
+          )
+        ],
+      ),
+      actions: <Widget>[
+        new TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close'),
+        ),
+        SizedBox(
+          height:64,
+        ),
+
+      ],
     );
   }
 }

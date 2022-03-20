@@ -122,45 +122,35 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
                           elevation: 10,
                           child: Container(
                             height: 100,
-                            child: Expanded(
-                              child: Container(
-                                alignment: Alignment.topLeft,
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      flex: 4,
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          child:
-                                              Text(widget.questionUserName[0]),
-                                        ),
-                                        title: Text(widget.questionTitle),
-                                        subtitle: Text(
-                                            "User: ${widget.questionUserName}"),
-                                        isThreeLine: false,
-                                      ),
+                            child: Container(
+                              alignment: Alignment.topLeft,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: CircleAvatar(
+                                      child: Text(widget.questionUserName[0]),
                                     ),
-                                    Expanded(
-                                      flex: 4,
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15.0, 8.0, 8.0, 8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              widget.questionDescription,
-                                              style: TextStyle(height: 2.0),
-                                            ),
-                                          ],
+                                    title: Text(widget.questionTitle),
+                                    subtitle: Text(
+                                        "User: ${widget.questionUserName}"),
+                                    isThreeLine: false,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        15.0, 8.0, 8.0, 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          widget.questionDescription,
+                                          style: TextStyle(height: 2.0),
                                         ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
-                              flex: 8,
                             ),
                           )),
                     ),
@@ -200,26 +190,20 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
           elevation: 10,
           child: Container(
             height: 80,
-            child: Expanded(
-              child: Container(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          child: Text(userName[0]),
-                        ),
-                        title: Text("Answer: ${description}"),
-                        subtitle: Text("User: ${userName}"),
-                        isThreeLine: false,
-                      ),
+            child: Container(
+              alignment: Alignment.topLeft,
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: CircleAvatar(
+                      child: Text(userName[0]),
                     ),
-                  ],
-                ),
+                    title: Text("Answer: ${description}"),
+                    subtitle: Text("User: ${userName}"),
+                    isThreeLine: false,
+                  ),
+                ],
               ),
-              flex: 8,
             ),
           )),
     );
