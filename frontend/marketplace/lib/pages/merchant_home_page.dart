@@ -61,6 +61,19 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
         ));
   }
 
+  final _categoryName = TextEditingController();
+  String get _errorValidation {
+    // at any time, we can get the text from _controller.value.text
+    final text = _categoryName.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    // return null if the text is valid
+    return null;
+  }
+
   Widget Add_Category_Popup(BuildContext context) {
     var new_category_name;
     return new AlertDialog(
@@ -75,13 +88,14 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextField(
-            //controller: emailTextFieldController,
+            controller: _categoryName,
             decoration: InputDecoration(
               hintText: 'Category Name',
               labelText: 'Category Name',
               suffixIcon: Icon(
                 Icons.input,
               ),
+              errorText: _errorValidation,
             ),
             keyboardType: TextInputType.text,
             onChanged: (newText) {

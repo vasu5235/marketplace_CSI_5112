@@ -312,8 +312,22 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
     );
   }
 
+  final _description = TextEditingController();
+
+  String get _errorValidation {
+    // at any time, we can get the text from _controller.value.text
+    final text = _description.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    // return null if the text is valid
+    return null;
+  }
+
   Widget addNewAnswer(BuildContext context) {
-    final _description = TextEditingController();
+
 
     return AlertDialog(
       title: const Text("New Answer"),
@@ -323,10 +337,12 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
         children: [
           TextFormField(
             controller: _description,
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               hintText: 'Answer Text',
               labelText: 'Answer Text',
+              errorText: _errorValidation,
             ),
+
           ),
         ],
       ),

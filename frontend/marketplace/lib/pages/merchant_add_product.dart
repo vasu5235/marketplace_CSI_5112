@@ -30,20 +30,20 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
     var response = await http.get(Uri.parse(ApiUrl.get_category));
     var jsonData = jsonDecode(response.body);
     print(jsonData);
-    // var data1;
-    // for (data1 in jsonData) {
-    //   print(data1.name);
-    //   _categoryValues.add(data1.name);
-    // }
-
-    category_keys = jsonData.keys.toList();
-    _categoryValues = List.filled(jsonData.keys.length, '');
-    for (var i = 1; i <= jsonData.length; i++) {
-      for (var j = 0; j < jsonData['${category_keys[i - 1]}'].length; j++) {
-        _categoryValues[i - 1].add(jsonData['${category_keys[i - 1]}'][j]['name']);
-      }
-      print(_categoryValues[i - 1]);
+    var data1;
+    for (data1 in jsonData) {
+      print(data1.name);
+      _categoryValues = data1['name'] as List;
     }
+
+    // category_keys = jsonData.keys.toList();
+    // _categoryValues = List.filled(jsonData.keys.length, '');
+    // for (var i = 1; i <= jsonData.length; i++) {
+    //   for (var j = 0; j < jsonData['${category_keys[i - 1]}'].length; j++) {
+    //     _categoryValues[i - 1].add(jsonData['${category_keys[i - 1]}'][j]['name']);
+    //   }
+    //   print(_categoryValues[i - 1]);
+    // }
     return jsonData;
   }
 
