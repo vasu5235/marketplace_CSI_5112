@@ -8,6 +8,8 @@ class ApiUrl {
   static const String get_category = envUrl + '/Category';
   static const String get_recent_product = envUrl + '/Product';
   static const String get_product_by_id = envUrl + '/Product/';
+  static const String edit_product = envUrl + '/Product';
+  static const String delete_product = envUrl + 'Product/';
   static const String get_all_orders = envUrl + '/Order';
   static const String get_orders_by_userid = envUrl + '/Order/byUser/';
   static const String get_product_by_category = envUrl + '/Product/search-cat/';

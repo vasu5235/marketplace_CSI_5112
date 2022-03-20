@@ -238,7 +238,7 @@ class _SignUpState extends State<SignUp> {
                                 // Retrieve the text the that user has entered by using the
                                 // TextEditingController.
                                 content: Text(
-                                    "Success!, please Login with your credentials"),
+                                    "Success!, please Login with your credentials with different email"),
                               );
 
                               showDialog(
@@ -282,8 +282,63 @@ class _SignUpState extends State<SignUp> {
                             ),
                             child: Center(
                               child: TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, RouteNames.home);
+                                onPressed: () async {
+                                  var email = emailTextFieldController.text;
+                                  var password = passwordFieldController.text;
+                                  var name = nameFieldController.text;
+                                  int randomId = Random().nextInt(99999);
+
+                                  Map bodyData = {
+                                    "id": randomId,
+                                    "name": name,
+                                    "email": email,
+                                    "password": password,
+                                    "isMerchant": false
+                                  };
+
+                                  var body = json.encode(bodyData);
+
+                                  // print("email: " + emailTextFieldController.text);
+                                  // print("password: " + passwordFieldController.text);
+                                  String uri = ApiUrl.envUrl;
+                                  final url = Uri.encodeFull("${uri}/user");
+
+                                  // print("===URL===" + url);
+
+                                  var response = await http.post(url,
+                                      headers: {'Content-Type': 'application/json'},
+                                      body: body);
+                                  print("Response\n" + response.body);
+
+                                  if (response.body == "true") {
+                                    AlertDialog signUpResultDialog = AlertDialog(
+                                      // Retrieve the text the that user has entered by using the
+                                      // TextEditingController.
+                                      content: Text(
+                                          "Success!, please Login with your credentials"),
+                                    );
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return signUpResultDialog;
+                                      },
+                                    );
+                                  } else {
+                                    AlertDialog signUpFailure = AlertDialog(
+                                      // Retrieve the text the that user has entered by using the
+                                      // TextEditingController.
+                                      content: Text(
+                                          "Oops! Failed to register, please try again with different email"),
+                                    );
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return signUpFailure;
+                                      },
+                                    );
+                                  }
                                 },
                                 child: Text(
                                   "CREATE ACCOUNT",

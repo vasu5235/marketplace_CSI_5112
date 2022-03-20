@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_session/flutter_session.dart';
 import 'package:marketplace/constants/api_url.dart';
 import 'package:marketplace/constants/route_names.dart';
@@ -17,6 +18,35 @@ class DiscussionForumPage extends StatefulWidget {
   @override
   State<DiscussionForumPage> createState() => _DiscussionForumPageState();
 }
+
+class CustomFormField extends StatelessWidget {
+  CustomFormField({
+    Key key,
+    this.hintText,
+    this.inputFormatters,
+    this.validator,
+  }) : super(key: key);
+  final String hintText;
+  final List<TextInputFormatter> inputFormatters;
+  final String Function(String) validator;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        inputFormatters: inputFormatters,
+        validator: validator,
+        decoration: InputDecoration(hintText: hintText),
+      ),
+    );
+  }
+}
+
+// extension extString on String {
+//   bool get isNotNull{
+//     return this!=null;
+//   }
+// }
 
 class _DiscussionForumPageState extends State<DiscussionForumPage> {
   int _userId = -1;
@@ -160,29 +190,44 @@ class _DiscussionForumPageState extends State<DiscussionForumPage> {
     );
   }
 
-  Widget addNewQuestion(BuildContext context) {
-    final _title = TextEditingController();
-    final _description = TextEditingController();
+  final _title = TextEditingController();
+  final _description = TextEditingController();
 
+  String get _errorValidation {
+    // at any time, we can get the text from _controller.value.text
+    final text = _title.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    // return null if the text is valid
+    return null;
+  }
+
+  Widget addNewQuestion(BuildContext context) {
     return AlertDialog(
-      title: const Text("New Question"),
+      title:  Text("New Question"),
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextFormField(
+          TextField(
             controller: _title,
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               hintText: 'Question title',
               labelText: 'Question Title',
+              errorText: _errorValidation
+              // errorText:_errorValidation,
             ),
           ),
           Divider(),
           TextFormField(
               controller: _description,
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                 hintText: 'Question description',
                 labelText: 'Description',
+                errorText: _errorValidation
               ))
         ],
       ),
