@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_session/flutter_session.dart';
 //import 'package:marketplace/constants/route_names.dart';
 import 'package:http/http.dart' as http;
 import 'package:marketplace/utils/cart_products_controller.dart';
@@ -74,6 +75,12 @@ class Single_prod extends StatelessWidget {
       this.prod_description,
       this.prod_category});
 
+  var session = FlutterSession();
+  var _userIsMerchant = false;
+
+  Future<dynamic> _loadSession() async {
+    _userIsMerchant = await session.get("user_is_merchant");
+  }
   @override
   Widget build(BuildContext context) {
     //print("description: " + prod_description.toString());
@@ -95,7 +102,46 @@ class Single_prod extends StatelessWidget {
             child: GridTile(
                 footer: Container(
                   color: Colors.white70,
-                  child: ListTile(
+
+                  child: (_userIsMerchant)?
+                  ListTile(
+                    leading: Text(prod_name,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20.0)),
+                    title: Text(
+                      "\$$prod_price",
+                      style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w800),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () async {
+                        await cartController.addProductToCart(
+                            prod_id,
+                            prod_name,
+                            prod_picture,
+                            prod_price,
+                            prod_quantity,
+                            prod_description,
+                            prod_category);
+                        AlertDialog addToCartSuccess = AlertDialog(
+                          // Retrieve the text the that user has entered by using the
+                          // TextEditingController.
+                          content: Text("Product added to cart!"),
+                        );
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return addToCartSuccess;
+                          },
+                        );
+                      },
+                    ),
+                  ) :
+                  ListTile(
                     leading: Text(prod_name,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20.0)),
@@ -131,7 +177,7 @@ class Single_prod extends StatelessWidget {
                         );
                       },
                     ),
-                  ),
+                  )
                 ),
                 child: Image.asset(
                   prod_picture,

@@ -98,6 +98,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextField(
+                      controller: idController,
                       decoration: InputDecoration(
                         hintText: 'Product Id',
                         labelText: 'Product Id',
@@ -110,6 +111,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                       height: 32,
                     ),
                     TextField(
+                      controller: nameController,
                       decoration: InputDecoration(
                         hintText: 'Product Name',
                         labelText: 'Product Name',
@@ -123,6 +125,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                       height: 32,
                     ),
                     TextField(
+                      controller: descController,
                       decoration: InputDecoration(
                         hintText: 'Product Description',
                         labelText: 'Description',
@@ -136,6 +139,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                       height: 32,
                     ),
                     TextFormField(
+                      controller: priceController,
                       keyboardType:TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
