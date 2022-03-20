@@ -9,8 +9,12 @@ import 'package:marketplace/utils/cart_products_controller.dart';
 
 class CategoryFilteredProductsPage extends StatefulWidget {
   final String _categoryName;
+  final int _id;
+  final String _imageLocation;
 
-  const CategoryFilteredProductsPage(this._categoryName, {Key key})
+  const CategoryFilteredProductsPage(
+      this._id, this._categoryName, this._imageLocation,
+      {Key key})
       : super(key: key);
 
   @override
@@ -38,19 +42,47 @@ class _CategoryFilteredProductsPageState
   Widget build(BuildContext context) {
     return AppScaffold(
       pageTitle: "${widget._categoryName}",
+
       body: Column(children: <Widget>[
         FutureBuilder(
             future: _loadSession(),
             builder: (context, snapshot) {
               if (_userIsMerchant) {
-                return TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  // textColor: Colors.white,
-                  // color: Colors.red,
-                  child: const Text('Close'),
-                );
+                return Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      Edit_Category_Popup(context),
+                                );
+                              },
+                              child: const Text(
+                                'Edit Category',
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        Delete_Category_Popup(context),
+                                  );
+                                },
+                                child: const Text(
+                                  'Delete Category',
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.red,
+                                ))
+                          ],
+                        )));
               } else {
                 return SizedBox();
               }
@@ -85,15 +117,15 @@ class _CategoryFilteredProductsPageState
                       mainAxisSpacing: 10),
                   itemBuilder: (context, index) {
                     return Single_prod(
-                      prod_id: snapshot.data[index]['id'],
-                      prod_name: snapshot.data[index]['name'],
-                      prod_picture: snapshot.data[index]['imageUrl'],
-                      prod_price: snapshot.data[index]['price'],
-                      prod_quantity: snapshot.data[index]['quantity'],
-                      prod_description: snapshot.data[index]['description'],
-                      prod_category: snapshot.data[index]['category'],
-                      cartController: cartController,
-                    );
+                        prod_id: snapshot.data[index]['id'],
+                        prod_name: snapshot.data[index]['name'],
+                        prod_picture: snapshot.data[index]['imageUrl'],
+                        prod_price: snapshot.data[index]['price'],
+                        prod_quantity: snapshot.data[index]['quantity'],
+                        prod_description: snapshot.data[index]['description'],
+                        prod_category: snapshot.data[index]['category'],
+                        cartController: cartController,
+                        userIsMerchant: _userIsMerchant);
                   });
             }
           },
@@ -101,6 +133,152 @@ class _CategoryFilteredProductsPageState
       ]),
 
       //),
+    );
+  }
+
+  Widget Delete_Category_Popup(BuildContext context) {
+    var response;
+    var jsonData;
+    return new AlertDialog(
+      // Retrieve the text the that user has entered by using the
+      // TextEditingController.
+      content: Text("Are you sure you want to delete ?"),
+      actions: [
+        TextButton(
+            //add actions here if needed
+            onPressed: () async => {
+                  //deletehere
+                  response = await http.delete(Uri.parse(
+                      ApiUrl.delete_category + widget._id.toString())),
+                  jsonData = jsonDecode(response.body),
+                  //print(jsonData),
+                  if (jsonData == true)
+                    {
+                      Navigator.pushNamed(context, RouteNames.merchanthome)
+                      // AlertDialog(
+                      //   // Retrieve the text the that user has entered by using the
+                      //   // TextEditingController.
+                      //   content: Text("Category deleted!"),
+                      //   actions: [
+                      //     TextButton(
+                      //         onPressed: () => {
+                      //               Navigator.pushNamed(
+                      //                   context, RouteNames.merchanthome)
+                      //             },
+                      //         child: Text("Ok"))
+                      //   ],
+                      // ),
+                    },
+
+                  //Navigator.pushNamed(context, RouteNames.merchanthome)
+                },
+            child: Text("Yes")),
+        ElevatedButton(
+            onPressed: () => {Navigator.of(context).pop()}, child: Text("No"))
+      ],
+    );
+
+    // showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return deleteProductSuccessDialog;
+    //   },
+    // );
+  }
+
+  Widget Edit_Category_Popup(BuildContext context) {
+    var new_category_name;
+    return new AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      elevation: 50,
+      title: Text(
+        widget._categoryName,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+      ),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextField(
+            //controller: emailTextFieldController,
+            decoration: InputDecoration(
+              hintText: 'New Category Name',
+              labelText: 'New Category Name',
+              suffixIcon: Icon(
+                Icons.input,
+              ),
+            ),
+            keyboardType: TextInputType.text,
+            onChanged: (newText) {
+              new_category_name = newText;
+            },
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () async {
+            //Navigator.of(context).pop();
+            String uri = ApiUrl.edit_category;
+            Map bodyData = {
+              "id": widget._id,
+              "imageURL": widget._imageLocation,
+              "name": new_category_name,
+            };
+            var body = json.encode(bodyData);
+            // print("====body===");
+            // print(body);
+            var response = await http.put(uri,
+                headers: {
+                  'Content-Type': 'application/json',
+                  'accept': 'text/plain'
+                },
+                body: body);
+            //print("Response\n" + response.body);
+
+            if (response.body == "true") {
+              //print('=====EDIT SUCCESS');
+              //Navigator.of(context).pop();
+              //AlertDialog(content: Text("Category name updated !"));
+              AlertDialog editProductSuccessDialog = AlertDialog(
+                // Retrieve the text the that user has entered by using the
+                // TextEditingController.
+                content: Text("Category name updated !"),
+                actions: [
+                  TextButton(
+                      onPressed: () => {
+                            Navigator.pushNamed(
+                                context, RouteNames.merchanthome)
+                          },
+                      child: Text("Ok"))
+                ],
+              );
+
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return editProductSuccessDialog;
+                },
+              );
+              //Navigator.pushNamed(context, RouteNames.merchanthome);
+            }
+          },
+          // textColor: Colors.white,
+          // color: Colors.red,
+          child: const Text('Save'),
+        ),
+        new TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          // textColor: Colors.white,
+          // color: Colors.red,
+          child: const Text('Close'),
+        ),
+        SizedBox(
+          height: 64,
+        ),
+      ],
     );
   }
 }
@@ -114,6 +292,7 @@ class Single_prod extends StatelessWidget {
   final prod_description;
   final prod_category;
   final CartProductsController cartController;
+  final userIsMerchant;
   Single_prod(
       {this.prod_id,
       this.prod_name,
@@ -122,72 +301,137 @@ class Single_prod extends StatelessWidget {
       this.cartController,
       this.prod_quantity,
       this.prod_description,
-      this.prod_category});
+      this.prod_category,
+      this.userIsMerchant});
 
   @override
   Widget build(BuildContext context) {
     //print("description: " + prod_description.toString());
-    return Container(
-      margin: EdgeInsets.all(15),
-      child: Hero(
-          tag: prod_name,
-          child: Material(
-              child: InkWell(
-            onTap: () {
-              // Navigator.pushNamed(context, RouteNames.product,
-              //     arguments: prod_id);
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => PopupDialog(context),
-              );
-            },
-            child: GridTile(
-                footer: Container(
-                  color: Colors.white70,
-                  child: ListTile(
-                    leading: Text(prod_name,
+    if (userIsMerchant) {
+      return Container(
+        margin: EdgeInsets.all(15),
+        child: Hero(
+            tag: prod_name,
+            child: Material(
+                child: InkWell(
+              onTap: () {
+                // Navigator.pushNamed(context, RouteNames.product,
+                //     arguments: prod_id);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => PopupDialog(context),
+                );
+              },
+              child: GridTile(
+                  footer: Container(
+                    color: Colors.white70,
+                    child: ListTile(
+                      leading: Text(prod_name,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20.0)),
+                      title: Text(
+                        "\$$prod_price",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20.0)),
-                    title: Text(
-                      "\$$prod_price",
-                      style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w800),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.add_box_rounded),
-                      onPressed: () {
-                        cartController.addProductToCart(
-                            prod_id,
-                            prod_name,
-                            prod_picture,
-                            prod_price,
-                            prod_quantity,
-                            prod_description,
-                            prod_category);
-                        AlertDialog addToCartSuccess = AlertDialog(
-                          // Retrieve the text the that user has entered by using the
-                          // TextEditingController.
-                          content: Text("Product added to cart!"),
-                        );
+                            color: Colors.blueGrey,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w800),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          cartController.addProductToCart(
+                              prod_id,
+                              prod_name,
+                              prod_picture,
+                              prod_price,
+                              prod_quantity,
+                              prod_description,
+                              prod_category);
+                          AlertDialog addToCartSuccess = AlertDialog(
+                            // Retrieve the text the that user has entered by using the
+                            // TextEditingController.
+                            content: Text("Product added to cart!"),
+                          );
 
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return addToCartSuccess;
-                          },
-                        );
-                      },
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return addToCartSuccess;
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                child: Image.asset(
-                  prod_picture,
-                  fit: BoxFit.cover,
-                )),
-          ))),
-    );
+                  child: Image.asset(
+                    prod_picture,
+                    fit: BoxFit.cover,
+                  )),
+            ))),
+      );
+    } else {
+      return Container(
+        margin: EdgeInsets.all(15),
+        child: Hero(
+            tag: prod_name,
+            child: Material(
+                child: InkWell(
+              onTap: () {
+                // Navigator.pushNamed(context, RouteNames.product,
+                //     arguments: prod_id);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => PopupDialog(context),
+                );
+              },
+              child: GridTile(
+                  footer: Container(
+                    color: Colors.white70,
+                    child: ListTile(
+                      leading: Text(prod_name,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20.0)),
+                      title: Text(
+                        "\$$prod_price",
+                        style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w800),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.add_box_rounded),
+                        onPressed: () {
+                          cartController.addProductToCart(
+                              prod_id,
+                              prod_name,
+                              prod_picture,
+                              prod_price,
+                              prod_quantity,
+                              prod_description,
+                              prod_category);
+                          AlertDialog addToCartSuccess = AlertDialog(
+                            // Retrieve the text the that user has entered by using the
+                            // TextEditingController.
+                            content: Text("Product added to cart!"),
+                          );
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return addToCartSuccess;
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  child: Image.asset(
+                    prod_picture,
+                    fit: BoxFit.cover,
+                  )),
+            ))),
+      );
+    }
   }
 
   Widget PopupDialog(BuildContext context) {
@@ -220,7 +464,8 @@ class Single_prod extends StatelessWidget {
         ],
       ),
       actions: <Widget>[
-        new TextButton(
+        new ElevatedButton(
+
           onPressed: () {
             Navigator.of(context).pop();
           },

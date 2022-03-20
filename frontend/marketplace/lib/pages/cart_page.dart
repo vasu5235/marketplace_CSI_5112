@@ -161,26 +161,12 @@ class CartPage extends StatelessWidget {
                                 var session = FlutterSession();
                                 var randomId =
                                     await Random().nextInt(99999999).toString();
-                                //print("======random====" + randomId);
-                                //var uuid = Uuid();
                                 var _userId = 0;
                                 _userId = await session.get("user_id");
-                                //print(_userId);
-                                //print(_userId);
-
-                                // if (_userId == null) {
-                                //   _userId = 0;
-                                // }
                                 var orderid =
                                     _userId.toString() + '-' + randomId;
-                                //var orderid = _userId;
-                                //print("======Orderid====" + orderid);
                                 String uri =
                                     ApiUrl.checkout + orderid.toString();
-
-                                //final url = Uri.encodeFull("${uri}");
-                                //print(url);
-                                //print("===URL===" + uri);
 
                                 var response = await http.post(uri,
                                     headers: {
