@@ -1,9 +1,15 @@
 class ApiUrl {
-  static const String envUrl = "https://localhost:7136/api";
+  //local
+ //static const String envUrl = "https://localhost:7136/api";
+  //prod
+  //static const String envUrl = "https://services.vlearnings.net/api";
+  static const String envUrl = 'http://3.93.177.49/api';
   //API calls related constants
   static const String get_category = envUrl + '/Category';
   static const String get_recent_product = envUrl + '/Product';
   static const String get_product_by_id = envUrl + '/Product/';
+
+  static const String delete_product = envUrl + 'Product/';
   static const String get_all_orders = envUrl + '/Order';
   static const String get_orders_by_userid = envUrl + '/Order/byUser/';
   static const String get_product_by_category = envUrl + '/Product/search-cat/';

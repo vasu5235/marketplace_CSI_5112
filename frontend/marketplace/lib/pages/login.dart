@@ -253,8 +253,62 @@ class _LogInState extends State<LogIn> {
                             ),
                             child: Center(
                               child: TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, RouteNames.home);
+                                onPressed: () async {
+                                  var email = emailTextFieldController.text;
+                                  var password = passwordFieldController.text;
+
+                                  // print("email: " + emailTextFieldController.text);
+                                  // print("password: " + passwordFieldController.text);
+                                  String uri = ApiUrl.envUrl;
+                                  final url = Uri.encodeFull(
+                                      "${uri}/user/${email}/${password}");
+
+                                  // print("===URL===" + url);
+
+                                  var response = await http.post(url,
+                                      headers: {'Content-Type': 'application/json'});
+                                  int statusCode = response.statusCode;
+
+                                  if (statusCode == 200) {
+                                    var responseBodyData = jsonDecode(response.body);
+
+                                    var session = FlutterSession();
+                                    await session.set(
+                                        "user_name", responseBodyData["name"]);
+                                    await session.set(
+                                        "user_email", responseBodyData["email"]);
+                                    await session.set(
+                                        "user_id", responseBodyData["id"]);
+                                    await session.set("user_is_merchant",
+                                        responseBodyData["isMerchant"]);
+
+                                    await session.set("isLoggedIn", true);
+
+                                    if (responseBodyData["isMerchant"] == true) {
+                                      Navigator.pushNamed(
+                                          context, RouteNames.merchanthome);
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) => MerchantHomePage()),
+                                      // );
+                                    } else {
+                                      Navigator.pushNamed(context, RouteNames.home);
+                                    }
+                                  } else {
+                                    AlertDialog signUpFailure = AlertDialog(
+                                      // Retrieve the text the that user has entered by using the
+                                      // TextEditingController.
+                                      content: Text("Invalid credentials!"),
+                                    );
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return signUpFailure;
+                                      },
+                                    );
+                                  }
                                 },
                                 child: Text(
                                   "LOG IN",

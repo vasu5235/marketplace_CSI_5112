@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_session/flutter_session.dart';
+import '../constants/route_names.dart';
 import '../widgets/app_scaffold.dart';
 import '../../constants/api_url.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:marketplace/utils/cart_products_controller.dart';
-import 'package:marketplace/constants/route_names.dart';
+//import 'package:marketplace/constants/route_names.dart';
 
 class CategoryFilteredProductsPage extends StatefulWidget {
   final String _categoryName;
@@ -186,6 +187,19 @@ class _CategoryFilteredProductsPageState
     // );
   }
 
+  final _categoryName = TextEditingController();
+  String get _errorValidation {
+    // at any time, we can get the text from _controller.value.text
+    final text = _categoryName.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    // return null if the text is valid
+    return null;
+  }
+
   Widget Edit_Category_Popup(BuildContext context) {
     var new_category_name;
     return new AlertDialog(
@@ -200,13 +214,14 @@ class _CategoryFilteredProductsPageState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextField(
-            //controller: emailTextFieldController,
+            controller: _categoryName,
             decoration: InputDecoration(
               hintText: 'New Category Name',
               labelText: 'New Category Name',
               suffixIcon: Icon(
                 Icons.input,
               ),
+              errorText: _errorValidation,
             ),
             keyboardType: TextInputType.text,
             onChanged: (newText) {
@@ -478,6 +493,7 @@ class _Single_prodState extends State<Single_prod> {
       ),
       actions: <Widget>[
         new ElevatedButton(
+
           onPressed: () {
             Navigator.of(context).pop();
           },

@@ -6,7 +6,7 @@ name: Release
 on:
   push:
     branches:
-      - test/continous-deployment
+      - test/deploymentWithAPIv1
   release:
     types:
       - created

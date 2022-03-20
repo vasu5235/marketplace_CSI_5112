@@ -50,7 +50,7 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
 
     var response = await http.get(url);
     var jsonData = jsonDecode(response.body);
-    // print(jsonData);
+    print(jsonData);
     return jsonData;
   }
 
@@ -62,9 +62,112 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
         future: getAllAnswers(widget.questionId),
         builder: (context, snapshot) {
           if (snapshot.data == null) {
-            return Transform.scale(
-              scale: 0.2,
-              child: CircularProgressIndicator(),
+            return AppScaffold(
+              pageTitle: PageTitles.discussion_forum,
+              body: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton.icon(
+                              label: Text('Back'),
+                              icon: Icon(Icons.navigate_before),
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, RouteNames.discussion_forum);
+                              },
+                              style:
+                              ElevatedButton.styleFrom(primary: Colors.red),
+                            )),
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ElevatedButton.icon(
+                                  label: Text('New answer'),
+                                  icon: Icon(Icons.add),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          addNewAnswer(context),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.red),
+                                ))
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 60.0),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.18,
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          elevation: 10,
+                          child: Container(
+                            height: 100,
+                            child: Container(
+                              alignment: Alignment.topLeft,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: CircleAvatar(
+                                      child: Text(widget.questionUserName[0]),
+                                    ),
+                                    title: Text(widget.questionTitle),
+                                    subtitle: Text(
+                                        "User: ${widget.questionUserName}"),
+                                    isThreeLine: false,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        15.0, 8.0, 8.0, 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          widget.questionDescription,
+                                          style: TextStyle(height: 2.0),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )),
+                    ),
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 60.0),
+                  //   child: SizedBox(
+                  //     height: MediaQuery.of(context).size.height * 0.6,
+                  //     width: MediaQuery.of(context).size.width * 0.6,
+                  //     child: ListView.builder(
+                  //       // reverse: true,
+                  //       itemCount: snapshot.data.length,
+                  //       itemBuilder: (context, index) {
+                  //         return BuildAnswerCard(
+                  //             snapshot.data[index]["userName"],
+                  //             snapshot.data[index]["description"]);
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
             );
           } else {
             return AppScaffold(
@@ -122,45 +225,35 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
                           elevation: 10,
                           child: Container(
                             height: 100,
-                            child: Expanded(
-                              child: Container(
-                                alignment: Alignment.topLeft,
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      flex: 4,
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          child:
-                                              Text(widget.questionUserName[0]),
-                                        ),
-                                        title: Text(widget.questionTitle),
-                                        subtitle: Text(
-                                            "User: ${widget.questionUserName}"),
-                                        isThreeLine: false,
-                                      ),
+                            child: Container(
+                              alignment: Alignment.topLeft,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: CircleAvatar(
+                                      child: Text(widget.questionUserName[0]),
                                     ),
-                                    Expanded(
-                                      flex: 4,
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            15.0, 8.0, 8.0, 8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              widget.questionDescription,
-                                              style: TextStyle(height: 2.0),
-                                            ),
-                                          ],
+                                    title: Text(widget.questionTitle),
+                                    subtitle: Text(
+                                        "User: ${widget.questionUserName}"),
+                                    isThreeLine: false,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        15.0, 8.0, 8.0, 8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          widget.questionDescription,
+                                          style: TextStyle(height: 2.0),
                                         ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
-                              flex: 8,
                             ),
                           )),
                     ),
@@ -200,33 +293,41 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
           elevation: 10,
           child: Container(
             height: 80,
-            child: Expanded(
-              child: Container(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          child: Text(userName[0]),
-                        ),
-                        title: Text("Answer: ${description}"),
-                        subtitle: Text("User: ${userName}"),
-                        isThreeLine: false,
-                      ),
+            child: Container(
+              alignment: Alignment.topLeft,
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: CircleAvatar(
+                      child: Text(userName[0]),
                     ),
-                  ],
-                ),
+                    title: Text("Answer: ${description}"),
+                    subtitle: Text("User: ${userName}"),
+                    isThreeLine: false,
+                  ),
+                ],
               ),
-              flex: 8,
             ),
           )),
     );
   }
 
+  final _description = TextEditingController();
+
+  String get _errorValidation {
+    // at any time, we can get the text from _controller.value.text
+    final text = _description.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    // return null if the text is valid
+    return null;
+  }
+
   Widget addNewAnswer(BuildContext context) {
-    final _description = TextEditingController();
+
 
     return AlertDialog(
       title: const Text("New Answer"),
@@ -236,10 +337,12 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
         children: [
           TextFormField(
             controller: _description,
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               hintText: 'Answer Text',
               labelText: 'Answer Text',
+              errorText: _errorValidation,
             ),
+
           ),
         ],
       ),

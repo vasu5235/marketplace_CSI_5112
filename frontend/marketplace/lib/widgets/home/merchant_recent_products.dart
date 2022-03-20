@@ -110,6 +110,7 @@ class _Single_prodState extends State<Single_prod> {
             },
             child: GridTile(
                 footer: Container(
+
                     color: Colors.white70,
                     child: FutureBuilder(
                         future: getCategoryList(),
@@ -149,6 +150,48 @@ class _Single_prodState extends State<Single_prod> {
                             ),
                           );
                         })),
+
+//                   color: Colors.white70,
+//                   child: ListTile(
+//                     leading: Text(prod_name,
+//                         style: TextStyle(
+//                             fontWeight: FontWeight.bold, fontSize: 20.0)),
+//                     title: Text(
+//                       "\$$prod_price",
+//                       style: TextStyle(
+//                           color: Colors.blueGrey,
+//                           fontSize: 20.0,
+//                           fontWeight: FontWeight.w800),
+//                     ),
+//                     trailing: IconButton(
+//                       icon: Icon(Icons.edit),
+//                       onPressed: () async {
+//                         Navigator.pushNamed(context, RouteNames.mEditProduct);
+//                         // await cartController.addProductToCart(
+//                         //     prod_id,
+//                         //     prod_name,
+//                         //     prod_picture,
+//                         //     prod_price,
+//                         //     prod_quantity,
+//                         //     prod_description,
+//                         //     prod_category);
+//                         // AlertDialog addToCartSuccess = AlertDialog(
+//                         //   // Retrieve the text the that user has entered by using the
+//                         //   // TextEditingController.
+//                         //   content: Text("Product added to cart!"),
+//                         // );
+//                         //
+//                         // showDialog(
+//                         //   context: context,
+//                         //   builder: (BuildContext context) {
+//                         //     return addToCartSuccess;
+//                         //   },
+//                         // );
+//                       },
+//                     ),
+//                   ),
+//                 ),
+
                 child: Image.asset(
                   widget.prod_picture,
                   fit: BoxFit.cover,
