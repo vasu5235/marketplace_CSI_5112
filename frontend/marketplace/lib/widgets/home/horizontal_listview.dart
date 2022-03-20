@@ -19,12 +19,7 @@ class _HorizontalListState extends State<HorizontalList> {
     var response = await http.get(Uri.parse(ApiUrl.edit_category));
 
     var jsonData = jsonDecode(response.body);
-    // List<User> users = [];
 
-    // for (var u in jsonData) {
-    //   User user = User(u["imageURL"], u["name"]);
-    //   users.add(user);
-    // }
     print(jsonData);
     return jsonData;
   }

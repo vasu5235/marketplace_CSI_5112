@@ -33,7 +33,6 @@ class MerchantEditProducts extends StatefulWidget {
 class _MerchantEditProductsState extends State<MerchantEditProducts> {
   String _categoryValue = null;
   var _categoryValues = ["Clothing", "Sports", "Hiking", "Electronics"];
-
   void _onchanged(String value) {
     setState(() {
       _categoryValue = value;
@@ -56,10 +55,13 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
 
   @override
   Widget build(BuildContext context) {
+    //print()
+    final args = ModalRoute.of(context).settings.arguments;
+    print(args);
     return AppScaffold(
       pageTitle: PageTitles.mEditProduct,
       body: Center(
-        child: editProductForm(),
+        child: editProductForm(args),
       ),
     );
   }
@@ -78,6 +80,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
     // return null if the text is valid
     return null;
   }
+
   String get errorDesc {
     // at any time, we can get the text from _controller.value.text
     final text = nameController.value.text;
@@ -93,50 +96,83 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
     return null;
   }
 
-
-  Widget editProductForm() {
+  Widget editProductForm(args) {
     Size size = MediaQuery.of(context).size;
     var new_product_name;
     var new_description;
     var new_price;
     var new_category;
     //Simple login form using TextFields and buttons from action_button.dart
-    return FutureBuilder(
-      builder: (context, snapshot) {
-        return Center(
-          child: Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(25),
-              ),
-            ),
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
-              height: size.height *
-                  (size.height > 770
-                      ? 0.9
-                      : size.height > 670
-                          ? 0.8
-                          : 0.9),
-              width: 800,
-              color: Colors.white,
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextField(
-                          controller: idController,
-                          decoration: InputDecoration(
-                            hintText: 'Product Id',
-                            labelText: 'Product Id',
-                            suffixIcon: Icon(
-                              Icons.fingerprint,
-                            ),
-                          ),
+
+    return Center(
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(25),
+          ),
+        ),
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          height: size.height *
+              (size.height > 770
+                  ? 0.9
+                  : size.height > 670
+                      ? 0.8
+                      : 0.9),
+          width: 800,
+          color: Colors.white,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: 'args',
+                        labelText: 'Product Id',
+                        suffixIcon: Icon(
+                          Icons.fingerprint,
+
+//     return FutureBuilder(
+//       builder: (context, snapshot) {
+//         return Center(
+//           child: Card(
+//             elevation: 4,
+//             shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.all(
+//                 Radius.circular(25),
+//               ),
+//             ),
+//             child: AnimatedContainer(
+//               duration: Duration(milliseconds: 200),
+//               height: size.height *
+//                   (size.height > 770
+//                       ? 0.9
+//                       : size.height > 670
+//                           ? 0.8
+//                           : 0.9),
+//               width: 800,
+//               color: Colors.white,
+//               child: Center(
+//                 child: SingleChildScrollView(
+//                   child: Padding(
+//                     padding: EdgeInsets.all(20),
+//                     child: Column(
+//                       mainAxisAlignment: MainAxisAlignment.center,
+//                       children: [
+//                         TextField(
+//                           controller: idController,
+//                           decoration: InputDecoration(
+//                             hintText: 'Product Id',
+//                             labelText: 'Product Id',
+//                             suffixIcon: Icon(
+//                               Icons.fingerprint,
+//                             ),
+//                           ),
+
                         ),
                         SizedBox(
                           height: 32,
@@ -155,8 +191,29 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                             new_product_name = newText;
                           },
                         ),
-                        SizedBox(
-                          height: 32,
+
+                        errorText: errorDesc,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    TextFormField(
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^(\d+)?\.?\d{0,2}'))
+                      ],
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'Enter Price',
+                        suffixIcon: Icon(
+                          Icons.attach_money,
+
+//                         SizedBox(
+//                           height: 32,
+
                         ),
                         TextField(
                           controller: descController,

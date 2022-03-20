@@ -24,4 +24,8 @@ class ApiUrl {
   static const String add_category = envUrl + '/Category';
   static const String edit_category = envUrl + '/Category';
   static const String delete_category = envUrl + '/Category/';
+
+  //product
+  static const String add_product = envUrl + '/Product';
+  static const String edit_product = envUrl + '/Product';
 }
