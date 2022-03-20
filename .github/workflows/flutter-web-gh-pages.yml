@@ -15,11 +15,13 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'dev'
-      - run: flutter config --enable-web
-      - run: flutter pub get
-      - run: flutter build web --release
+#       - run: flutter config --enable-web
+      - working-directory: ./frontend/marketplace
+        run: flutter pub get
+      - working-directory: ./frontend/marketplace
+        run: flutter build web --release --base-href "/marketplace_CSI_5112/"
       - run: |
-          cd build/web
+          cd frontend/marketplace/build/web
           git init
           # type configurations: your user.email and user.name followed lines 
           # git config --global user.email your_email 

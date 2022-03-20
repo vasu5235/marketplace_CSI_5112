@@ -1,7 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:marketplace/widgets/action_button.dart';
+import 'package:flutter_session/flutter_session.dart';
+import 'package:marketplace/constants/api_url.dart';
+// import 'package:marketplace/widgets/action_button.dart';
 import 'package:marketplace/constants/constants.dart';
 //import 'package:marketplace/constants/route_names.dart';
+import 'package:http/http.dart' as http;
+import 'package:marketplace/constants/route_names.dart';
+import 'package:email_validator/email_validator.dart';
+
+import 'merchant_home_page.dart';
 
 class LogIn extends StatefulWidget {
   final Function onSignUpSelected;
@@ -14,6 +23,33 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   //Simple login form using TextFields and buttons from action_button.dart
+  var emailTextFieldController = TextEditingController();
+  var passwordFieldController = TextEditingController();
+
+  bool visible = true;
+  String message = '';
+
+  void validateEmail(String enteredEmail) {
+    if (EmailValidator.validate(enteredEmail)) {
+      setState(() {
+        message = '';
+      });
+    } else {
+      setState(() {
+        message = 'Please enter a valid email address!';
+      });
+    }
+  }
+
+  String validatePassword(String value) {
+    if (value.isEmpty) {
+      return 'Password is required';
+    } else if (value.length < 4) {
+      return 'Password must be at least 4 characters';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -70,6 +106,7 @@ class _LogInState extends State<LogIn> {
                         height: 32,
                       ),
                       TextField(
+                        controller: emailTextFieldController,
                         decoration: InputDecoration(
                           hintText: 'Email',
                           labelText: 'Email',
@@ -77,23 +114,213 @@ class _LogInState extends State<LogIn> {
                             Icons.mail_outline,
                           ),
                         ),
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (enteredEmail) =>
+                            validateEmail(enteredEmail),
                       ),
+                      Text(message, textAlign: TextAlign.left),
                       SizedBox(
                         height: 32,
                       ),
-                      TextField(
+                      TextFormField(
+                        controller: passwordFieldController,
+                        obscureText: visible,
                         decoration: InputDecoration(
-                          hintText: 'Password',
-                          labelText: 'Password',
-                          suffixIcon: Icon(
-                            Icons.lock_outline,
-                          ),
-                        ),
+                            hintText: 'Password',
+                            labelText: 'Password',
+                            suffixIcon: Icon(
+                              Icons.lock_outline,
+                            ),
+                            suffix: InkWell(
+                              child: visible
+                                  ? Icon(
+                                      Icons.visibility_off,
+                                      size: 18,
+                                      color: Colors.blue,
+                                    )
+                                  : Icon(
+                                      Icons.visibility,
+                                      size: 18,
+                                      color: Colors.blueAccent,
+                                    ),
+                              onTap: () {
+                                setState(() {
+                                  visible = !visible;
+                                });
+                              },
+                            )),
                       ),
                       SizedBox(
                         height: 64,
                       ),
-                      actionButton(context, "Log In"),
+                      GestureDetector(
+                          onTap: () async {
+                            // var test = _LogInState.getEmailTextControllerValue();
+                            var email = emailTextFieldController.text;
+                            var password = passwordFieldController.text;
+
+                            // print("email: " + emailTextFieldController.text);
+                            // print("password: " + passwordFieldController.text);
+                            String uri = ApiUrl.envUrl;
+                            final url = Uri.encodeFull(
+                                "${uri}/user/${email}/${password}");
+
+                            // print("===URL===" + url);
+
+                            var response = await http.post(url,
+                                headers: {'Content-Type': 'application/json'});
+                            int statusCode = response.statusCode;
+
+                            if (statusCode == 200) {
+                              var responseBodyData = jsonDecode(response.body);
+
+                              var session = FlutterSession();
+                              await session.set(
+                                  "user_name", responseBodyData["name"]);
+                              await session.set(
+                                  "user_email", responseBodyData["email"]);
+                              await session.set(
+                                  "user_id", responseBodyData["id"]);
+                              await session.set("user_is_merchant",
+                                  responseBodyData["isMerchant"]);
+
+                              await session.set("isLoggedIn", true);
+
+                              if (responseBodyData["isMerchant"] == true) {
+                                Navigator.pushNamed(
+                                    context, RouteNames.merchanthome);
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) => MerchantHomePage()),
+                                // );
+                              } else {
+                                Navigator.pushNamed(context, RouteNames.home);
+                              }
+                            } else {
+                              AlertDialog signUpFailure = AlertDialog(
+                                // Retrieve the text the that user has entered by using the
+                                // TextEditingController.
+                                content: Text("Invalid credentials!"),
+                              );
+
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return signUpFailure;
+                                },
+                              );
+                            }
+
+                            // if (response.body == "true") {
+                            //   var session = FlutterSession();
+                            //   await session.set("user_name", "Vasu Mistry");
+                            //   await session.set("user_email", email);
+                            //   await session.set("isLoggedIn", true);
+
+                            //   Navigator.pushNamed(context, RouteNames.home);
+                            // } else {
+                            //   AlertDialog signUpFailure = AlertDialog(
+                            //     // Retrieve the text the that user has entered by using the
+                            //     // TextEditingController.
+                            //     content: Text("Invalid credentials!"),
+                            //   );
+
+                            //   showDialog(
+                            //     context: context,
+                            //     builder: (BuildContext context) {
+                            //       return signUpFailure;
+                            //     },
+                            //   );
+                            // }
+                          },
+                          child: Container(
+                            height: 50,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: kPrimaryColor.withOpacity(0.2),
+                                  spreadRadius: 4,
+                                  blurRadius: 7,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: TextButton(
+                                onPressed: () async {
+                                  var email = emailTextFieldController.text;
+                                  var password = passwordFieldController.text;
+
+                                  // print("email: " + emailTextFieldController.text);
+                                  // print("password: " + passwordFieldController.text);
+                                  String uri = ApiUrl.envUrl;
+                                  final url = Uri.encodeFull(
+                                      "${uri}/user/${email}/${password}");
+
+                                  // print("===URL===" + url);
+
+                                  var response = await http.post(url,
+                                      headers: {'Content-Type': 'application/json'});
+                                  int statusCode = response.statusCode;
+
+                                  if (statusCode == 200) {
+                                    var responseBodyData = jsonDecode(response.body);
+
+                                    var session = FlutterSession();
+                                    await session.set(
+                                        "user_name", responseBodyData["name"]);
+                                    await session.set(
+                                        "user_email", responseBodyData["email"]);
+                                    await session.set(
+                                        "user_id", responseBodyData["id"]);
+                                    await session.set("user_is_merchant",
+                                        responseBodyData["isMerchant"]);
+
+                                    await session.set("isLoggedIn", true);
+
+                                    if (responseBodyData["isMerchant"] == true) {
+                                      Navigator.pushNamed(
+                                          context, RouteNames.merchanthome);
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //       builder: (context) => MerchantHomePage()),
+                                      // );
+                                    } else {
+                                      Navigator.pushNamed(context, RouteNames.home);
+                                    }
+                                  } else {
+                                    AlertDialog signUpFailure = AlertDialog(
+                                      // Retrieve the text the that user has entered by using the
+                                      // TextEditingController.
+                                      content: Text("Invalid credentials!"),
+                                    );
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return signUpFailure;
+                                      },
+                                    );
+                                  }
+                                },
+                                child: Text(
+                                  "LOG IN",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )),
                       SizedBox(
                         height: 32,
                       ),

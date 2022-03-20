@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import '../constants/constants.dart' as Constants;
+import 'package:flutter_session/flutter_session.dart';
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../constants/api_url.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class OrdersPage extends StatefulWidget {
   OrdersPage({Key key}) : super(key: key);
@@ -11,7 +17,53 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
-  var sampleOrders = Constants.SAMPLE_ORDERS;
+  var order_keys;
+  var total_price;
+  static var cartProducts = [
+    // {
+    //   //"id": 10,
+    //   'name': 'iPhone 123',
+    //   'imageUrl': 'images/product_images/iphone.jpg',
+    //   //"description": "asdasd",
+    //   //"category": "cloth",
+    //   'price': 100,
+    //   //"quantity": 1
+    // },
+
+    {
+      'id': 9999999,
+      'name': 'sample Product',
+      'imageUrl': 'images/product_images/iphone.jpg',
+      'price': 400,
+      'quantity': 1,
+      'description': 'sample desc',
+      //add
+      'category': 'Food'
+    },
+  ];
+  Future getOrders() async {
+    var session = FlutterSession();
+    var _userId = 0;
+    _userId = await session.get("user_id");
+    var response =
+        await http.get(ApiUrl.get_orders_by_userid + _userId.toString());
+    var jsonData = jsonDecode(response.body);
+    order_keys = jsonData.keys.toList();
+    total_price = List.filled(jsonData.keys.length, 0);
+    for (var i = 1; i <= jsonData.length; i++) {
+      for (var j = 0; j < jsonData['${order_keys[i - 1]}'].length; j++) {
+        total_price[i - 1] += jsonData['${order_keys[i - 1]}'][j]['price'];
+      }
+      //print(total_price[i - 1]);
+    }
+    return jsonData;
+  }
+
+  //var sampleOrders = {};
+
+  // _OrdersPageState() {
+  //   getOrders();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +86,36 @@ class _OrdersPageState extends State<OrdersPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: ListView.builder(
-                        itemCount: sampleOrders.length,
-                        itemBuilder: (context, index) {
-                          return BuildOrdersCards(sampleOrders[index]);
-                        },
-                      )),
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: FutureBuilder(
+                      future: getOrders(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data == null) {
+                          return Container(
+                            child: Center(
+                              child: Text("Loading..."),
+                            ),
+                          );
+                        } else if (snapshot.data.length == 0) {
+                          return Container(
+                            child: Center(
+                              child: Text("You don't have any Orders yet"),
+                            ),
+                          );
+                        } else
+                          return ListView.builder(
+                            //physics: ScrollPhysics(),
+                            //shrinkWrap: true,
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context, index) {
+                              return BuildOrdersCards(
+                                  index, snapshot.data[order_keys[index]]);
+                            },
+                          );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -51,7 +125,8 @@ class _OrdersPageState extends State<OrdersPage> {
     );
   }
 
-  Widget BuildOrdersCards(order) {
+  Widget BuildOrdersCards(index, order) {
+    print(order[index]);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -68,20 +143,89 @@ class _OrdersPageState extends State<OrdersPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Order Id:\n 123-456",
+                        // "Order Id:\n ${order['id']}",
+                        "Order Id:\n ${order_keys[index]}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Column(
                         children: [
                           Text(
-                            "Total: \$20",
+                            // "Total: \$20",
+                            //"Total: \$ $total",
+                            "Total: \$ ${total_price[index]}",
+                            //"Total: \$ 0",
+
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextButton.icon(
                             icon: Icon(Icons.download),
                             label: Text('Invoice'),
-                            onPressed: () {},
+                            onPressed: () async {
+                              for (var i = 0; i < order.length; i++) {
+                                cartProducts.add({
+                                  'id': order[i]['id'],
+                                  'name': order[i]['name'],
+                                  'imageUrl': order[i]['imageUrl'],
+                                  'price': order[i]['price'],
+                                  'quantity': order[i]['quantity'],
+                                  'description': order[i]['description'],
+                                  'category': order[i]['category']
+                                });
+                              }
+
+                              List<Map<String, Object>> currentCartProducts =
+                                  cartProducts.sublist(1);
+
+                              List<List<Object>> productInfoSubset = <List>[];
+                              double cartTotal = 0;
+
+                              for (var productInfo in currentCartProducts) {
+                                List<String> temp = [];
+
+                                //ensure correct insertion order with table headers
+                                temp.add(productInfo["name"]);
+                                temp.add(productInfo["price"].toString());
+                                temp.add(productInfo["quantity"].toString());
+
+                                double tempPrice =
+                                    productInfo["price"] as double;
+                                int tempQuantity =
+                                    productInfo["quantity"] as int;
+
+                                cartTotal =
+                                    cartTotal + (tempPrice * tempQuantity);
+
+                                productInfoSubset.add(temp);
+                              }
+
+                              final doc = pw.Document();
+
+                              doc.addPage(pw.Page(
+                                  pageFormat: PdfPageFormat.a4,
+                                  build: (pw.Context context) {
+                                    return pw.Column(
+                                      children: [
+                                        pw.Header(text: "Order Summary"),
+                                        pw.Table.fromTextArray(headers: [
+                                          "Product Name",
+                                          "Price (\$)",
+                                          "Quantity"
+                                        ], data: productInfoSubset),
+                                        pw.Divider(),
+                                        pw.Footer(
+                                            leading: pw.Text(
+                                                "Total: \$ ${cartTotal}"),
+                                            title: pw.Text(
+                                                "Thank you for shopping at Shoppers!"))
+                                      ],
+                                    );
+                                  })); //
+
+                              await Printing.layoutPdf(
+                                  onLayout: (PdfPageFormat format) async =>
+                                      doc.save());
+                            },
                           )
                         ],
                       )
@@ -91,11 +235,12 @@ class _OrdersPageState extends State<OrdersPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.2,
+                  height: MediaQuery.of(context).size.height * 0.4,
                   width: MediaQuery.of(context).size.width * 0.6,
                   child: ListView.builder(
                       itemCount: order.length,
                       itemBuilder: (context, index) {
+                        //total = total + order[index]["price"];
                         return Card(
                             elevation: 20,
                             shape: RoundedRectangleBorder(
@@ -114,10 +259,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                   leading: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 10.0, right: 20.0),
-                                    child: Expanded(
-                                      child: Image.asset(order[index]["image"]),
-                                      // flex: 8,
-                                    ),
+                                    child:
+                                        Image.asset(order[index]["imageUrl"]),
                                   ),
                                 ),
                               ],

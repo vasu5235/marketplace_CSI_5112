@@ -11,6 +11,7 @@ class RouteNames {
   static const String product = '/product';
 
   //Merchant related routes
+  static const String merchanthome = '/merchanthome';
   static const String mAddProduct = '/addProduct';
   static const String mEditProduct = '/editProduct';
 }

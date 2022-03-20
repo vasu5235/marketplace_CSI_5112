@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:marketplace/widgets/home/products.dart';
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
-import '../widgets/home/horizontal_listview_recentproducts.dart';
+//import '../widgets/home/horizontal_listview_recentproducts.dart';
+// import '../widgets/product_details.dart';
+// import 'package:http/http.dart' as http;
+// import '../../constants/api_url.dart';
+// import 'dart:convert';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key key}) : super(key: key);
-
   @override
   State<ProductPage> createState() => _ProductPageState();
 }
+
+// class Product {
+//   final String name, imageUrl, description, category, price;
+//   Product(
+//       this.name, this.imageUrl, this.description, this.category, this.price);
+// }
 
 class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     // Layout: Row (Column: Product Image) +
-    //Column (Product Name and desc) + Description 
-    // Column: 
+    //Column (Product Name and desc) + Description
+    // Column:
+    final args = ModalRoute.of(context).settings.arguments;
+    //print(args);
+    print(args.runtimeType);
     return AppScaffold(
         pageTitle: PageTitles.home,
         body: new ListView(
@@ -32,7 +45,7 @@ class _ProductPageState extends State<ProductPage> {
                         width: 250,
                         fit: BoxFit.contain,
                       ),
-                      elevation: 18.0,
+                      //elevation: 18.0,
                       shape: RoundedRectangleBorder(),
                       shadowColor: Colors.black,
                     )
@@ -85,6 +98,8 @@ class _ProductPageState extends State<ProductPage> {
                 )
               ],
             ),
+            //ProductPage(),
+
             new Padding(
                 padding: const EdgeInsets.fromLTRB(22, 0, 0, 10),
                 child: new Text(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:appbar_textfield/appbar_textfield.dart';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:marketplace/constants/route_names.dart';
+import 'package:marketplace/pages/search_results_page.dart';
 
 import 'app_drawer.dart';
 
@@ -19,54 +21,108 @@ class AppScaffold extends StatefulWidget {
 }
 
 class _AppScaffoldState extends State<AppScaffold> {
+  var session = FlutterSession();
+  var _userIsMerchant = false;
+
+  Future<dynamic> _loadSession() async {
+    _userIsMerchant = await session.get("user_is_merchant");
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool displayMobileLayout = MediaQuery.of(context).size.width < 900;
-    return Row(
-      children: [
-        if (!displayMobileLayout)
-          const AppDrawer(
-            permanentlyDisplay: true,
-          ),
-        Expanded(
-          child: Scaffold(
-            // appBar: AppBar(
-            //   // when the app isn't displaying the mobile version of app, hide the menu button that is used to open the navigation drawer
-            //   automaticallyImplyLeading: displayMobileLayout,
-            //   title: Text(widget.pageTitle),
-            //   actions: <Widget>[
-            //     new IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-            //     new IconButton(
-            //         onPressed: () {}, icon: Icon(Icons.shopping_cart))
-            //   ],
-            // ),
-            appBar: AppBarTextField(
-              automaticallyImplyLeading: displayMobileLayout,
-              title: Text(widget.pageTitle),
-              onBackPressed: _onRestoreAllData,
-              onClearPressed: _onRestoreAllData,
-              onChanged: _onSearchChanged,
-              trailingActionButtons: <Widget>[
-                new IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, RouteNames.cart);
-                    },
-                    icon: Icon(Icons.shopping_cart))
+    return FutureBuilder(
+        future: _loadSession(),
+        builder: (context, snapshot) {
+          if (_userIsMerchant) {
+            return Row(
+              children: [
+                if (!displayMobileLayout)
+                  const AppDrawer(
+                    permanentlyDisplay: true,
+                  ),
+                Expanded(
+                  child: Scaffold(
+                    appBar: AppBarTextField(
+                      automaticallyImplyLeading: displayMobileLayout,
+                      title: Text(widget.pageTitle),
+                      onBackPressed: _onRestoreAllData,
+                      onClearPressed: _onRestoreAllData,
+                      onChanged: _onSearchChanged,
+                      onSubmitted: _onSearchSubmitted,
+                      defaultHintText: "Search Products",
+                    ),
+                    drawer: displayMobileLayout
+                        ? const AppDrawer(
+                            permanentlyDisplay: false,
+                          )
+                        : null,
+                    body: widget.body,
+                  ),
+                )
               ],
-            ),
-            drawer: displayMobileLayout
-                ? const AppDrawer(
-                    permanentlyDisplay: false,
-                  )
-                : null,
-            body: widget.body,
-          ),
-        )
-      ],
-    );
+            );
+          } else {
+            return Row(
+              children: [
+                if (!displayMobileLayout)
+                  const AppDrawer(
+                    permanentlyDisplay: true,
+                  ),
+                Expanded(
+                  child: Scaffold(
+                    //if (_userIsMerchant){}
+                    // appBar: AppBar(
+                    //   // when the app isn't displaying the mobile version of app, hide the menu button that is used to open the navigation drawer
+                    //   automaticallyImplyLeading: displayMobileLayout,
+                    //   title: Text(widget.pageTitle),
+                    //   actions: <Widget>[
+                    //     new IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                    //     new IconButton(
+                    //         onPressed: () {}, icon: Icon(Icons.shopping_cart))
+                    //   ],
+                    // ),
+                    appBar: AppBarTextField(
+                      automaticallyImplyLeading: displayMobileLayout,
+                      title: Text(widget.pageTitle),
+                      onBackPressed: _onRestoreAllData,
+                      onClearPressed: _onRestoreAllData,
+                      onChanged: _onSearchChanged,
+                      onSubmitted: _onSearchSubmitted,
+                      defaultHintText: "Search Products",
+                      trailingActionButtons: <Widget>[
+                        new IconButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, RouteNames.cart);
+                            },
+                            icon: Icon(Icons.shopping_cart))
+                      ],
+                    ),
+                    drawer: displayMobileLayout
+                        ? const AppDrawer(
+                            permanentlyDisplay: false,
+                          )
+                        : null,
+                    body: widget.body,
+                  ),
+                )
+              ],
+            );
+          }
+        });
   }
 
   void _onSearchChanged(String value) {}
 
   void _onRestoreAllData() {}
+
+  void _onSearchSubmitted(String value) {
+    //navigator.push -> new page and display products
+    if (value.isEmpty) return;
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SearchResultsPage(value),
+        ));
+  }
 }
