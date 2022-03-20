@@ -14,7 +14,6 @@ class MerchantEditProducts extends StatefulWidget {
 class _MerchantEditProductsState extends State<MerchantEditProducts> {
   String _categoryValue = null;
   var _categoryValues = ["Clothing", "Sports", "Hiking", "Electronics"];
-
   void _onchanged(String value) {
     setState(() {
       _categoryValue = value;
@@ -30,10 +29,13 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
 
   @override
   Widget build(BuildContext context) {
+    //print()
+    final args = ModalRoute.of(context).settings.arguments;
+    print(args);
     return AppScaffold(
       pageTitle: PageTitles.mEditProduct,
       body: Center(
-        child: editProductForm(),
+        child: editProductForm(args),
       ),
     );
   }
@@ -52,6 +54,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
     // return null if the text is valid
     return null;
   }
+
   String get errorDesc {
     // at any time, we can get the text from _controller.value.text
     final text = nameController.value.text;
@@ -67,8 +70,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
     return null;
   }
 
-
-  Widget editProductForm() {
+  Widget editProductForm(args) {
     Size size = MediaQuery.of(context).size;
 
     //Simple login form using TextFields and buttons from action_button.dart
@@ -99,7 +101,7 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                   children: [
                     TextField(
                       decoration: InputDecoration(
-                        hintText: 'Product Id',
+                        hintText: 'args',
                         labelText: 'Product Id',
                         suffixIcon: Icon(
                           Icons.fingerprint,
@@ -136,9 +138,11 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                       height: 32,
                     ),
                     TextFormField(
-                      keyboardType:TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^(\d+)?\.?\d{0,2}'))
                       ],
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(),

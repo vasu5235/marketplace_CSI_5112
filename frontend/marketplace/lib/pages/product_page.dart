@@ -27,7 +27,8 @@ class _ProductPageState extends State<ProductPage> {
     //Column (Product Name and desc) + Description
     // Column:
     final args = ModalRoute.of(context).settings.arguments;
-    print(args);
+    //print(args);
+    print(args.runtimeType);
     return AppScaffold(
         pageTitle: PageTitles.home,
         body: new ListView(

@@ -3,13 +3,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/page_titles.dart';
-import 'package:marketplace/widgets/action_button.dart';
 import 'package:marketplace/widgets/app_scaffold.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 
 import '../constants/api_url.dart';
-
 
 class MerchantAddProducts extends StatefulWidget {
   const MerchantAddProducts({Key key}) : super(key: key);
@@ -18,65 +16,48 @@ class MerchantAddProducts extends StatefulWidget {
   _MerchantAddProductsState createState() => _MerchantAddProductsState();
 }
 
-
-
 class _MerchantAddProductsState extends State<MerchantAddProducts> {
-
-
   String _categoryValue = null;
-  var _categoryValues = ["Clothing", "Sports", "Hiking", "Electronics"];
+  var _categoryValues = [''];
+  Future getCategoryList() async {
+    var response = await http.get(Uri.parse(ApiUrl.edit_category));
 
-  void _onchanged(String value) {
+    var jsonData = jsonDecode(response.body);
+
+    print(jsonData);
+    return jsonData;
+  }
+
+  void _onchanged1(String value) {
     setState(() {
       _categoryValue = value;
     });
   }
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController imageController = TextEditingController();
-  TextEditingController descController = TextEditingController();
-  TextEditingController categoryController = TextEditingController();
-  TextEditingController idController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-        pageTitle: PageTitles.mAddProduct, body: addProductForm());
-  }
-  String get _errorText {
-    // at any time, we can get the text from _controller.value.text
-    final text = nameController.value.text;
-    // Note: you can do your own custom validation here
-    // Move this logic this outside the widget for more testable code
-    if (text.isEmpty) {
-      return 'Can\'t be empty';
-    }
-    if (text.length < 4) {
-      return 'Minimum 3 Characters required';
-    }
-    // return null if the text is valid
-    return null;
-  }
-  String get errorDesc {
-    // at any time, we can get the text from _controller.value.text
-    final text = descController.value.text;
-    // Note: you can do your own custom validation here
-    // Move this logic this outside the widget for more testable code
-    if (text.isEmpty) {
-      return 'Can\'t be empty';
-    }
-    if (text.length < 4) {
-      return 'Minimum 3 Characters required';
-    }
-    // return null if the text is valid
-    return null;
+        pageTitle: PageTitles.mAddProduct,
+        body: FutureBuilder(
+            future: getCategoryList(),
+            builder: (context, snapshot) {
+              return addProductForm(snapshot.data);
+            }));
   }
 
-
-  Widget addProductForm() {
+  Widget addProductForm(categories) {
     Size size = MediaQuery.of(context).size;
-
+    var prod_name;
+    var prod_desc;
+    var prod_price = 0;
+    var prod_category;
+    var prod_image = 'images/product_images/oatmeal.jpg';
+    _categoryValues = List.filled(categories.length, '');
+    _categoryValue = categories[0]['name'];
+    for (var i = 0; i < categories.length; i++) {
+      _categoryValues[i] = categories[i]['name'];
+      //print(total_price[i - 1]);
+    }
     return Center(
       child: Card(
         elevation: 4,
@@ -91,8 +72,8 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
               (size.height > 770
                   ? 0.9
                   : size.height > 670
-                  ? 0.8
-                  : 0.9),
+                      ? 0.8
+                      : 0.9),
           width: 800,
           color: Colors.white,
           child: Center(
@@ -101,27 +82,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                 padding: EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Text(
-                    //   "SIGN UP",
-                    //   style: TextStyle(
-                    //     fontSize: 18,
-                    //     color: Colors.grey[700],
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 8,
-                    // ),
-                    // Container(
-                    //   width: 30,
-                    //   child: Divider(
-                    //     color: Color(0xFFFE4350),
-                    //     thickness: 2,
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 32,
-                    // ),
+                  children: <Widget>[
                     TextField(
                       decoration: InputDecoration(
                         hintText: 'Product Name',
@@ -129,9 +90,14 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         suffixIcon: Icon(
                           Icons.shop,
                         ),
-                        errorText: _errorText,
+                        //errorText: _errorText,
                       ),
-                      controller: nameController,
+                      //controller: nameController,
+                      keyboardType: TextInputType.text,
+                      onChanged: (newText1) {
+                        setState(() => prod_name = newText1);
+                        //prod_name = newText1;
+                      },
                     ),
                     SizedBox(
                       height: 32,
@@ -143,17 +109,23 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         suffixIcon: Icon(
                           Icons.description,
                         ),
-                        errorText: errorDesc,
+                        //errorText: errorDesc,
                       ),
-                      controller: descController,
+                      //controller: descController,
+                      keyboardType: TextInputType.text,
+                      onChanged: (newText2) {
+                        prod_desc = newText2;
+                      },
                     ),
                     SizedBox(
                       height: 32,
                     ),
                     TextFormField(
-                      keyboardType:TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^(\d+)?\.?\d{0,2}'))
                       ],
                       decoration: const InputDecoration(
                         border: UnderlineInputBorder(),
@@ -162,105 +134,94 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                           Icons.attach_money,
                         ),
                       ),
+                      onChanged: (newText3) {
+                        prod_price = int.parse(newText3);
+                      },
                     ),
                     SizedBox(
                       height: 32,
                     ),
                     DropdownButton(
+                        // Initial Value
                         isExpanded: true,
-                        hint: Text("Product Category"),
-                        focusColor: Colors.grey,
                         value: _categoryValue,
-                        items: _categoryValues.map((String value) {
+                        icon: const Icon(Icons.keyboard_arrow_down),
+
+                        // Array list of items
+                        items: _categoryValues.map((String items) {
                           return DropdownMenuItem(
-                              value: value, child: Text("${value}"));
+                            value: items,
+                            child: Text(items),
+                          );
                         }).toList(),
                         onChanged: (String value) {
-                          _onchanged(value);
+                          _onchanged1(value);
                         }
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(
-                            width: 200, height: 50),
-                        child: ElevatedButton.icon(
-                          label: Text('Upload Picture'),
-                          icon: Icon(Icons.image),
-                          onPressed: () {},
-                          // style: ElevatedButton.styleFrom(primary: Colors.red),
+                        //value: new_product_category,
+                        // change button value to selected value
                         ),
-                      ),
-
-                    ),
                     SizedBox(
                       height: 64,
                     ),
+                    ElevatedButton(
+                        onPressed: () async {
+                          var qty = 1;
+                          int randomId = Random().nextInt(99999);
 
-                    ElevatedButton(onPressed: () async {
-                      var name = nameController.text;
-                      var desc = descController.text;
-                      var category = categoryController.text;
-                      var price = priceController.text;
-                      var qty = 1;
-                      int randomId = Random().nextInt(99999);
+                          Map bodyData = {
+                            "id": randomId,
+                            "name": prod_name,
+                            "description": prod_desc,
+                            "category": prod_category,
+                            "price": prod_price,
+                            "image": prod_image,
+                            "quantity": qty,
+                          };
 
-                      Map bodyData = {
-                        "id": randomId,
-                        "name": name,
-                        "description": desc,
-                        "category": category,
-                        "price": price,
-                        "quantity":qty,
-                      };
+                          var body = json.encode(bodyData);
+                          print(body);
+                          // print("email: " + emailTextFieldController.text);
+                          // print("password: " + passwordFieldController.text);
+                          String uri = ApiUrl.add_product;
+                          //final url = Uri.encodeFull("${uri}/Product");
 
-                      var body = json.encode(bodyData);
+                          // print("===URL===" + url);
 
-                      // print("email: " + emailTextFieldController.text);
-                      // print("password: " + passwordFieldController.text);
-                      String uri = ApiUrl.envUrl;
-                      final url = Uri.encodeFull("${uri}/Product");
+                          var response = await http.post(uri,
+                              headers: {'Content-Type': 'application/json'},
+                              body: body);
+                          print("Response\n" + response.body);
 
-                      // print("===URL===" + url);
+                          if (response.body == "true") {
+                            AlertDialog signUpResultDialog = AlertDialog(
+                              // Retrieve the text the that user has entered by using the
+                              // TextEditingController.
+                              content:
+                                  Text("Success!, Product added successfully!"),
+                            );
 
-                      var response = await http.post(url,
-                          headers: {'Content-Type': 'application/json'},
-                          body: body);
-                      print("Response\n" + response.body);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return signUpResultDialog;
+                              },
+                            );
+                          } else {
+                            AlertDialog signUpFailure = AlertDialog(
+                              // Retrieve the text the that user has entered by using the
+                              // TextEditingController.
+                              content: Text(
+                                  "Oops! Failed to add product, please try again"),
+                            );
 
-                      if (response.body == "true") {
-                        AlertDialog signUpResultDialog = AlertDialog(
-                          // Retrieve the text the that user has entered by using the
-                          // TextEditingController.
-                          content: Text(
-                              "Success!, Product added successfully!"),
-                        );
-
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return signUpResultDialog;
-                          },
-                        );
-                      } else {
-                        AlertDialog signUpFailure = AlertDialog(
-                          // Retrieve the text the that user has entered by using the
-                          // TextEditingController.
-                          content: Text(
-                              "Oops! Failed to add product, please try again"),
-                        );
-
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return signUpFailure;
-                          },
-                        );
-                      }
-                    },
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return signUpFailure;
+                              },
+                            );
+                          }
+                        },
                         child: Text("Submit")),
                     SizedBox(
                       height: 32,
