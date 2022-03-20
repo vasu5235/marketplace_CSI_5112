@@ -174,6 +174,8 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
 //                           ),
 
                         ),
+                )
+              ),
                         SizedBox(
                           height: 32,
                         ),
@@ -192,9 +194,9 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                           },
                         ),
 
-                        errorText: errorDesc,
-                      ),
-                    ),
+                    //     errorText: errorDesc,
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 32,
                     ),
@@ -215,6 +217,8 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
 //                           height: 32,
 
                         ),
+                      )
+                    ),
                         TextField(
                           controller: descController,
                           decoration: InputDecoration(
@@ -345,8 +349,8 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                                 onPressed: () {
                                   showDialog(
                                     context: context,
-                                    builder: (BuildContext context) =>
-                                        Delete_Product_Popup(context),
+                                    // builder: (BuildContext context) =>
+                                    //     Delete_Product_Popup(context),
                                   );
                                 },
                                 child: const Text(
@@ -371,49 +375,49 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
           ),
         );
       }
-    );
-  }
-  Widget Delete_Product_Popup(BuildContext context) {
-    var response;
-    var jsonData;
-    return new AlertDialog(
-      // Retrieve the text the that user has entered by using the
-      // TextEditingController.
-      content: Text("Are you sure you want to delete ?"),
-      actions: [
-        TextButton(
-          //add actions here if needed
-            onPressed: () async => {
-              //deletehere
-              response = await http.delete(Uri.parse(
-                  ApiUrl.delete_product + widget.id.toString())),
-              jsonData = jsonDecode(response.body),
-              //print(jsonData),
-              if (jsonData == true)
-                {
-                  Navigator.pushNamed(context, RouteNames.merchanthome)
-                  // AlertDialog(
-                  //   // Retrieve the text the that user has entered by using the
-                  //   // TextEditingController.
-                  //   content: Text("Category deleted!"),
-                  //   actions: [
-                  //     TextButton(
-                  //         onPressed: () => {
-                  //               Navigator.pushNamed(
-                  //                   context, RouteNames.merchanthome)
-                  //             },
-                  //         child: Text("Ok"))
-                  //   ],
-                  // ),
-                },
 
-              //Navigator.pushNamed(context, RouteNames.merchanthome)
-            },
-            child: Text("Yes")),
-        ElevatedButton(
-            onPressed: () => {Navigator.of(context).pop()}, child: Text("No"))
-      ],
-    );
+  }
+  // Widget Delete_Product_Popup(BuildContext context) {
+  //   var response;
+  //   var jsonData;
+  //   return new AlertDialog(
+  //     // Retrieve the text the that user has entered by using the
+  //     // TextEditingController.
+  //     content: Text("Are you sure you want to delete ?"),
+  //     actions: [
+  //       TextButton(
+  //         //add actions here if needed
+  //           onPressed: () async => {
+  //             //deletehere
+  //             response = await http.delete(Uri.parse(
+  //                 ApiUrl.delete_product + widget.id.toString())),
+  //             jsonData = jsonDecode(response.body),
+  //             //print(jsonData),
+  //             if (jsonData == true)
+  //               {
+  //                 Navigator.pushNamed(context, RouteNames.merchanthome)
+  //                 // AlertDialog(
+  //                 //   // Retrieve the text the that user has entered by using the
+  //                 //   // TextEditingController.
+  //                 //   content: Text("Category deleted!"),
+  //                 //   actions: [
+  //                 //     TextButton(
+  //                 //         onPressed: () => {
+  //                 //               Navigator.pushNamed(
+  //                 //                   context, RouteNames.merchanthome)
+  //                 //             },
+  //                 //         child: Text("Ok"))
+  //                 //   ],
+  //                 // ),
+  //               },
+  //
+  //             //Navigator.pushNamed(context, RouteNames.merchanthome)
+  //           },
+  //           child: Text("Yes")),
+  //       ElevatedButton(
+  //           onPressed: () => {Navigator.of(context).pop()}, child: Text("No"))
+  //     ],
+  //   );
 
     // showDialog(
     //   context: context,
@@ -421,5 +425,4 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
     //     return deleteProductSuccessDialog;
     //   },
     // );
-  }
-}
+
