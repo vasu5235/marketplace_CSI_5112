@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/route_names.dart';
 import 'package:http/http.dart' as http;
-import 'package:marketplace/pages/merchant_edit_product.dart';
 import 'package:marketplace/utils/cart_products_controller.dart';
 import '../../constants/api_url.dart';
 import 'dart:convert';
@@ -80,14 +78,34 @@ class Single_prod extends StatefulWidget {
   State<Single_prod> createState() => _Single_prodState();
 }
 
+String _categoryValue = 'test';
+var _categoryValues = [''];
+String new_product_category;
+
 class _Single_prodState extends State<Single_prod> {
   Future getCategoryList() async {
     var response = await http.get(Uri.parse(ApiUrl.edit_category));
 
     var jsonData = jsonDecode(response.body);
 
-    print(jsonData);
+    print(_categoryValue);
+
+    _categoryValues = List.filled(jsonData.length, '');
+    //_categoryValue = jsonData[0]['name'];
+    _categoryValue = new_product_category;
+
+    for (var i = 0; i < jsonData.length; i++) {
+      _categoryValues[i] = jsonData[i]['name'];
+    }
+
     return jsonData;
+  }
+
+  void _onchanged(String value) {
+    setState(() {
+      _categoryValue = value;
+      new_product_category = value;
+    });
   }
 
   @override
@@ -110,7 +128,6 @@ class _Single_prodState extends State<Single_prod> {
             },
             child: GridTile(
                 footer: Container(
-
                     color: Colors.white70,
                     child: FutureBuilder(
                         future: getCategoryList(),
@@ -150,48 +167,6 @@ class _Single_prodState extends State<Single_prod> {
                             ),
                           );
                         })),
-
-//                   color: Colors.white70,
-//                   child: ListTile(
-//                     leading: Text(prod_name,
-//                         style: TextStyle(
-//                             fontWeight: FontWeight.bold, fontSize: 20.0)),
-//                     title: Text(
-//                       "\$$prod_price",
-//                       style: TextStyle(
-//                           color: Colors.blueGrey,
-//                           fontSize: 20.0,
-//                           fontWeight: FontWeight.w800),
-//                     ),
-//                     trailing: IconButton(
-//                       icon: Icon(Icons.edit),
-//                       onPressed: () async {
-//                         Navigator.pushNamed(context, RouteNames.mEditProduct);
-//                         // await cartController.addProductToCart(
-//                         //     prod_id,
-//                         //     prod_name,
-//                         //     prod_picture,
-//                         //     prod_price,
-//                         //     prod_quantity,
-//                         //     prod_description,
-//                         //     prod_category);
-//                         // AlertDialog addToCartSuccess = AlertDialog(
-//                         //   // Retrieve the text the that user has entered by using the
-//                         //   // TextEditingController.
-//                         //   content: Text("Product added to cart!"),
-//                         // );
-//                         //
-//                         // showDialog(
-//                         //   context: context,
-//                         //   builder: (BuildContext context) {
-//                         //     return addToCartSuccess;
-//                         //   },
-//                         // );
-//                       },
-//                     ),
-//                   ),
-//                 ),
-
                 child: Image.asset(
                   widget.prod_picture,
                   fit: BoxFit.cover,
@@ -250,15 +225,14 @@ class _Single_prodState extends State<Single_prod> {
     var new_product_name;
     var new_product_desc;
     var new_product_price;
-    String new_product_category = categories[0]['name'];
-    var cat_list = List.filled(categories.length, '');
+    // String new_product_category = categories[0]['name'];
+    // var cat_list = List.filled(categories.length, '');
 
-    //print(categories.length);
-    for (var i = 0; i < categories.length; i++) {
-      cat_list[i] = categories[i]['name'];
-      //print(total_price[i - 1]);
-    }
-    for (var i = 0; i < categories.length; i++) {}
+    // //print(categories.length);
+    // for (var i = 0; i < categories.length; i++) {
+    //   cat_list[i] = categories[i]['name'];
+    //   //print(total_price[i - 1]);
+    // }
     return new AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 50,
@@ -316,27 +290,30 @@ class _Single_prodState extends State<Single_prod> {
             },
           ),
           DropdownButton(
-            // Initial Value
-            value: new_product_category,
+              // Initial Value
+              hint: Text("Select Category"),
+              isExpanded: true,
+              value: _categoryValue,
+              icon: const Icon(Icons.keyboard_arrow_down),
 
-            // Down Arrow Icon
-            icon: const Icon(Icons.keyboard_arrow_down),
+              // Array list of items
+              items: _categoryValues.map((String items) {
+                return DropdownMenuItem(
+                  value: items,
+                  child: Text(items),
+                );
+              }).toList(),
+              onChanged: (String value) {
+                _onchanged(value);
+                new_product_category = value;
+                _categoryValue = value;
+                print(new_product_category);
+              }
 
-            // Array list of items
-            items: cat_list.map((String items) {
-              return DropdownMenuItem(
-                value: items,
-                child: Text(items),
-              );
-            }).toList(),
-            // After selecting the desired option,it will
-            // change button value to selected value
-            onChanged: (String newValue) {
-              setState(() {
-                new_product_category = newValue;
-              });
-            },
-          ),
+              //value: new_product_category,
+              // change button value to selected value
+
+              ),
 
           // TextField(
           //   //controller: emailTextFieldController,
@@ -355,6 +332,18 @@ class _Single_prodState extends State<Single_prod> {
         ],
       ),
       actions: <Widget>[
+        new ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.red),
+            ),
+            onPressed: () async {
+              var response = await http.delete(
+                  Uri.parse(ApiUrl.delete_product + widget.prod_id.toString()));
+              if (response.statusCode == 200) {
+                Navigator.pushNamed(context, RouteNames.merchanthome);
+              }
+            },
+            child: Text('Delete')),
         new ElevatedButton(
           onPressed: () async {
             //Navigator.of(context).pop();
@@ -412,15 +401,6 @@ class _Single_prodState extends State<Single_prod> {
           // color: Colors.red,
           child: const Text('Save'),
         ),
-        new TextButton(onPressed: ()async{
-          var response = await http.delete(Uri.parse(
-              ApiUrl.delete_category + widget.prod_id.toString()));
-          var jsonData = jsonDecode(response.body);
-          if(jsonData == 'true') {
-            Navigator.of(context).pop(widget.prod_id);
-          }
-        },
-            child: Text('Delete')),
         new TextButton(
           onPressed: () {
             Navigator.of(context).pop();
