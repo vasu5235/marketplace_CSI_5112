@@ -412,6 +412,15 @@ class _Single_prodState extends State<Single_prod> {
           // color: Colors.red,
           child: const Text('Save'),
         ),
+        new TextButton(onPressed: ()async{
+          var response = await http.delete(Uri.parse(
+              ApiUrl.delete_category + widget.prod_id.toString()));
+          var jsonData = jsonDecode(response.body);
+          if(jsonData == 'true') {
+            Navigator.of(context).pop(widget.prod_id);
+          }
+        },
+            child: Text('Delete')),
         new TextButton(
           onPressed: () {
             Navigator.of(context).pop();
