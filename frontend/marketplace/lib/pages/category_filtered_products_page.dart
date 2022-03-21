@@ -493,7 +493,6 @@ class _Single_prodState extends State<Single_prod> {
       ),
       actions: <Widget>[
         new ElevatedButton(
-
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -534,6 +533,18 @@ class _Single_prodState extends State<Single_prod> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          new ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.red),
+              ),
+              onPressed: () async {
+                var response = await http.delete(Uri.parse(
+                    ApiUrl.delete_product + widget.prod_id.toString()));
+                if (response.statusCode == 200) {
+                  Navigator.pushNamed(context, RouteNames.merchanthome);
+                }
+              },
+              child: Text('Delete')),
           TextField(
             //controller: emailTextFieldController,
             decoration: InputDecoration(
