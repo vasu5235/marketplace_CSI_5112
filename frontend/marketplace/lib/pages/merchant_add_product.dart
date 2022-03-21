@@ -22,6 +22,17 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 
   String _categoryValue = null;
   var _categoryValues = [''];
+  TextEditingController nameController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+  TextEditingController categoryController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+
+  String prod_name, prod_desc,prod_price;
+  String prod_image = 'images/product_images/oatmeal.jpg';
+  String prod_category ;
+
   Future getCategoryList() async {
     var response = await http.get(Uri.parse(ApiUrl.edit_category));
 
@@ -60,7 +71,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 //   // var _categoryValues;
 
 
-  void _onchanged1(String value) {
+  void _onchanged(String value) {
     setState(() {
       _categoryValue = value;
     });
@@ -76,6 +87,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
             builder: (context, snapshot) {
               return addProductForm(snapshot.data);
             }));
+
 
 //   Future _pickFile() async {
 //     final result = await FilePicker.platform.pickFiles(type: FileType.image);
@@ -99,12 +111,12 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 //     else {}
 //   }
 
-//   TextEditingController nameController = TextEditingController();
-//   TextEditingController imageController = TextEditingController();
-//   TextEditingController descController = TextEditingController();
-//   TextEditingController categoryController = TextEditingController();
-//   TextEditingController idController = TextEditingController();
-//   TextEditingController priceController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+  TextEditingController categoryController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -157,11 +169,11 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 
   Widget addProductForm(categories) {
     Size size = MediaQuery.of(context).size;
-    var prod_name;
-    var prod_desc;
-    var prod_price = 0;
-    var prod_category;
-    var prod_image = 'images/product_images/oatmeal.jpg';
+    // var prod_name;
+    // var prod_desc;
+    // var prod_price = 0;
+    // var prod_category;
+    //var prod_image = 'images/product_images/oatmeal.jpg';
     _categoryValues = List.filled(categories.length, '');
     _categoryValue = categories[0]['name'];
     for (var i = 0; i < categories.length; i++) {
@@ -202,7 +214,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         ),
                         //errorText: _errorText,
                       ),
-                      //controller: nameController,
+                      controller: nameController,
                       keyboardType: TextInputType.text,
                       onChanged: (newText1) {
                         setState(() => prod_name = newText1);
@@ -221,7 +233,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         ),
                         //errorText: errorDesc,
                       ),
-                      //controller: descController,
+                      controller: descController,
                       keyboardType: TextInputType.text,
                       onChanged: (newText2) {
                         prod_desc = newText2;
@@ -235,7 +247,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                       keyboardType:
                           TextInputType.numberWithOptions(decimal: true),
 
-//                       controller: priceController,
+                       controller: priceController,
 //                       keyboardType:TextInputType.numberWithOptions(decimal: true),
 
                       inputFormatters: <TextInputFormatter>[
@@ -250,7 +262,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         ),
                       ),
                       onChanged: (newText3) {
-                        prod_price = int.parse(newText3);
+                        prod_price = newText3.toString();
                       },
                     ),
                     SizedBox(
@@ -270,30 +282,32 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                           );
                         }).toList(),
                         onChanged: (String value) {
-                          _onchanged1(value);
+                          prod_category = value;
                         }
 
                         //value: new_product_category,
                         // change button value to selected value
 
 
-//                     ),
-//                     SizedBox(
-//                       height: 32,
-//                     ),
-//                     Align(
-//                       alignment: Alignment.bottomLeft,
-//                       child: ConstrainedBox(
-//                         constraints: const BoxConstraints.tightFor(
-//                             width: 200, height: 50),
-//                         child: ElevatedButton(
-//                            child: Text('Upload Picture'),
-//                           onPressed: () {
-//                              _pickFile();
-//                           },
-//                           // style: ElevatedButton.styleFrom(primary: Colors.red),
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints.tightFor(
+                            width: 200, height: 50),
+                        child: ElevatedButton(
+                           child: Text('Upload Picture'),
+                          onPressed: () {
+                             // _pickFile();
+                          },
+                          // style: ElevatedButton.styleFrom(primary: Colors.red),
 
                         ),
+                      )
+                    ),
                     SizedBox(
                       height: 64,
                     ),
@@ -301,6 +315,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                     ElevatedButton(
                         onPressed: () async {
                           var qty = 1;
+                          var image = 'images/product_images/oatmeal.jpg';
                           int randomId = Random().nextInt(99999);
 
                           Map bodyData = {
@@ -309,7 +324,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                             "description": prod_desc,
                             "category": prod_category,
                             "price": prod_price,
-                            "image": prod_image,
+                            "imageUrl": image,
                             "quantity": qty,
                           };
 
