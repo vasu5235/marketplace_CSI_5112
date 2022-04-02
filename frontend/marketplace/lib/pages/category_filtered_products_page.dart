@@ -324,6 +324,9 @@ class Single_prod extends StatefulWidget {
 }
 
 class _Single_prodState extends State<Single_prod> {
+  var _categoryValues = [''];
+  String new_prod_category;
+
   Future getCategoryList() async {
     var response = await http.get(Uri.parse(ApiUrl.edit_category));
 
@@ -333,13 +336,8 @@ class _Single_prodState extends State<Single_prod> {
     return jsonData;
   }
 
-  var cat_list = [''];
-  String new_product_category = '';
-  void _onchanged(String value) {
-    setState(() {
-      new_product_category = value;
-    });
-  }
+  // var cat_list = [''];
+  // String new_product_category;
 
   @override
   Widget build(BuildContext context) {
@@ -509,17 +507,11 @@ class _Single_prodState extends State<Single_prod> {
     var new_product_name;
     var new_product_desc;
     var new_product_price;
-    cat_list = List.filled(categories.length, '');
-    new_product_category = categories[0]['name'];
+    _categoryValues = List.filled(categories.length, '');
+    new_prod_category = categories[0]['name'];
 
-    // var cat_list = List.filled(categories.length, '');
-    // String new_product_category = categories[0]['name'];
-
-    //var _selection = categories[0]['name'];
-    //print(categories.length);
     for (var i = 0; i < categories.length; i++) {
-      cat_list[i] = categories[i]['name'];
-      //print(total_price[i - 1]);
+      _categoryValues[i] = categories[i]['name'];
     }
     for (var i = 0; i < categories.length; i++) {}
     return new AlertDialog(
@@ -590,51 +582,25 @@ class _Single_prodState extends State<Single_prod> {
               new_product_desc = newText3;
             },
           ),
-          DropdownButton(
-              // Initial Value
-              //hint: Text("Select Category"),
-              value: new_product_category,
-              //value: _selection,
-              // Down Arrow Icon
-              icon: const Icon(Icons.keyboard_arrow_down),
-
-              // Array list of items
-              items: cat_list.map((String items) {
+          StatefulBuilder(
+              builder: (BuildContext context, StateSetter dropDownState) {
+            return DropdownButton<String>(
+              hint: Text("Select Category"),
+              value: new_prod_category,
+              underline: Container(),
+              items: _categoryValues.map((String item) {
                 return DropdownMenuItem(
-                  value: items,
-                  child: Text(items),
+                  value: item,
+                  child: Text(item),
                 );
               }).toList(),
-              // After selecting the desired option,it will
-              // onChanged: (newValue) {
-              //   setState(() {
-              //     new_product_category = newValue;
-              //     //_selection = newValue;
-              //   });
-              //   print(new_product_category);
-              // },
-
               onChanged: (String value) {
-                _onchanged(value);
-              }
-              //value: new_product_category,
-              // change button value to selected value
-              ),
-
-          // TextField(
-          //   //controller: emailTextFieldController,
-          //   decoration: InputDecoration(
-          //     hintText: cat_list.toString(),
-          //     labelText: 'New Price',
-          //     suffixIcon: Icon(
-          //       Icons.input,
-          //     ),
-          //   ),
-          //   keyboardType: TextInputType.text,
-          //   onChanged: (newText2) {
-          //     new_product_price = newText2;
-          //   },
-          // ),
+                dropDownState(() {
+                  new_prod_category = value;
+                });
+              },
+            );
+          }),
         ],
       ),
       actions: <Widget>[
@@ -647,7 +613,7 @@ class _Single_prodState extends State<Single_prod> {
               "name": new_product_name,
               "imageUrl": this.widget.prod_picture,
               "description": new_product_desc,
-              "category": new_product_category,
+              "category": new_prod_category,
               "price": new_product_price,
               "quantity": this.widget.prod_quantity
             };

@@ -64,48 +64,35 @@ class Single_prod extends StatefulWidget {
   final prod_description;
   final prod_category;
   final CartProductsController cartController;
-  Single_prod(
-      {this.prod_id,
-      this.prod_name,
-      this.prod_picture,
-      this.prod_price,
-      this.cartController,
-      this.prod_quantity,
-      this.prod_description,
-      this.prod_category});
+  Single_prod({
+    this.prod_id,
+    this.prod_name,
+    this.prod_picture,
+    this.prod_price,
+    this.cartController,
+    this.prod_quantity,
+    this.prod_description,
+    this.prod_category,
+  });
 
   @override
   State<Single_prod> createState() => _Single_prodState();
 }
 
-String _categoryValue = 'test';
-var _categoryValues = [''];
-String new_product_category;
-
 class _Single_prodState extends State<Single_prod> {
+  var _categoryValues = [''];
+  String new_prod_category;
+
   Future getCategoryList() async {
     var response = await http.get(Uri.parse(ApiUrl.edit_category));
-
     var jsonData = jsonDecode(response.body);
-
-    print(_categoryValue);
-
     _categoryValues = List.filled(jsonData.length, '');
-    //_categoryValue = jsonData[0]['name'];
-    _categoryValue = new_product_category;
 
     for (var i = 0; i < jsonData.length; i++) {
       _categoryValues[i] = jsonData[i]['name'];
     }
 
     return jsonData;
-  }
-
-  void _onchanged(String value) {
-    setState(() {
-      _categoryValue = value;
-      new_product_category = value;
-    });
   }
 
   @override
@@ -159,7 +146,7 @@ class _Single_prodState extends State<Single_prod> {
                                 //       'paia2': prod_name,
                                 //       'paia3': prod_picture,
                                 //       'paia4': prod_description,
-                                //       'paia5': prod_category,
+                                //       'paia5': new_prod_category,
                                 //       'paia6': prod_price,
                                 //       'paia7': prod_quantity
                                 //     });
@@ -289,46 +276,25 @@ class _Single_prodState extends State<Single_prod> {
               new_product_desc = newText3;
             },
           ),
-          DropdownButton(
-              // Initial Value
+          StatefulBuilder(
+              builder: (BuildContext context, StateSetter dropDownState) {
+            return DropdownButton<String>(
               hint: Text("Select Category"),
-              isExpanded: true,
-              value: _categoryValue,
-              icon: const Icon(Icons.keyboard_arrow_down),
-
-              // Array list of items
-              items: _categoryValues.map((String items) {
+              value: new_prod_category,
+              underline: Container(),
+              items: _categoryValues.map((String item) {
                 return DropdownMenuItem(
-                  value: items,
-                  child: Text(items),
+                  value: item,
+                  child: Text(item),
                 );
               }).toList(),
               onChanged: (String value) {
-                _onchanged(value);
-                new_product_category = value;
-                _categoryValue = value;
-                print(new_product_category);
-              }
-
-              //value: new_product_category,
-              // change button value to selected value
-
-              ),
-
-          // TextField(
-          //   //controller: emailTextFieldController,
-          //   decoration: InputDecoration(
-          //     hintText: cat_list.toString(),
-          //     labelText: 'New Price',
-          //     suffixIcon: Icon(
-          //       Icons.input,
-          //     ),
-          //   ),
-          //   keyboardType: TextInputType.text,
-          //   onChanged: (newText2) {
-          //     new_product_price = newText2;
-          //   },
-          // ),
+                dropDownState(() {
+                  new_prod_category = value;
+                });
+              },
+            );
+          }),
         ],
       ),
       actions: <Widget>[
@@ -353,7 +319,7 @@ class _Single_prodState extends State<Single_prod> {
               "name": new_product_name,
               "imageUrl": this.widget.prod_picture,
               "description": new_product_desc,
-              "category": new_product_category,
+              "category": new_prod_category,
               "price": new_product_price,
               "quantity": this.widget.prod_quantity
             };

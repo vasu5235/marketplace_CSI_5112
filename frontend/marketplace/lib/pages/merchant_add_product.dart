@@ -1,15 +1,12 @@
 import 'dart:convert';
-
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/page_titles.dart';
 import 'package:marketplace/constants/route_names.dart';
-
 import 'package:marketplace/widgets/app_scaffold.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
-import 'package:file_picker/file_picker.dart';
+//import 'package:file_picker/file_picker.dart';
 import '../constants/api_url.dart';
 
 class MerchantAddProducts extends StatefulWidget {
@@ -20,8 +17,7 @@ class MerchantAddProducts extends StatefulWidget {
 }
 
 class _MerchantAddProductsState extends State<MerchantAddProducts> {
-  String _categoryValue = 'test';
-  var _categoryValues = [''];
+  //String _categoryValue = 'test';
 
   TextEditingController nameController = TextEditingController();
   TextEditingController imageController = TextEditingController();
@@ -32,6 +28,8 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 
   String prod_name, prod_desc, prod_price;
   String prod_image = 'images/product_images/oatmeal.jpg';
+
+  var _categoryValues = [''];
   String prod_category;
 
   Future getCategoryList() async {
@@ -39,21 +37,15 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 
     var jsonData = jsonDecode(response.body);
 
-    print(jsonData[0]['name']);
+    //print(jsonData[0]['name']);
     _categoryValues = List.filled(jsonData.length, '');
     //_categoryValue = jsonData[0]['name'];
-    _categoryValue = prod_category;
+    //_categoryValue = prod_category;
 
     for (var i = 0; i < jsonData.length; i++) {
       _categoryValues[i] = jsonData[i]['name'];
     }
     return jsonData;
-  }
-
-  void _onchanged(String value) {
-    setState(() {
-      _categoryValue = value;
-    });
   }
 
   @override
@@ -166,49 +158,26 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         // Initial Value
                         hint: Text("Select Category"),
                         isExpanded: true,
-                        value: _categoryValue,
+                        //value: _categoryValue,
+                        value: prod_category,
                         icon: const Icon(Icons.keyboard_arrow_down),
 
                         // Array list of items
-                        items: _categoryValues.map((String items) {
+                        items: _categoryValues.map((String item) {
                           return DropdownMenuItem(
-                            value: items,
-                            child: Text(items),
+                            value: item,
+                            child: Text(item),
                           );
                         }).toList(),
                         onChanged: (String value) {
-                          _onchanged(value);
                           prod_category = value;
-                          _categoryValue = value;
-                          print(prod_category);
-                        }
-
-                        //value: new_product_category,
-                        // change button value to selected value
-
-                        ),
-                    // SizedBox(
-                    //   height: 32,
-                    // ),
-                    // Align(
-                    //   alignment: Alignment.bottomLeft,
-                    //   child: ConstrainedBox(
-                    //     constraints: const BoxConstraints.tightFor(
-                    //         width: 200, height: 50),
-                    //     child: ElevatedButton(
-                    //        child: Text('Upload Picture'),
-                    //       onPressed: () {
-                    //          // _pickFile();
-                    //       },
-                    //       // style: ElevatedButton.styleFrom(primary: Colors.red),
-
-                    //     ),
-                    //   )
-                    // ),
+                          setState(() {
+                            prod_category;
+                          });
+                        }),
                     SizedBox(
                       height: 64,
                     ),
-
                     ElevatedButton(
                         onPressed: () async {
                           var qty = 1;
