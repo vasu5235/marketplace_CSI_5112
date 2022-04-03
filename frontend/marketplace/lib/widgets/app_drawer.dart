@@ -123,6 +123,14 @@ class _AppDrawerState extends State<AppDrawer> with RouteAware {
                           // ),
                           // const Divider(),
                           ListTile(
+                            leading: const Icon(Icons.list),
+                            title: const Text(PageTitles.mOrders),
+                            onTap: () async {
+                              await _navigateTo(context, RouteNames.mOrders);
+                            },
+                            selected: _selectedRoute == RouteNames.mOrders,
+                          ),
+                          ListTile(
                             leading: const Icon(Icons.chat),
                             title: const Text(PageTitles.discussion_forum),
                             onTap: () async {

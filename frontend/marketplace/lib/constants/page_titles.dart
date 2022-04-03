@@ -15,4 +15,5 @@ class PageTitles {
   static const String merchant_home_page = "Merchant Home";
   static const String mAddProduct = 'Add Product';
   static const String mEditProduct = 'Edit Product';
+  static const String mOrders = 'View Orders';
 }
