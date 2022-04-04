@@ -114,50 +114,50 @@ class _Single_prodState extends State<Single_prod> {
               //     arguments: prod_id);
             },
             child: GridTile(
-                footer: Container(
-                    color: Colors.white70,
-                    child: FutureBuilder(
-                        future: getCategoryList(),
-                        builder: (context, snapshot) {
-                          return ListTile(
-                            leading: Text(widget.prod_name,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0)),
-                            title: Text(
-                              "\$${widget.prod_price}",
+              footer: Container(
+                  color: Colors.white70,
+                  child: FutureBuilder(
+                      future: getCategoryList(),
+                      builder: (context, snapshot) {
+                        return ListTile(
+                          leading: Text(widget.prod_name,
                               style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w800),
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () async {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      Edit_Product_Popup(
-                                          context, snapshot.data),
-                                );
-                                // Navigator.pushNamed(context, RouteNames.mEditProduct,
-                                //     arguments: {
-                                //       'paia': prod_id,
-                                //       'paia2': prod_name,
-                                //       'paia3': prod_picture,
-                                //       'paia4': prod_description,
-                                //       'paia5': new_prod_category,
-                                //       'paia6': prod_price,
-                                //       'paia7': prod_quantity
-                                //     });
-                              },
-                            ),
-                          );
-                        })),
-                child: Image.asset(
-                  widget.prod_picture,
-                  fit: BoxFit.cover,
-                )),
+                                  fontWeight: FontWeight.bold, fontSize: 20.0)),
+                          title: Text(
+                            "\$${widget.prod_price}",
+                            style: TextStyle(
+                                color: Colors.blueGrey,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w800),
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () async {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    Edit_Product_Popup(context, snapshot.data),
+                              );
+                              // Navigator.pushNamed(context, RouteNames.mEditProduct,
+                              //     arguments: {
+                              //       'paia': prod_id,
+                              //       'paia2': prod_name,
+                              //       'paia3': prod_picture,
+                              //       'paia4': prod_description,
+                              //       'paia5': new_prod_category,
+                              //       'paia6': prod_price,
+                              //       'paia7': prod_quantity
+                              //     });
+                            },
+                          ),
+                        );
+                      })),
+              child: Image.network(widget.prod_picture),
+              // child: Image.asset(
+              //   widget.prod_picture,
+              //   fit: BoxFit.cover,
+              // )
+            ),
           ))),
     );
   }
@@ -212,6 +212,7 @@ class _Single_prodState extends State<Single_prod> {
     var new_product_name;
     var new_product_desc;
     var new_product_price;
+    var new_product_image;
     // String new_product_category = categories[0]['name'];
     // var cat_list = List.filled(categories.length, '');
 
@@ -276,6 +277,20 @@ class _Single_prodState extends State<Single_prod> {
               new_product_desc = newText3;
             },
           ),
+          TextField(
+            //controller: emailTextFieldController,
+            decoration: InputDecoration(
+              hintText: 'New image URL',
+              labelText: 'New image URL',
+              suffixIcon: Icon(
+                Icons.image,
+              ),
+            ),
+            keyboardType: TextInputType.text,
+            onChanged: (newText4) {
+              new_product_image = newText4;
+            },
+          ),
           StatefulBuilder(
               builder: (BuildContext context, StateSetter dropDownState) {
             return DropdownButton<String>(
@@ -317,7 +332,7 @@ class _Single_prodState extends State<Single_prod> {
             Map bodyData = {
               "id": this.widget.prod_id,
               "name": new_product_name,
-              "imageUrl": this.widget.prod_picture,
+              "imageUrl": new_product_image,
               "description": new_product_desc,
               "category": new_prod_category,
               "price": new_product_price,

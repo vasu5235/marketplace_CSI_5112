@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+//import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/page_titles.dart';
 import 'package:marketplace/constants/route_names.dart';
@@ -26,11 +27,12 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
   TextEditingController idController = TextEditingController();
   TextEditingController priceController = TextEditingController();
 
-  String prod_name, prod_desc, prod_price;
+  String prod_name, prod_desc, prod_price, imgURL;
   String prod_image = 'images/product_images/oatmeal.jpg';
-
   var _categoryValues = [''];
   String prod_category;
+  //PlatformFile imgFile = null;
+  String imgName;
 
   Future getCategoryList() async {
     var response = await http.get(Uri.parse(ApiUrl.edit_category));
@@ -176,6 +178,51 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                           });
                         }),
                     SizedBox(
+                      height: 32,
+                    ),
+                    // Align(
+                    //   alignment: Alignment.bottomLeft,
+                    //   child: ConstrainedBox(
+                    //     constraints: const BoxConstraints.tightFor(
+                    //         width: 200, height: 50),
+                    //     child: ElevatedButton.icon(
+                    //       label: Text('Upload Picture'),
+                    //       icon: Icon(Icons.image),
+                    //       onPressed: () async {
+                    //         var picked = await FilePicker.platform.pickFiles(
+                    //           withReadStream: true,
+                    //         );
+
+                    //         if (picked != null) {
+                    //           print(picked.files.first.name);
+                    //           setState(() {
+                    //             imgFile = picked.files.single;
+                    //             imgName = picked.files.first.name;
+                    //           });
+                    //         }
+                    //       },
+                    //       // style: ElevatedButton.styleFrom(primary: Colors.red),
+                    //     ),
+                    //   ),
+                    // ),
+                    // if (imgName != null) Text(imgName.toString()),
+
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Image URL',
+                        labelText: 'Image URL',
+                        suffixIcon: Icon(
+                          Icons.image,
+                        ),
+                        //errorText: errorDesc,
+                      ),
+                      //controller: descController,
+                      keyboardType: TextInputType.text,
+                      onChanged: (newtext4) {
+                        imgURL = newtext4;
+                      },
+                    ),
+                    SizedBox(
                       height: 64,
                     ),
                     ElevatedButton(
@@ -190,7 +237,8 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                             "description": prod_desc,
                             "category": prod_category,
                             "price": prod_price,
-                            "imageUrl": image,
+                            "imageUrl": imgURL,
+                            //"imageUrl": image,
                             "quantity": qty,
                           };
 

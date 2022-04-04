@@ -76,6 +76,7 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
 
   Widget Add_Category_Popup(BuildContext context) {
     var new_category_name;
+    var new_image_URL = null;
     return new AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 50,
@@ -102,6 +103,21 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
               new_category_name = newText;
             },
           ),
+          TextField(
+            //controller: _categoryName,
+            decoration: InputDecoration(
+              hintText: 'Image URL',
+              labelText: 'Image URL',
+              suffixIcon: Icon(
+                Icons.image,
+              ),
+              //errorText: _errorValidation,
+            ),
+            keyboardType: TextInputType.text,
+            onChanged: (newText2) {
+              new_image_URL = newText2;
+            },
+          ),
         ],
       ),
       actions: <Widget>[
@@ -110,11 +126,21 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
             int randomId = Random().nextInt(99999);
             //Navigator.of(context).pop();
             String uri = ApiUrl.add_category;
-            Map bodyData = {
-              "id": randomId,
-              "imageURL": "images/category_images/08.png",
-              "name": new_category_name,
-            };
+            Map bodyData;
+            if (new_image_URL == null) {
+              bodyData = {
+                "id": randomId,
+                "imageURL": "images/category_images/08.png",
+                "name": new_category_name,
+              };
+            } else {
+              bodyData = {
+                "id": randomId,
+                "imageURL": new_image_URL,
+                "name": new_category_name,
+              };
+            }
+
             var body = json.encode(bodyData);
             // print("====body===");
             // print(body);

@@ -14,4 +14,5 @@ class RouteNames {
   static const String merchanthome = '/merchanthome';
   static const String mAddProduct = '/addProduct';
   static const String mEditProduct = '/editProduct';
+  static const String mOrders = '/merchantOrders';
 }

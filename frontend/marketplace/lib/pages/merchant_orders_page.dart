@@ -9,27 +9,25 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-class OrdersPage extends StatefulWidget {
-  OrdersPage({Key key}) : super(key: key);
+class mOrdersPage extends StatefulWidget {
+  mOrdersPage({Key key}) : super(key: key);
 
   @override
-  State<OrdersPage> createState() => _OrdersPageState();
+  State<mOrdersPage> createState() => _mOrdersPageState();
 }
 
-class _OrdersPageState extends State<OrdersPage> {
+class User {
+  const User(this.id, this.name);
+
+  final String name;
+  final int id;
+}
+
+class _mOrdersPageState extends State<mOrdersPage> {
   var order_keys;
   var total_price;
+  var user_keys;
   static var cartProducts = [
-    // {
-    //   //"id": 10,
-    //   'name': 'iPhone 123',
-    //   'imageUrl': 'images/product_images/iphone.jpg',
-    //   //"description": "asdasd",
-    //   //"category": "cloth",
-    //   'price': 100,
-    //   //"quantity": 1
-    // },
-
     {
       'id': 9999999,
       'name': 'sample Product',
@@ -41,12 +39,27 @@ class _OrdersPageState extends State<OrdersPage> {
       'category': 'Food'
     },
   ];
+  //var _UserValues = [''];
+  List<User> users = [];
+  var _selectedValue = 0;
+  //var _selectedname = "user";
+
   Future getOrders() async {
-    var session = FlutterSession();
-    var _userId = 0;
-    _userId = await session.get("user_id");
+    var response_users = await http.get(ApiUrl.get_all_users);
+    var jsonData_users = jsonDecode(response_users.body);
+    users = [];
+    for (var i = 0; i < jsonData_users.length; i++) {
+      if (jsonData_users[i]['name'] != "Merchant") {
+        users.add(User(jsonData_users[i]['id'], jsonData_users[i]['name']));
+      }
+    }
+    //_selectedname = users[_selectedValue].name;
+
+    print("====Furute===");
+    print(users[0].name);
+    print("====Furute===");
     var response =
-        await http.get(ApiUrl.get_orders_by_userid + _userId.toString());
+        await http.get(ApiUrl.get_orders_by_userid + _selectedValue.toString());
     var jsonData = jsonDecode(response.body);
     order_keys = jsonData.keys.toList();
     total_price = List.filled(jsonData.keys.length, 0);
@@ -59,12 +72,6 @@ class _OrdersPageState extends State<OrdersPage> {
     return jsonData;
   }
 
-  //var sampleOrders = {};
-
-  // _OrdersPageState() {
-  //   getOrders();
-  // }
-
   @override
   Widget build(BuildContext context) {
     // Data from Constants.SAMPLE_ORDERS
@@ -75,7 +82,7 @@ class _OrdersPageState extends State<OrdersPage> {
     //     Card
     //       ListView of Card(ListTile)
     return AppScaffold(
-      pageTitle: PageTitles.orders,
+      pageTitle: PageTitles.mOrders,
       body: Column(
         children: <Widget>[
           Align(
@@ -91,27 +98,101 @@ class _OrdersPageState extends State<OrdersPage> {
                     child: FutureBuilder(
                       future: getOrders(),
                       builder: (context, snapshot) {
+                        //hereeee
+
                         if (snapshot.data == null) {
-                          return Container(
-                            child: Center(
-                              child: Text("Loading..."),
-                            ),
-                          );
-                        } else if (snapshot.data.length == 0) {
-                          return Container(
-                            child: Center(
-                              child: Text("You don't have any Orders yet"),
-                            ),
+                          return Column(
+                            children: [
+                              DropdownButton(
+                                // Initial Value
+                                hint: Text("Select User"),
+                                isExpanded: true,
+                                //value: _categoryValue,
+                                //value: _selectedValue,
+                                //value: users[_selectedValue].name,
+                                icon: const Icon(Icons.keyboard_arrow_down),
+                                // Array list of items
+                                items: users
+                                    .map((data) => DropdownMenuItem(
+                                          child: Text(data.name),
+                                          value: data.id,
+                                        ))
+                                    .toList(),
+
+                                onChanged: (var value) {
+                                  _selectedValue = value;
+                                  //_selectedname = users[_selectedValue].name;
+                                  setState(() {
+                                    _selectedValue;
+                                    //_selectedname;
+                                    // print("==user name==");
+                                    // print(users[_selectedValue].name);
+                                    // print("==user name==");
+                                    print("==user id==");
+                                    print(_selectedValue);
+                                    print("==user id==");
+                                  });
+                                },
+                              ),
+                              Text("No Orders for this user"),
+                            ],
                           );
                         } else
-                          return ListView.builder(
-                            //physics: ScrollPhysics(),
-                            //shrinkWrap: true,
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, index) {
-                              return BuildOrdersCards(
-                                  index, snapshot.data[order_keys[index]]);
-                            },
+                          return Column(
+                            children: [
+                              DropdownButton(
+                                // Initial Value
+                                hint: Text("Select User"),
+                                isExpanded: true,
+                                //value: _selectedname,
+                                //value: users[_selectedValue].name,
+                                icon: const Icon(Icons.keyboard_arrow_down),
+
+                                // Array list of items
+                                items: users
+                                    .map((data) => DropdownMenuItem(
+                                          child: Text(data.name),
+                                          value: data.id,
+                                        ))
+                                    .toList(),
+
+                                onChanged: (var value) {
+                                  //_selectedname = users[_selectedValue].name;
+                                  _selectedValue = value;
+                                  setState(() {
+                                    //_selectedname;
+                                    _selectedValue;
+                                    // _selectedname =
+                                    //     users[_selectedValue - 1].name;
+                                    // print(_selectedValue);
+                                    // print("==user name==");
+                                    // print(_selectedname);
+                                    // print("==user name==");
+                                    print("==user id==");
+                                    print(_selectedValue);
+                                    print("==user id==");
+                                  });
+                                },
+                                // onChanged: (String value) {
+                                //   prod_category = value;
+                                //   setState(() {
+                                //     prod_category;
+                                //   });
+                                // }
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  //physics: ScrollPhysics(),
+                                  //shrinkWrap: true,
+
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context, index) {
+                                    return BuildOrdersCards(index,
+                                        snapshot.data[order_keys[index]]);
+                                  },
+                                ),
+                              ),
+                            ],
                           );
                       },
                     ),
@@ -257,14 +338,13 @@ class _OrdersPageState extends State<OrdersPage> {
                                   ),
                                   subtitle: Text('\$${order[index]["price"]}'),
                                   leading: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10.0, right: 20.0),
-
-                                    child:
-                                        Image.network(order[index]["imageUrl"]),
-                                    // child:
-                                    //     Image.asset(order[index]["imageUrl"]),
-                                  ),
+                                      padding: const EdgeInsets.only(
+                                          left: 10.0, right: 20.0),
+                                      child: Image.network(
+                                          order[index]["imageUrl"])
+                                      // child:
+                                      //     Image.asset(order[index]["imageUrl"]),
+                                      ),
                                 ),
                               ],
                             ));
