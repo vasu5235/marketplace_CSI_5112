@@ -90,7 +90,17 @@ class CartProductsController {
   getTotal() {
     int total = 0;
     for (var i = 0; i < cartProducts.sublist(1).length; i++) {
-      total += cartProducts.sublist(1)[i]["price"];
+      // print(cartProducts.sublist(1)[i]["price"].toString() *
+      //     cartProducts.sublist(1)[i]["quantity"]);
+      //if (int.parse(cartProducts.sublist(1)[i]["quantity"].toString()) > 1) {}
+
+      //total += cartProducts.sublist(1)[i]["price"];
+      //print(cartProducts.sublist(1)[i]["price"].runtimeType);
+
+      total += int.parse(cartProducts.sublist(1)[i]["price"].toString()) *
+          int.parse(cartProducts.sublist(1)[i]["quantity"].toString());
+
+      //total += cartProducts.sublist(1)[i]["price"];
     }
     return total;
     //cartProducts.add({'name': _name, 'imageUrl': _imageURL, 'price': _price});

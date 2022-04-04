@@ -202,6 +202,7 @@ class _CategoryFilteredProductsPageState
 
   Widget Edit_Category_Popup(BuildContext context) {
     var new_category_name;
+    var new_image_url = null;
     return new AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 50,
@@ -228,6 +229,21 @@ class _CategoryFilteredProductsPageState
               new_category_name = newText;
             },
           ),
+          TextField(
+            //controller: _categoryName,
+            decoration: InputDecoration(
+              hintText: 'New Image URL',
+              labelText: 'New Image URL',
+              suffixIcon: Icon(
+                Icons.image,
+              ),
+              //errorText: _errorValidation,
+            ),
+            keyboardType: TextInputType.text,
+            onChanged: (newText2) {
+              new_image_url = newText2;
+            },
+          ),
         ],
       ),
       actions: <Widget>[
@@ -235,11 +251,21 @@ class _CategoryFilteredProductsPageState
           onPressed: () async {
             //Navigator.of(context).pop();
             String uri = ApiUrl.edit_category;
-            Map bodyData = {
-              "id": widget._id,
-              "imageURL": widget._imageLocation,
-              "name": new_category_name,
-            };
+            Map bodyData;
+            if (new_image_url == null) {
+              bodyData = {
+                "id": widget._id,
+                "imageURL": widget._imageLocation,
+                "name": new_category_name,
+              };
+            } else {
+              bodyData = {
+                "id": widget._id,
+                "imageURL": new_image_url,
+                "name": new_category_name,
+              };
+            }
+
             var body = json.encode(bodyData);
             // print("====body===");
             // print(body);
@@ -388,10 +414,13 @@ class _Single_prodState extends State<Single_prod> {
                               ),
                             );
                           })),
-                  child: Image.asset(
-                    widget.prod_picture,
-                    fit: BoxFit.cover,
-                  )),
+                  child: Image.network(widget.prod_picture, fit: BoxFit.cover)
+                  // child: Image.asset(
+                  //   widget.prod_picture,
+                  //   fit: BoxFit.cover,
+                  // )
+
+                  ),
             ))),
       );
     } else {
@@ -450,10 +479,12 @@ class _Single_prodState extends State<Single_prod> {
                       ),
                     ),
                   ),
-                  child: Image.asset(
-                    widget.prod_picture,
-                    fit: BoxFit.cover,
-                  )),
+                  child: Image.network(widget.prod_picture, fit: BoxFit.cover)
+                  // child: Image.asset(
+                  //   widget.prod_picture,
+                  //   fit: BoxFit.cover,
+                  // )
+                  ),
             ))),
       );
     }

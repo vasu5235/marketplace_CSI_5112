@@ -44,7 +44,6 @@ class _CartProductsState extends State<CartProducts> {
               productPrice: _productList[index]['price'],
               productQuantity: _productList[index]['quantity']);
 
-
           //productName: _productList[index]['name'],
           //productImageURL: _productList[index]['imageUrl'],
           //productPrice: _productList[index]['price'],
@@ -93,7 +92,9 @@ class _SingleCartProductState extends State<SingleCartProduct> {
                       maxHeight: MediaQuery.of(context).size.height * 0.1,
                     ),
                     child:
-                        Image.asset(widget.productImageURL, fit: BoxFit.fill),
+                        Image.network(widget.productImageURL, fit: BoxFit.fill),
+                    // child:
+                    //     Image.asset(widget.productImageURL, fit: BoxFit.fill),
                   ),
                 ),
                 Expanded(
@@ -173,6 +174,7 @@ class _SingleCartProductState extends State<SingleCartProduct> {
               CartProductsController()
                   .incrementProductQuantity(widget.productName);
             });
+            Navigator.pushNamed(context, RouteNames.cart);
           },
         ),
       ),
@@ -194,6 +196,7 @@ class _SingleCartProductState extends State<SingleCartProduct> {
                       .decrementProductQuantity(widget.productName);
                 }
               });
+              Navigator.pushNamed(context, RouteNames.cart);
             },
             child: new Icon(Icons.remove, color: Colors.black87),
             backgroundColor: Colors.white),

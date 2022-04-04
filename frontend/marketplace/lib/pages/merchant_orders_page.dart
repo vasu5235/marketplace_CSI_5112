@@ -338,11 +338,13 @@ class _mOrdersPageState extends State<mOrdersPage> {
                                   ),
                                   subtitle: Text('\$${order[index]["price"]}'),
                                   leading: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10.0, right: 20.0),
-                                    child:
-                                        Image.asset(order[index]["imageUrl"]),
-                                  ),
+                                      padding: const EdgeInsets.only(
+                                          left: 10.0, right: 20.0),
+                                      child: Image.network(
+                                          order[index]["imageUrl"])
+                                      // child:
+                                      //     Image.asset(order[index]["imageUrl"]),
+                                      ),
                                 ),
                               ],
                             ));
