@@ -113,11 +113,12 @@ class Category extends StatelessWidget {
         child: Container(
           width: 100.0,
           child: ListTile(
-              title: Image.asset(
-                image_location,
-                width: 100.0,
-                height: 80.0,
-              ),
+              title: Image.network(image_location, width: 100.0, height: 80.0),
+              // title: Image.asset(
+              //   image_location,
+              //   width: 100.0,
+              //   height: 80.0,
+              // ),
               subtitle: Container(
                   padding: const EdgeInsets.all(5.0),
                   alignment: Alignment.topCenter,

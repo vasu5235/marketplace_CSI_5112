@@ -81,6 +81,7 @@ class Single_prod extends StatelessWidget {
   Future<dynamic> _loadSession() async {
     _userIsMerchant = await session.get("user_is_merchant");
   }
+
   @override
   Widget build(BuildContext context) {
     //print("description: " + prod_description.toString());
@@ -101,88 +102,90 @@ class Single_prod extends StatelessWidget {
             },
             child: GridTile(
                 footer: Container(
-                  color: Colors.white70,
+                    color: Colors.white70,
+                    child: (_userIsMerchant)
+                        ? ListTile(
+                            leading: Text(prod_name,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0)),
+                            title: Text(
+                              "\$$prod_price",
+                              style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () async {
+                                await cartController.addProductToCart(
+                                    prod_id,
+                                    prod_name,
+                                    prod_picture,
+                                    prod_price,
+                                    prod_quantity,
+                                    prod_description,
+                                    prod_category);
+                                AlertDialog addToCartSuccess = AlertDialog(
+                                  // Retrieve the text the that user has entered by using the
+                                  // TextEditingController.
+                                  content: Text("Product added to cart!"),
+                                );
 
-                  child: (_userIsMerchant)?
-                  ListTile(
-                    leading: Text(prod_name,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20.0)),
-                    title: Text(
-                      "\$$prod_price",
-                      style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w800),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () async {
-                        await cartController.addProductToCart(
-                            prod_id,
-                            prod_name,
-                            prod_picture,
-                            prod_price,
-                            prod_quantity,
-                            prod_description,
-                            prod_category);
-                        AlertDialog addToCartSuccess = AlertDialog(
-                          // Retrieve the text the that user has entered by using the
-                          // TextEditingController.
-                          content: Text("Product added to cart!"),
-                        );
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return addToCartSuccess;
+                                  },
+                                );
+                              },
+                            ),
+                          )
+                        : ListTile(
+                            leading: Text(prod_name,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0)),
+                            title: Text(
+                              "\$$prod_price",
+                              style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.add_box_rounded),
+                              onPressed: () async {
+                                await cartController.addProductToCart(
+                                    prod_id,
+                                    prod_name,
+                                    prod_picture,
+                                    prod_price,
+                                    prod_quantity,
+                                    prod_description,
+                                    prod_category);
+                                AlertDialog addToCartSuccess = AlertDialog(
+                                  // Retrieve the text the that user has entered by using the
+                                  // TextEditingController.
+                                  content: Text("Product added to cart!"),
+                                );
 
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return addToCartSuccess;
-                          },
-                        );
-                      },
-                    ),
-                  ) :
-                  ListTile(
-                    leading: Text(prod_name,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20.0)),
-                    title: Text(
-                      "\$$prod_price",
-                      style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w800),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.add_box_rounded),
-                      onPressed: () async {
-                        await cartController.addProductToCart(
-                            prod_id,
-                            prod_name,
-                            prod_picture,
-                            prod_price,
-                            prod_quantity,
-                            prod_description,
-                            prod_category);
-                        AlertDialog addToCartSuccess = AlertDialog(
-                          // Retrieve the text the that user has entered by using the
-                          // TextEditingController.
-                          content: Text("Product added to cart!"),
-                        );
-
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return addToCartSuccess;
-                          },
-                        );
-                      },
-                    ),
-                  )
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return addToCartSuccess;
+                                  },
+                                );
+                              },
+                            ),
+                          )),
+                child: Image.network(prod_picture, fit: BoxFit.cover)
+                // child: Image.asset(
+                //   prod_picture,
+                //   fit: BoxFit.cover,
+                // )
                 ),
-                child: Image.asset(
-                  prod_picture,
-                  fit: BoxFit.cover,
-                )),
           ))),
     );
   }

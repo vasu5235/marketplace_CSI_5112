@@ -202,6 +202,7 @@ class _CategoryFilteredProductsPageState
 
   Widget Edit_Category_Popup(BuildContext context) {
     var new_category_name;
+    var new_image_url = null;
     return new AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 50,
@@ -228,6 +229,21 @@ class _CategoryFilteredProductsPageState
               new_category_name = newText;
             },
           ),
+          TextField(
+            //controller: _categoryName,
+            decoration: InputDecoration(
+              hintText: 'New Image URL',
+              labelText: 'New Image URL',
+              suffixIcon: Icon(
+                Icons.image,
+              ),
+              //errorText: _errorValidation,
+            ),
+            keyboardType: TextInputType.text,
+            onChanged: (newText2) {
+              new_image_url = newText2;
+            },
+          ),
         ],
       ),
       actions: <Widget>[
@@ -235,11 +251,21 @@ class _CategoryFilteredProductsPageState
           onPressed: () async {
             //Navigator.of(context).pop();
             String uri = ApiUrl.edit_category;
-            Map bodyData = {
-              "id": widget._id,
-              "imageURL": widget._imageLocation,
-              "name": new_category_name,
-            };
+            Map bodyData;
+            if (new_image_url == null) {
+              bodyData = {
+                "id": widget._id,
+                "imageURL": widget._imageLocation,
+                "name": new_category_name,
+              };
+            } else {
+              bodyData = {
+                "id": widget._id,
+                "imageURL": new_image_url,
+                "name": new_category_name,
+              };
+            }
+
             var body = json.encode(bodyData);
             // print("====body===");
             // print(body);
@@ -324,6 +350,9 @@ class Single_prod extends StatefulWidget {
 }
 
 class _Single_prodState extends State<Single_prod> {
+  var _categoryValues = [''];
+  String new_prod_category;
+
   Future getCategoryList() async {
     var response = await http.get(Uri.parse(ApiUrl.edit_category));
 
@@ -333,13 +362,8 @@ class _Single_prodState extends State<Single_prod> {
     return jsonData;
   }
 
-  var cat_list = [''];
-  String new_product_category = '';
-  void _onchanged(String value) {
-    setState(() {
-      new_product_category = value;
-    });
-  }
+  // var cat_list = [''];
+  // String new_product_category;
 
   @override
   Widget build(BuildContext context) {
@@ -390,10 +414,13 @@ class _Single_prodState extends State<Single_prod> {
                               ),
                             );
                           })),
-                  child: Image.asset(
-                    widget.prod_picture,
-                    fit: BoxFit.cover,
-                  )),
+                  child: Image.network(widget.prod_picture, fit: BoxFit.cover)
+                  // child: Image.asset(
+                  //   widget.prod_picture,
+                  //   fit: BoxFit.cover,
+                  // )
+
+                  ),
             ))),
       );
     } else {
@@ -452,10 +479,12 @@ class _Single_prodState extends State<Single_prod> {
                       ),
                     ),
                   ),
-                  child: Image.asset(
-                    widget.prod_picture,
-                    fit: BoxFit.cover,
-                  )),
+                  child: Image.network(widget.prod_picture, fit: BoxFit.cover)
+                  // child: Image.asset(
+                  //   widget.prod_picture,
+                  //   fit: BoxFit.cover,
+                  // )
+                  ),
             ))),
       );
     }
@@ -493,7 +522,6 @@ class _Single_prodState extends State<Single_prod> {
       ),
       actions: <Widget>[
         new ElevatedButton(
-
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -510,17 +538,11 @@ class _Single_prodState extends State<Single_prod> {
     var new_product_name;
     var new_product_desc;
     var new_product_price;
-    cat_list = List.filled(categories.length, '');
-    new_product_category = categories[0]['name'];
+    _categoryValues = List.filled(categories.length, '');
+    new_prod_category = categories[0]['name'];
 
-    // var cat_list = List.filled(categories.length, '');
-    // String new_product_category = categories[0]['name'];
-
-    //var _selection = categories[0]['name'];
-    //print(categories.length);
     for (var i = 0; i < categories.length; i++) {
-      cat_list[i] = categories[i]['name'];
-      //print(total_price[i - 1]);
+      _categoryValues[i] = categories[i]['name'];
     }
     for (var i = 0; i < categories.length; i++) {}
     return new AlertDialog(
@@ -534,6 +556,18 @@ class _Single_prodState extends State<Single_prod> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          new ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.red),
+              ),
+              onPressed: () async {
+                var response = await http.delete(Uri.parse(
+                    ApiUrl.delete_product + widget.prod_id.toString()));
+                if (response.statusCode == 200) {
+                  Navigator.pushNamed(context, RouteNames.merchanthome);
+                }
+              },
+              child: Text('Delete')),
           TextField(
             //controller: emailTextFieldController,
             decoration: InputDecoration(
@@ -579,51 +613,25 @@ class _Single_prodState extends State<Single_prod> {
               new_product_desc = newText3;
             },
           ),
-          DropdownButton(
-              // Initial Value
-              //hint: Text("Select Category"),
-              value: new_product_category,
-              //value: _selection,
-              // Down Arrow Icon
-              icon: const Icon(Icons.keyboard_arrow_down),
-
-              // Array list of items
-              items: cat_list.map((String items) {
+          StatefulBuilder(
+              builder: (BuildContext context, StateSetter dropDownState) {
+            return DropdownButton<String>(
+              hint: Text("Select Category"),
+              value: new_prod_category,
+              underline: Container(),
+              items: _categoryValues.map((String item) {
                 return DropdownMenuItem(
-                  value: items,
-                  child: Text(items),
+                  value: item,
+                  child: Text(item),
                 );
               }).toList(),
-              // After selecting the desired option,it will
-              // onChanged: (newValue) {
-              //   setState(() {
-              //     new_product_category = newValue;
-              //     //_selection = newValue;
-              //   });
-              //   print(new_product_category);
-              // },
-
               onChanged: (String value) {
-                _onchanged(value);
-              }
-              //value: new_product_category,
-              // change button value to selected value
-              ),
-
-          // TextField(
-          //   //controller: emailTextFieldController,
-          //   decoration: InputDecoration(
-          //     hintText: cat_list.toString(),
-          //     labelText: 'New Price',
-          //     suffixIcon: Icon(
-          //       Icons.input,
-          //     ),
-          //   ),
-          //   keyboardType: TextInputType.text,
-          //   onChanged: (newText2) {
-          //     new_product_price = newText2;
-          //   },
-          // ),
+                dropDownState(() {
+                  new_prod_category = value;
+                });
+              },
+            );
+          }),
         ],
       ),
       actions: <Widget>[
@@ -636,7 +644,7 @@ class _Single_prodState extends State<Single_prod> {
               "name": new_product_name,
               "imageUrl": this.widget.prod_picture,
               "description": new_product_desc,
-              "category": new_product_category,
+              "category": new_prod_category,
               "price": new_product_price,
               "quantity": this.widget.prod_quantity
             };

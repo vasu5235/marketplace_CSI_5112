@@ -1,14 +1,13 @@
 import 'dart:convert';
-
 import 'dart:math';
-
+//import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/page_titles.dart';
-
+import 'package:marketplace/constants/route_names.dart';
 import 'package:marketplace/widgets/app_scaffold.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
-// import 'package:file_picker/file_picker.dart';
+//dabefcd17eae272941684ce4228210db616fa419
 import '../constants/api_url.dart';
 
 class MerchantAddProducts extends StatefulWidget {
@@ -19,9 +18,8 @@ class MerchantAddProducts extends StatefulWidget {
 }
 
 class _MerchantAddProductsState extends State<MerchantAddProducts> {
+  //String _categoryValue = 'test';
 
-  String _categoryValue = null;
-  var _categoryValues = [''];
   TextEditingController nameController = TextEditingController();
   TextEditingController imageController = TextEditingController();
   TextEditingController descController = TextEditingController();
@@ -29,14 +27,25 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
   TextEditingController idController = TextEditingController();
   TextEditingController priceController = TextEditingController();
 
-  String prod_name, prod_desc,prod_price;
+  String prod_name, prod_desc, prod_price, imgURL;
   String prod_image = 'images/product_images/oatmeal.jpg';
-  String prod_category ;
+  var _categoryValues = [''];
+  String prod_category;
+  //PlatformFile imgFile = null;
+  String imgName;
 
   Future getCategoryList() async {
     var response = await http.get(Uri.parse(ApiUrl.edit_category));
 
     var jsonData = jsonDecode(response.body);
+    _categoryValues = List.filled(jsonData.length, '');
+    //_categoryValue = jsonData[0]['name'];
+    //_categoryValue = prod_category;
+
+    for (var i = 0; i < jsonData.length; i++) {
+      _categoryValues[i] = jsonData[i]['name'];
+    }
+
 
 
     print(jsonData);
@@ -109,6 +118,19 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
   // }
 
 
+
+  //   //print(jsonData[0]['name']);
+  //   _categoryValues = List.filled(jsonData.length, '');
+  //   //_categoryValue = jsonData[0]['name'];
+  //   //_categoryValue = prod_category;
+  //
+  //   for (var i = 0; i < jsonData.length; i++) {
+  //     _categoryValues[i] = jsonData[i]['name'];
+  //   }
+  //   return jsonData;
+  // }
+
+
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
@@ -123,6 +145,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                 return Container(child: Center(child:Text("Loading....")));
               }
             }));
+
 
 
 //   Future _pickFile() async {
@@ -195,21 +218,17 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 //     // return null if the text is valid
 //     return null;
 
+
   }
 
   Widget addProductForm(categories) {
     Size size = MediaQuery.of(context).size;
-    // var prod_name;
-    // var prod_desc;
-    // var prod_price = 0;
-    // var prod_category;
-    //var prod_image = 'images/product_images/oatmeal.jpg';
-    _categoryValues = List.filled(categories.length, '');
-    _categoryValue = categories[0]['name'];
-    for (var i = 0; i < categories.length; i++) {
-      _categoryValues[i] = categories[i]['name'];
-      //print(total_price[i - 1]);
-    }
+    // _categoryValues = List.filled(categories.length, '');
+    // _categoryValue = categories[0]['name'];
+    // for (var i = 0; i < categories.length; i++) {
+    //   _categoryValues[i] = categories[i]['name'];
+    //   //print(total_price[i - 1]);
+    // }
     return Center(
       child: Card(
         elevation: 4,
@@ -273,11 +292,10 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                       height: 32,
                     ),
                     TextFormField(
-
                       keyboardType:
                           TextInputType.numberWithOptions(decimal: true),
 
-                       controller: priceController,
+                      controller: priceController,
 //                       keyboardType:TextInputType.numberWithOptions(decimal: true),
 
                       inputFormatters: <TextInputFormatter>[
@@ -300,48 +318,73 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                     ),
                     DropdownButton(
                         // Initial Value
+                        hint: Text("Select Category"),
                         isExpanded: true,
-                        value: _categoryValue,
+                        //value: _categoryValue,
+                        value: prod_category,
                         icon: const Icon(Icons.keyboard_arrow_down),
 
                         // Array list of items
-                        items: _categoryValues.map((String items) {
+                        items: _categoryValues.map((String item) {
                           return DropdownMenuItem(
-                            value: items,
-                            child: Text(items),
+                            value: item,
+                            child: Text(item),
                           );
                         }).toList(),
                         onChanged: (String value) {
                           prod_category = value;
-                        }
-
-                        //value: new_product_category,
-                        // change button value to selected value
-
-
-                    ),
+                          setState(() {
+                            prod_category;
+                          });
+                        }),
                     SizedBox(
                       height: 32,
                     ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(
-                            width: 200, height: 50),
-                        child: ElevatedButton(
-                           child: Text('Upload Picture'),
-                          onPressed: () {
-                             // _pickFile();
-                          },
-                          // style: ElevatedButton.styleFrom(primary: Colors.red),
+                    // Align(
+                    //   alignment: Alignment.bottomLeft,
+                    //   child: ConstrainedBox(
+                    //     constraints: const BoxConstraints.tightFor(
+                    //         width: 200, height: 50),
+                    //     child: ElevatedButton.icon(
+                    //       label: Text('Upload Picture'),
+                    //       icon: Icon(Icons.image),
+                    //       onPressed: () async {
+                    //         var picked = await FilePicker.platform.pickFiles(
+                    //           withReadStream: true,
+                    //         );
 
+                    //         if (picked != null) {
+                    //           print(picked.files.first.name);
+                    //           setState(() {
+                    //             imgFile = picked.files.single;
+                    //             imgName = picked.files.first.name;
+                    //           });
+                    //         }
+                    //       },
+                    //       // style: ElevatedButton.styleFrom(primary: Colors.red),
+                    //     ),
+                    //   ),
+                    // ),
+                    // if (imgName != null) Text(imgName.toString()),
+
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Image URL',
+                        labelText: 'Image URL',
+                        suffixIcon: Icon(
+                          Icons.image,
                         ),
-                      )
+                        //errorText: errorDesc,
+                      ),
+                      //controller: descController,
+                      keyboardType: TextInputType.text,
+                      onChanged: (newtext4) {
+                        imgURL = newtext4;
+                      },
                     ),
                     SizedBox(
                       height: 64,
                     ),
-
                     ElevatedButton(
                         onPressed: () async {
                           var qty = 1;
@@ -354,7 +397,8 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                             "description": prod_desc,
                             "category": prod_category,
                             "price": prod_price,
-                            "imageUrl": image,
+                            "imageUrl": imgURL,
+                            //"imageUrl": image,
                             "quantity": qty,
                           };
 
@@ -378,6 +422,15 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                               // TextEditingController.
                               content:
                                   Text("Success!, Product added successfully!"),
+                              actions: [
+                                TextButton(
+                                    //add actions here if needed
+                                    onPressed: () => {
+                                          Navigator.pushNamed(
+                                              context, RouteNames.merchanthome)
+                                        },
+                                    child: Text("Ok")),
+                              ],
                             );
 
                             showDialog(
@@ -402,7 +455,6 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                             );
                           }
                         },
-
 
 //                     ElevatedButton(onPressed: () async {
 //                       var name = nameController.text;
