@@ -38,7 +38,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
           if (snapshot.data == null) {
             return Container(
               child: Center(
-                child: Text("Loading..."),
+                child: Text("No such item found."),
               ),
             );
           } else if (snapshot.data.length == 0) {

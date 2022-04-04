@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marketplace/constants/route_names.dart';
 import 'package:http/http.dart' as http;
 import 'package:marketplace/pages/merchant_edit_product.dart';
@@ -89,6 +90,43 @@ class _Single_prodState extends State<Single_prod> {
     print(jsonData);
     return jsonData;
   }
+
+  String get _errorText {
+    // at any time, we can get the text from _controller.value.text
+    final text = nameController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 4) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+  }
+  String get errorDesc {
+    // at any time, we can get the text from _controller.value.text
+    final text = descController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 4) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+
+  }
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+  TextEditingController categoryController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -278,14 +316,20 @@ class _Single_prodState extends State<Single_prod> {
               suffixIcon: Icon(
                 Icons.input,
               ),
+              errorText: _errorText,
             ),
+
             keyboardType: TextInputType.text,
             onChanged: (newText1) {
               new_product_name = newText1;
             },
           ),
-          TextField(
-            //controller: emailTextFieldController,
+          TextFormField(
+            controller: priceController,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'^(\d+)?\.?\d{0,2}'))
+            ],
             decoration: InputDecoration(
               hintText: 'New Price',
               labelText: 'New Price',
@@ -293,27 +337,30 @@ class _Single_prodState extends State<Single_prod> {
                 Icons.input,
               ),
             ),
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             onChanged: (newText2) {
               new_product_price = newText2;
             },
           ),
-          TextField(
-            //controller: emailTextFieldController,
-            keyboardType: TextInputType.multiline,
-            minLines: 2, //Normal textInputField will be displayed
-            maxLines: 5,
+          Flexible(
+            child: TextField(
+              controller: descController,
+              keyboardType: TextInputType.multiline,
+              minLines: 2, //Normal textInputField will be displayed
+              maxLines: 5,
 
-            decoration: InputDecoration(
-              hintText: 'New Description',
-              labelText: 'New Description',
-              suffixIcon: Icon(
-                Icons.input,
+              decoration: InputDecoration(
+                hintText: 'New Description',
+                labelText: 'New Description',
+                suffixIcon: Icon(
+                  Icons.input,
+                ),
+                errorText: errorDesc,
               ),
+              onChanged: (newText3) {
+                new_product_desc = newText3;
+              },
             ),
-            onChanged: (newText3) {
-              new_product_desc = newText3;
-            },
           ),
           DropdownButton(
             // Initial Value

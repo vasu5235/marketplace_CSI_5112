@@ -8,7 +8,7 @@ import 'package:marketplace/constants/page_titles.dart';
 import 'package:marketplace/widgets/app_scaffold.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import '../constants/api_url.dart';
 
 class MerchantAddProducts extends StatefulWidget {
@@ -38,8 +38,39 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 
     var jsonData = jsonDecode(response.body);
 
+
     print(jsonData);
     return jsonData;
+  }
+
+  String get _errorText {
+    // at any time, we can get the text from _controller.value.text
+    final text = nameController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 4) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+  }
+  String get errorDesc {
+    // at any time, we can get the text from _controller.value.text
+    final text = descController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 4) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+
   }
 
 //   var _categoryValues;
@@ -71,11 +102,11 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 //   // var _categoryValues;
 
 
-  void _onchanged(String value) {
-    setState(() {
-      _categoryValue = value;
-    });
-  }
+  // void _onchanged(String value) {
+  //   setState(() {
+  //     _categoryValue = value;
+  //   });
+  // }
 
 
   @override
@@ -85,7 +116,12 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
         body: FutureBuilder(
             future: getCategoryList(),
             builder: (context, snapshot) {
-              return addProductForm(snapshot.data);
+              if (snapshot.hasData) {
+                return addProductForm(snapshot.data);
+              }
+              else{
+                return Container(child: Center(child:Text("Loading....")));
+              }
             }));
 
 
@@ -111,12 +147,6 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
 //     else {}
 //   }
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController imageController = TextEditingController();
-  TextEditingController descController = TextEditingController();
-  TextEditingController categoryController = TextEditingController();
-  TextEditingController idController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -212,7 +242,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         suffixIcon: Icon(
                           Icons.shop,
                         ),
-                        //errorText: _errorText,
+                        errorText: _errorText,
                       ),
                       controller: nameController,
                       keyboardType: TextInputType.text,
@@ -231,7 +261,7 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                         suffixIcon: Icon(
                           Icons.description,
                         ),
-                        //errorText: errorDesc,
+                        errorText: errorDesc,
                       ),
                       controller: descController,
                       keyboardType: TextInputType.text,

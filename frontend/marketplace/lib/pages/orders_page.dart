@@ -94,7 +94,7 @@ class _OrdersPageState extends State<OrdersPage> {
                         if (snapshot.data == null) {
                           return Container(
                             child: Center(
-                              child: Text("Loading..."),
+                              child: Text("No orders yet."),
                             ),
                           );
                         } else if (snapshot.data.length == 0) {
