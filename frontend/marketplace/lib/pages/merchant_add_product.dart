@@ -1,14 +1,13 @@
 import 'dart:convert';
-
 import 'dart:math';
-
+//import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/page_titles.dart';
-
+import 'package:marketplace/constants/route_names.dart';
 import 'package:marketplace/widgets/app_scaffold.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
-import 'package:file_picker/file_picker.dart';
+//import 'package:file_picker/file_picker.dart';
 import '../constants/api_url.dart';
 
 class MerchantAddProducts extends StatefulWidget {
@@ -19,9 +18,8 @@ class MerchantAddProducts extends StatefulWidget {
 }
 
 class _MerchantAddProductsState extends State<MerchantAddProducts> {
+  //String _categoryValue = 'test';
 
-  String _categoryValue = null;
-  var _categoryValues = [''];
   TextEditingController nameController = TextEditingController();
   TextEditingController imageController = TextEditingController();
   TextEditingController descController = TextEditingController();
@@ -29,54 +27,28 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
   TextEditingController idController = TextEditingController();
   TextEditingController priceController = TextEditingController();
 
-  String prod_name, prod_desc,prod_price;
+  String prod_name, prod_desc, prod_price, imgURL;
   String prod_image = 'images/product_images/oatmeal.jpg';
-  String prod_category ;
+  var _categoryValues = [''];
+  String prod_category;
+  //PlatformFile imgFile = null;
+  String imgName;
 
   Future getCategoryList() async {
     var response = await http.get(Uri.parse(ApiUrl.edit_category));
 
     var jsonData = jsonDecode(response.body);
 
-    print(jsonData);
+    //print(jsonData[0]['name']);
+    _categoryValues = List.filled(jsonData.length, '');
+    //_categoryValue = jsonData[0]['name'];
+    //_categoryValue = prod_category;
+
+    for (var i = 0; i < jsonData.length; i++) {
+      _categoryValues[i] = jsonData[i]['name'];
+    }
     return jsonData;
   }
-
-//   var _categoryValues;
-//   var category_keys;
-//   var total_price;
-//   Future getAllCategories() async {
-//     // _loadSession();
-//     var response = await http.get(Uri.parse(ApiUrl.get_category));
-//     var jsonData = jsonDecode(response.body);
-//     print(jsonData);
-//     var data1;
-//     for (data1 in jsonData) {
-//       print(data1.name);
-//       _categoryValues = data1['name'] as List;
-//     }
-
-//     // category_keys = jsonData.keys.toList();
-//     // _categoryValues = List.filled(jsonData.keys.length, '');
-//     // for (var i = 1; i <= jsonData.length; i++) {
-//     //   for (var j = 0; j < jsonData['${category_keys[i - 1]}'].length; j++) {
-//     //     _categoryValues[i - 1].add(jsonData['${category_keys[i - 1]}'][j]['name']);
-//     //   }
-//     //   print(_categoryValues[i - 1]);
-//     // }
-//     return jsonData;
-//   }
-
-//   String _categoryValue = null;
-//   // var _categoryValues;
-
-
-  void _onchanged(String value) {
-    setState(() {
-      _categoryValue = value;
-    });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -87,99 +59,16 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
             builder: (context, snapshot) {
               return addProductForm(snapshot.data);
             }));
-
-
-//   Future _pickFile() async {
-//     final result = await FilePicker.platform.pickFiles(type: FileType.image);
-
-//     // if(result == null) return;
-//     //
-//     //
-//     // PlatformFile image = result.files.single;
-//     //
-//     //print(image.path );
-//     if(result != null) {
-//       final file = result.files.first;
-
-//       print(file.name);
-//       // print(file.bytes);
-//       print(file.size);
-//       print(file.extension);
-//       print(file.path);
-
-//     }
-//     else {}
-//   }
-
-  TextEditingController nameController = TextEditingController();
-  TextEditingController imageController = TextEditingController();
-  TextEditingController descController = TextEditingController();
-  TextEditingController categoryController = TextEditingController();
-  TextEditingController idController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return FutureBuilder(
-//         future: getAllCategories(),
-//         builder: (context, snapshot) {
-//           if (snapshot.data == null) {
-//             return Transform.scale(
-//               scale: 0.2,
-//               child: CircularProgressIndicator(),
-//             );
-//           } else {
-//             return AppScaffold(
-//                 pageTitle: PageTitles.mAddProduct, body: addProductForm());
-//           }
-//         }
-//     );
-
-//   }
-
-//   String get _errorText {
-//     // at any time, we can get the text from _controller.value.text
-//     final text = nameController.value.text;
-//     // Note: you can do your own custom validation here
-//     // Move this logic this outside the widget for more testable code
-//     if (text.isEmpty) {
-//       return 'Can\'t be empty';
-//     }
-//     if (text.length < 4) {
-//       return 'Minimum 3 Characters required';
-//     }
-//     // return null if the text is valid
-//     return null;
-//   }
-//   String get errorDesc {
-//     // at any time, we can get the text from _controller.value.text
-//     final text = descController.value.text;
-//     // Note: you can do your own custom validation here
-//     // Move this logic this outside the widget for more testable code
-//     if (text.isEmpty) {
-//       return 'Can\'t be empty';
-//     }
-//     if (text.length < 4) {
-//       return 'Minimum 3 Characters required';
-//     }
-//     // return null if the text is valid
-//     return null;
-
   }
 
   Widget addProductForm(categories) {
     Size size = MediaQuery.of(context).size;
-    // var prod_name;
-    // var prod_desc;
-    // var prod_price = 0;
-    // var prod_category;
-    //var prod_image = 'images/product_images/oatmeal.jpg';
-    _categoryValues = List.filled(categories.length, '');
-    _categoryValue = categories[0]['name'];
-    for (var i = 0; i < categories.length; i++) {
-      _categoryValues[i] = categories[i]['name'];
-      //print(total_price[i - 1]);
-    }
+    // _categoryValues = List.filled(categories.length, '');
+    // _categoryValue = categories[0]['name'];
+    // for (var i = 0; i < categories.length; i++) {
+    //   _categoryValues[i] = categories[i]['name'];
+    //   //print(total_price[i - 1]);
+    // }
     return Center(
       child: Card(
         elevation: 4,
@@ -243,11 +132,10 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                       height: 32,
                     ),
                     TextFormField(
-
                       keyboardType:
                           TextInputType.numberWithOptions(decimal: true),
 
-                       controller: priceController,
+                      controller: priceController,
 //                       keyboardType:TextInputType.numberWithOptions(decimal: true),
 
                       inputFormatters: <TextInputFormatter>[
@@ -270,48 +158,73 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                     ),
                     DropdownButton(
                         // Initial Value
+                        hint: Text("Select Category"),
                         isExpanded: true,
-                        value: _categoryValue,
+                        //value: _categoryValue,
+                        value: prod_category,
                         icon: const Icon(Icons.keyboard_arrow_down),
 
                         // Array list of items
-                        items: _categoryValues.map((String items) {
+                        items: _categoryValues.map((String item) {
                           return DropdownMenuItem(
-                            value: items,
-                            child: Text(items),
+                            value: item,
+                            child: Text(item),
                           );
                         }).toList(),
                         onChanged: (String value) {
                           prod_category = value;
-                        }
-
-                        //value: new_product_category,
-                        // change button value to selected value
-
-
-                    ),
+                          setState(() {
+                            prod_category;
+                          });
+                        }),
                     SizedBox(
                       height: 32,
                     ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints.tightFor(
-                            width: 200, height: 50),
-                        child: ElevatedButton(
-                           child: Text('Upload Picture'),
-                          onPressed: () {
-                             // _pickFile();
-                          },
-                          // style: ElevatedButton.styleFrom(primary: Colors.red),
+                    // Align(
+                    //   alignment: Alignment.bottomLeft,
+                    //   child: ConstrainedBox(
+                    //     constraints: const BoxConstraints.tightFor(
+                    //         width: 200, height: 50),
+                    //     child: ElevatedButton.icon(
+                    //       label: Text('Upload Picture'),
+                    //       icon: Icon(Icons.image),
+                    //       onPressed: () async {
+                    //         var picked = await FilePicker.platform.pickFiles(
+                    //           withReadStream: true,
+                    //         );
 
+                    //         if (picked != null) {
+                    //           print(picked.files.first.name);
+                    //           setState(() {
+                    //             imgFile = picked.files.single;
+                    //             imgName = picked.files.first.name;
+                    //           });
+                    //         }
+                    //       },
+                    //       // style: ElevatedButton.styleFrom(primary: Colors.red),
+                    //     ),
+                    //   ),
+                    // ),
+                    // if (imgName != null) Text(imgName.toString()),
+
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Image URL',
+                        labelText: 'Image URL',
+                        suffixIcon: Icon(
+                          Icons.image,
                         ),
-                      )
+                        //errorText: errorDesc,
+                      ),
+                      //controller: descController,
+                      keyboardType: TextInputType.text,
+                      onChanged: (newtext4) {
+                        imgURL = newtext4;
+                      },
                     ),
                     SizedBox(
                       height: 64,
                     ),
-
                     ElevatedButton(
                         onPressed: () async {
                           var qty = 1;
@@ -324,7 +237,8 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                             "description": prod_desc,
                             "category": prod_category,
                             "price": prod_price,
-                            "imageUrl": image,
+                            "imageUrl": imgURL,
+                            //"imageUrl": image,
                             "quantity": qty,
                           };
 
@@ -348,6 +262,15 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                               // TextEditingController.
                               content:
                                   Text("Success!, Product added successfully!"),
+                              actions: [
+                                TextButton(
+                                    //add actions here if needed
+                                    onPressed: () => {
+                                          Navigator.pushNamed(
+                                              context, RouteNames.merchanthome)
+                                        },
+                                    child: Text("Ok")),
+                              ],
                             );
 
                             showDialog(
@@ -372,7 +295,6 @@ class _MerchantAddProductsState extends State<MerchantAddProducts> {
                             );
                           }
                         },
-
 
 //                     ElevatedButton(onPressed: () async {
 //                       var name = nameController.text;

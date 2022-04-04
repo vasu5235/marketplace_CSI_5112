@@ -46,11 +46,11 @@ class _AppScaffoldState extends State<AppScaffold> {
                     appBar: AppBarTextField(
                       automaticallyImplyLeading: displayMobileLayout,
                       title: Text(widget.pageTitle),
-                      onBackPressed: _onRestoreAllData,
-                      onClearPressed: _onRestoreAllData,
-                      onChanged: _onSearchChanged,
-                      onSubmitted: _onSearchSubmitted,
-                      defaultHintText: "Search Products",
+                      // onBackPressed: _onRestoreAllData,
+                      // onClearPressed: _onRestoreAllData,
+                      // onChanged: _onSearchChanged,
+                      // onSubmitted: _onSearchSubmitted,
+                      // defaultHintText: "Search Products",
                     ),
                     drawer: displayMobileLayout
                         ? const AppDrawer(
