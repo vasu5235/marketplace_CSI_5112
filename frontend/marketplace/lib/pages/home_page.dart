@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
             new Padding(
                 padding: const EdgeInsets.fromLTRB(22, 30, 0, 10),
                 child: new Text(
-                  "Recent Products",
+                  "Products",
                   style: new TextStyle(fontSize: 20.0),
                 )),
             Container(
@@ -57,9 +57,6 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         )
-        // body: Center(
-        //   child: Text('This is the home page'),
-        // ),
         );
   }
 

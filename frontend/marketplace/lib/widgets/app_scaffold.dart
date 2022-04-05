@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:appbar_textfield/appbar_textfield.dart';
 import 'package:flutter_session/flutter_session.dart';
 import 'package:marketplace/constants/route_names.dart';
+import 'package:marketplace/pages/merchant_search_results_page.dart';
 import 'package:marketplace/pages/search_results_page.dart';
 
 import 'app_drawer.dart';
@@ -46,11 +47,11 @@ class _AppScaffoldState extends State<AppScaffold> {
                     appBar: AppBarTextField(
                       automaticallyImplyLeading: displayMobileLayout,
                       title: Text(widget.pageTitle),
-                      // onBackPressed: _onRestoreAllData,
-                      // onClearPressed: _onRestoreAllData,
-                      // onChanged: _onSearchChanged,
-                      // onSubmitted: _onSearchSubmitted,
-                      // defaultHintText: "Search Products",
+                      onBackPressed: _onRestoreAllData,
+                      onClearPressed: _onRestoreAllData,
+                      onChanged: _onSearchChanged,
+                      onSubmitted: _onMerchantSearchSubmitted,
+                      defaultHintText: "Search Products",
                     ),
                     drawer: displayMobileLayout
                         ? const AppDrawer(
@@ -123,6 +124,16 @@ class _AppScaffoldState extends State<AppScaffold> {
         context,
         MaterialPageRoute(
           builder: (context) => SearchResultsPage(value),
+        ));
+  }
+
+  void _onMerchantSearchSubmitted(String value) {
+    //navigator.push -> new page and display products
+    if (value.isEmpty) return;
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => mSearchResultsPage(value),
         ));
   }
 }

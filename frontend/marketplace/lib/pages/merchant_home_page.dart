@@ -6,9 +6,6 @@ import 'package:marketplace/constants/api_url.dart';
 import 'package:marketplace/constants/route_names.dart';
 import 'package:marketplace/widgets/home/horizontal_listview.dart';
 import 'package:marketplace/widgets/home/merchant_recent_products.dart';
-import 'package:marketplace/widgets/home/products.dart';
-//import 'package:marketplace/widgets/home/horizontal_listview_recentproducts.dart';
-
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
 
@@ -51,7 +48,7 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
             new Padding(
                 padding: const EdgeInsets.fromLTRB(22, 30, 0, 10),
                 child: new Text(
-                  "Recent Products",
+                  "Products",
                   style: new TextStyle(fontSize: 20.0),
                 )),
             Container(
@@ -89,18 +86,20 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextField(
-            controller: _categoryName,
+
             decoration: InputDecoration(
               hintText: 'Category Name',
               labelText: 'Category Name',
               suffixIcon: Icon(
                 Icons.input,
               ),
-              errorText: _errorValidation,
+              //errorText: _errorValidation,
             ),
+            controller: _categoryName,
             keyboardType: TextInputType.text,
             onChanged: (newText) {
               new_category_name = newText;
+              // setState(() => new_category_name = newText);
             },
           ),
           TextField(

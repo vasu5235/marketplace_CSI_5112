@@ -1,57 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:marketplace/constants/route_names.dart';
-import 'package:http/http.dart' as http;
+//import 'package:marketplace/constants/route_names.dart';
 import 'package:marketplace/utils/cart_products_controller.dart';
-import '../../constants/api_url.dart';
-import 'dart:convert';
 
-class mProducts extends StatefulWidget {
+import '../constants/page_titles.dart';
+import '../widgets/app_scaffold.dart';
+//import 'package:flutter_session/flutter_session.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../constants/api_url.dart';
+
+class mSearchResultsPage extends StatefulWidget {
+  final String _searchTextValue;
+
+  const mSearchResultsPage(this._searchTextValue, {Key key}) : super(key: key);
+
   @override
-  _mProductsState createState() => _mProductsState();
+  State<mSearchResultsPage> createState() => _mSearchResultsPageState();
 }
 
-class _mProductsState extends State<mProducts> {
-  Future getProductList() async {
-    var response = await http.get(Uri.parse(ApiUrl.get_recent_product));
+class _mSearchResultsPageState extends State<mSearchResultsPage> {
+  Future searchProduct() async {
+    var response = await http.get(ApiUrl.search_by_product_name +
+        widget._searchTextValue.toString().toLowerCase());
     var jsonData = jsonDecode(response.body);
     print(jsonData);
     return jsonData;
+    //print(total_price[i - 1]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getProductList(),
-      builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return Container(
-            child: Center(
-              child: Text("Loading..."),
-            ),
-          );
-        } else {
-          CartProductsController cartController = new CartProductsController();
-          return GridView.builder(
-              physics: ScrollPhysics(), // to disable GridView's scrolling
-              shrinkWrap: true,
-              itemCount: snapshot.data.length,
-              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, crossAxisSpacing: 50),
-              itemBuilder: (context, index) {
-                return Single_prod(
-                  prod_id: snapshot.data[index]['id'],
-                  prod_name: snapshot.data[index]['name'],
-                  prod_picture: snapshot.data[index]['imageUrl'],
-                  prod_price: snapshot.data[index]['price'],
-                  prod_quantity: snapshot.data[index]['quantity'],
-                  prod_description: snapshot.data[index]['description'],
-                  prod_category: snapshot.data[index]['category'],
-                  cartController: cartController,
-                );
-              });
-        }
-      },
+    return AppScaffold(
+      pageTitle: PageTitles.searchResults,
+      body: FutureBuilder(
+        future: searchProduct(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return Container(
+              child: Center(
+                child: Text("Loading..."),
+              ),
+            );
+          } else if (snapshot.data.length == 0) {
+            return Container(
+              child: Center(
+                child: Text("Not Found"),
+              ),
+            );
+          } else {
+            CartProductsController cartController =
+                new CartProductsController();
+
+            return GridView.builder(
+                physics: ScrollPhysics(), // to disable GridView's scrolling
+                shrinkWrap: true,
+                itemCount: snapshot.data.length,
+                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3, crossAxisSpacing: 50),
+                itemBuilder: (context, index) {
+                  return Single_prod(
+                    prod_id: snapshot.data[index]['id'],
+                    prod_name: snapshot.data[index]['name'],
+                    prod_picture: snapshot.data[index]['imageUrl'],
+                    prod_price: snapshot.data[index]['price'],
+                    prod_quantity: snapshot.data[index]['quantity'],
+                    prod_description: snapshot.data[index]['description'],
+                    prod_category: snapshot.data[index]['category'],
+                    cartController: cartController,
+                  );
+                });
+          }
+        },
+      ),
     );
   }
 }
@@ -65,16 +86,15 @@ class Single_prod extends StatefulWidget {
   final prod_description;
   final prod_category;
   final CartProductsController cartController;
-  Single_prod({
-    this.prod_id,
-    this.prod_name,
-    this.prod_picture,
-    this.prod_price,
-    this.cartController,
-    this.prod_quantity,
-    this.prod_description,
-    this.prod_category,
-  });
+  Single_prod(
+      {this.prod_id,
+      this.prod_name,
+      this.prod_picture,
+      this.prod_price,
+      this.cartController,
+      this.prod_quantity,
+      this.prod_description,
+      this.prod_category});
 
   @override
   State<Single_prod> createState() => _Single_prodState();
@@ -95,44 +115,6 @@ class _Single_prodState extends State<Single_prod> {
 
     return jsonData;
   }
-
-  String get _errorText {
-    // at any time, we can get the text from _controller.value.text
-    final text = nameController.value.text;
-    // Note: you can do your own custom validation here
-    // Move this logic this outside the widget for more testable code
-    if (text.isEmpty) {
-      return 'Can\'t be empty';
-    }
-    if (text.length < 3) {
-      return 'Minimum 3 Characters required';
-    }
-    // return null if the text is valid
-    return null;
-  }
-  String get errorDesc {
-    // at any time, we can get the text from _controller.value.text
-    final text = descController.value.text;
-    // Note: you can do your own custom validation here
-    // Move this logic this outside the widget for more testable code
-    if (text.isEmpty) {
-      return 'Can\'t be empty';
-    }
-    if (text.length < 3) {
-      return 'Minimum 3 Characters required';
-    }
-    // return null if the text is valid
-    return null;
-
-  }
-
-  final nameController = TextEditingController();
-  final imageController = TextEditingController();
-  final descController = TextEditingController();
-  final categoryController = TextEditingController();
-  final idController = TextEditingController();
-  final priceController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -236,8 +218,6 @@ class _Single_prodState extends State<Single_prod> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          // textColor: Colors.white,
-          // color: Colors.red,
           child: const Text('Close'),
         ),
         SizedBox(
@@ -248,10 +228,10 @@ class _Single_prodState extends State<Single_prod> {
   }
 
   Widget Edit_Product_Popup(BuildContext context, categories) {
-    var new_product_name=widget.prod_name;
-    var new_product_desc=widget.prod_description;
-    var new_product_price=widget.prod_price;
-    var new_product_image=widget.prod_picture;
+    var new_product_name = widget.prod_name;
+    var new_product_desc = widget.prod_description;
+    var new_product_price = widget.prod_price.toString();
+    var new_product_image = widget.prod_picture;
     // String new_product_category = categories[0]['name'];
     // var cat_list = List.filled(categories.length, '');
 
@@ -261,10 +241,8 @@ class _Single_prodState extends State<Single_prod> {
     //   //print(total_price[i - 1]);
     // }
     return new AlertDialog(
-      // insetPadding: EdgeInsets.fromLTRB(300, 100, 300, 100),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 50,
-
       title: Text(
         this.widget.prod_name,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
@@ -276,30 +254,24 @@ class _Single_prodState extends State<Single_prod> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TextFormField(
-              //controller: nameController,
-              initialValue: new_product_name,
+              //controller: emailTextFieldController,
+
               decoration: InputDecoration(
                 hintText: 'New Product Name',
                 labelText: 'New Product Name',
-
                 suffixIcon: Icon(
                   Icons.input,
                 ),
-                //errorText: _errorText,
               ),
-
+              initialValue: new_product_name,
               keyboardType: TextInputType.text,
               onChanged: (newText1) {
                 new_product_name = newText1;
               },
             ),
             TextFormField(
-              //controller: priceController,
-              initialValue: new_product_price.toString(),
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(
-                    RegExp(r'^(\d+)?\.?\d{0,2}'))
-              ],
+              //controller: emailTextFieldController,
+              initialValue: new_product_price,
               decoration: InputDecoration(
                 hintText: 'New Price',
                 labelText: 'New Price',
@@ -307,79 +279,43 @@ class _Single_prodState extends State<Single_prod> {
                   Icons.input,
                 ),
               ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType: TextInputType.text,
               onChanged: (newText2) {
                 new_product_price = newText2;
               },
-
             ),
-
-
-          TextFormField(
-              //controller: descController,
-            initialValue: new_product_desc,
+            TextFormField(
+              //controller: emailTextFieldController,
               keyboardType: TextInputType.multiline,
               minLines: 2, //Normal textInputField will be displayed
               maxLines: 5,
-
-
-            //TextField(
-              //controller: emailTextFieldController,
-              //keyboardType: TextInputType.multiline,
-              //minLines: 2, //Normal textInputField will be displayed
-              //maxLines: 5,
-
+              initialValue: new_product_desc,
               decoration: InputDecoration(
                 hintText: 'New Description',
                 labelText: 'New Description',
                 suffixIcon: Icon(
                   Icons.input,
                 ),
-
-                //errorText: errorDesc,
-
               ),
               onChanged: (newText3) {
                 new_product_desc = newText3;
               },
             ),
-          TextFormField(
-              //controller: imageController,
-            initialValue: new_product_image,
+            TextFormField(
+              //controller: emailTextFieldController,
+              initialValue: new_product_image,
               decoration: InputDecoration(
-              hintText: 'New image URL',
-              labelText: 'New image URL',
-              suffixIcon: Icon(
-                Icons.image,
+                hintText: 'New image URL',
+                labelText: 'New image URL',
+                suffixIcon: Icon(
+                  Icons.image,
+                ),
               ),
-               // errorText: _errorText,
+              keyboardType: TextInputType.text,
+              onChanged: (newText4) {
+                new_product_image = newText4;
+              },
             ),
-            keyboardType: TextInputType.text,
-
-            onChanged: (newText4) {
-              new_product_image = newText4;
-            },
-          ),
-
-          // StatefulBuilder(
-          //     builder: (BuildContext context, StateSetter dropDownState) {
-          //   return DropdownButton<String>(
-          //     hint: Text("Select Category"),
-          //     value: new_prod_category,
-          //     underline: Container(),
-          //     items: _categoryValues.map((String item) {
-          //       return DropdownMenuItem(
-          //         value: item,
-          //         child: Text(item),
-          //       );
-          //     }).toList(),
-          //     onChanged: (String value) {
-          //       dropDownState(() {
-          //         new_prod_category = value;
-          //       });
-          //
-          //     },
-          //   );
             StatefulBuilder(
                 builder: (BuildContext context, StateSetter dropDownState) {
               return DropdownButton<String>(
