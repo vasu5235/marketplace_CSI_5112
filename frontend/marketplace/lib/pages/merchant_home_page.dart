@@ -129,7 +129,7 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
             if (new_image_URL == null) {
               bodyData = {
                 "id": randomId,
-                "imageURL": "images/category_images/08.png",
+                "imageURL": "assets/images/category_images/08.png",
                 "name": new_category_name,
               };
             } else {
