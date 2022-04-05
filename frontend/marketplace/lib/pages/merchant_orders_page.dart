@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_session/flutter_session.dart';
 import '../constants/page_titles.dart';
 import '../widgets/app_scaffold.dart';
 import 'package:http/http.dart' as http;
@@ -41,7 +40,7 @@ class _mOrdersPageState extends State<mOrdersPage> {
   ];
   //var _UserValues = [''];
   List<User> users = [];
-  var _selectedValue = 0;
+  var _selectedValue;
   //var _selectedname = "user";
 
   Future getOrders() async {
@@ -65,7 +64,8 @@ class _mOrdersPageState extends State<mOrdersPage> {
     total_price = List.filled(jsonData.keys.length, 0);
     for (var i = 1; i <= jsonData.length; i++) {
       for (var j = 0; j < jsonData['${order_keys[i - 1]}'].length; j++) {
-        total_price[i - 1] += jsonData['${order_keys[i - 1]}'][j]['price'];
+        total_price[i - 1] += jsonData['${order_keys[i - 1]}'][j]['price'] *
+            jsonData['${order_keys[i - 1]}'][j]['quantity'];
       }
       //print(total_price[i - 1]);
     }
@@ -108,7 +108,7 @@ class _mOrdersPageState extends State<mOrdersPage> {
                                 hint: Text("Select User"),
                                 isExpanded: true,
                                 //value: _categoryValue,
-                                //value: _selectedValue,
+                                value: _selectedValue,
                                 //value: users[_selectedValue].name,
                                 icon: const Icon(Icons.keyboard_arrow_down),
                                 // Array list of items
@@ -123,7 +123,9 @@ class _mOrdersPageState extends State<mOrdersPage> {
                                   _selectedValue = value;
                                   //_selectedname = users[_selectedValue].name;
                                   setState(() {
-                                    _selectedValue;
+                                    _selectedValue = value;
+
+                                    //_selectedValue;
                                     //_selectedname;
                                     // print("==user name==");
                                     // print(users[_selectedValue].name);
@@ -144,7 +146,7 @@ class _mOrdersPageState extends State<mOrdersPage> {
                                 // Initial Value
                                 hint: Text("Select User"),
                                 isExpanded: true,
-                                //value: _selectedname,
+                                value: _selectedValue,
                                 //value: users[_selectedValue].name,
                                 icon: const Icon(Icons.keyboard_arrow_down),
 
@@ -161,7 +163,8 @@ class _mOrdersPageState extends State<mOrdersPage> {
                                   _selectedValue = value;
                                   setState(() {
                                     //_selectedname;
-                                    _selectedValue;
+                                    _selectedValue = value;
+                                    //_selectedValue;
                                     // _selectedname =
                                     //     users[_selectedValue - 1].name;
                                     // print(_selectedValue);
@@ -207,7 +210,6 @@ class _mOrdersPageState extends State<mOrdersPage> {
   }
 
   Widget BuildOrdersCards(index, order) {
-    print(order[index]);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -232,17 +234,26 @@ class _mOrdersPageState extends State<mOrdersPage> {
                       Column(
                         children: [
                           Text(
-                            // "Total: \$20",
-                            //"Total: \$ $total",
                             "Total: \$ ${total_price[index]}",
-                            //"Total: \$ 0",
-
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextButton.icon(
                             icon: Icon(Icons.download),
                             label: Text('Invoice'),
                             onPressed: () async {
+                              cartProducts = [
+                                {
+                                  'id': 9999999,
+                                  'name': 'sample Product',
+                                  'imageUrl':
+                                      'images/product_images/iphone.jpg',
+                                  'price': 400,
+                                  'quantity': 1,
+                                  'description': 'sample desc',
+                                  //add
+                                  'category': 'Food'
+                                },
+                              ];
                               for (var i = 0; i < order.length; i++) {
                                 cartProducts.add({
                                   'id': order[i]['id'],
@@ -336,7 +347,9 @@ class _mOrdersPageState extends State<mOrdersPage> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.w500),
                                   ),
-                                  subtitle: Text('\$${order[index]["price"]}'),
+                                  subtitle: Text(
+                                      '\$${order[index]["price"]}\nQty:${order[index]["quantity"]}'),
+                                  isThreeLine: true,
                                   leading: Padding(
                                       padding: const EdgeInsets.only(
                                           left: 10.0, right: 20.0),

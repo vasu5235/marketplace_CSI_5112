@@ -552,87 +552,90 @@ class _Single_prodState extends State<Single_prod> {
         this.widget.prod_name,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
       ),
-      content: new Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
+      content: SizedBox(
+        width: 20,
+        child: new Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.red),
+                ),
+                onPressed: () async {
+                  var response = await http.delete(Uri.parse(
+                      ApiUrl.delete_product + widget.prod_id.toString()));
+                  if (response.statusCode == 200) {
+                    Navigator.pushNamed(context, RouteNames.merchanthome);
+                  }
+                },
+                child: Text('Delete')),
+            TextField(
+              //controller: emailTextFieldController,
+              decoration: InputDecoration(
+                hintText: 'New Product Name',
+                labelText: 'New Product Name',
+                suffixIcon: Icon(
+                  Icons.input,
+                ),
               ),
-              onPressed: () async {
-                var response = await http.delete(Uri.parse(
-                    ApiUrl.delete_product + widget.prod_id.toString()));
-                if (response.statusCode == 200) {
-                  Navigator.pushNamed(context, RouteNames.merchanthome);
-                }
+              keyboardType: TextInputType.text,
+              onChanged: (newText1) {
+                new_product_name = newText1;
               },
-              child: Text('Delete')),
-          TextField(
-            //controller: emailTextFieldController,
-            decoration: InputDecoration(
-              hintText: 'New Product Name',
-              labelText: 'New Product Name',
-              suffixIcon: Icon(
-                Icons.input,
-              ),
             ),
-            keyboardType: TextInputType.text,
-            onChanged: (newText1) {
-              new_product_name = newText1;
-            },
-          ),
-          TextField(
-            //controller: emailTextFieldController,
-            decoration: InputDecoration(
-              hintText: 'New Price',
-              labelText: 'New Price',
-              suffixIcon: Icon(
-                Icons.input,
+            TextField(
+              //controller: emailTextFieldController,
+              decoration: InputDecoration(
+                hintText: 'New Price',
+                labelText: 'New Price',
+                suffixIcon: Icon(
+                  Icons.input,
+                ),
               ),
+              keyboardType: TextInputType.text,
+              onChanged: (newText2) {
+                new_product_price = newText2;
+              },
             ),
-            keyboardType: TextInputType.text,
-            onChanged: (newText2) {
-              new_product_price = newText2;
-            },
-          ),
-          TextField(
-            //controller: emailTextFieldController,
-            keyboardType: TextInputType.multiline,
-            minLines: 2, //Normal textInputField will be displayed
-            maxLines: 5,
+            TextField(
+              //controller: emailTextFieldController,
+              keyboardType: TextInputType.multiline,
+              minLines: 2, //Normal textInputField will be displayed
+              maxLines: 5,
 
-            decoration: InputDecoration(
-              hintText: 'New Description',
-              labelText: 'New Description',
-              suffixIcon: Icon(
-                Icons.input,
+              decoration: InputDecoration(
+                hintText: 'New Description',
+                labelText: 'New Description',
+                suffixIcon: Icon(
+                  Icons.input,
+                ),
               ),
-            ),
-            onChanged: (newText3) {
-              new_product_desc = newText3;
-            },
-          ),
-          StatefulBuilder(
-              builder: (BuildContext context, StateSetter dropDownState) {
-            return DropdownButton<String>(
-              hint: Text("Select Category"),
-              value: new_prod_category,
-              underline: Container(),
-              items: _categoryValues.map((String item) {
-                return DropdownMenuItem(
-                  value: item,
-                  child: Text(item),
-                );
-              }).toList(),
-              onChanged: (String value) {
-                dropDownState(() {
-                  new_prod_category = value;
-                });
+              onChanged: (newText3) {
+                new_product_desc = newText3;
               },
-            );
-          }),
-        ],
+            ),
+            StatefulBuilder(
+                builder: (BuildContext context, StateSetter dropDownState) {
+              return DropdownButton<String>(
+                hint: Text("Select Category"),
+                value: new_prod_category,
+                underline: Container(),
+                items: _categoryValues.map((String item) {
+                  return DropdownMenuItem(
+                    value: item,
+                    child: Text(item),
+                  );
+                }).toList(),
+                onChanged: (String value) {
+                  dropDownState(() {
+                    new_prod_category = value;
+                  });
+                },
+              );
+            }),
+          ],
+        ),
       ),
       actions: <Widget>[
         new ElevatedButton(

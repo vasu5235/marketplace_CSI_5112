@@ -1,56 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/route_names.dart';
-import 'package:http/http.dart' as http;
+//import 'package:marketplace/constants/route_names.dart';
 import 'package:marketplace/utils/cart_products_controller.dart';
-import '../../constants/api_url.dart';
-import 'dart:convert';
 
-class mProducts extends StatefulWidget {
+import '../constants/page_titles.dart';
+import '../widgets/app_scaffold.dart';
+//import 'package:flutter_session/flutter_session.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../constants/api_url.dart';
+
+class mSearchResultsPage extends StatefulWidget {
+  final String _searchTextValue;
+
+  const mSearchResultsPage(this._searchTextValue, {Key key}) : super(key: key);
+
   @override
-  _mProductsState createState() => _mProductsState();
+  State<mSearchResultsPage> createState() => _mSearchResultsPageState();
 }
 
-class _mProductsState extends State<mProducts> {
-  Future getProductList() async {
-    var response = await http.get(Uri.parse(ApiUrl.get_recent_product));
+class _mSearchResultsPageState extends State<mSearchResultsPage> {
+  Future searchProduct() async {
+    var response = await http.get(ApiUrl.search_by_product_name +
+        widget._searchTextValue.toString().toLowerCase());
     var jsonData = jsonDecode(response.body);
     print(jsonData);
     return jsonData;
+    //print(total_price[i - 1]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getProductList(),
-      builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return Container(
-            child: Center(
-              child: Text("Loading..."),
-            ),
-          );
-        } else {
-          CartProductsController cartController = new CartProductsController();
-          return GridView.builder(
-              physics: ScrollPhysics(), // to disable GridView's scrolling
-              shrinkWrap: true,
-              itemCount: snapshot.data.length,
-              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, crossAxisSpacing: 50),
-              itemBuilder: (context, index) {
-                return Single_prod(
-                  prod_id: snapshot.data[index]['id'],
-                  prod_name: snapshot.data[index]['name'],
-                  prod_picture: snapshot.data[index]['imageUrl'],
-                  prod_price: snapshot.data[index]['price'],
-                  prod_quantity: snapshot.data[index]['quantity'],
-                  prod_description: snapshot.data[index]['description'],
-                  prod_category: snapshot.data[index]['category'],
-                  cartController: cartController,
-                );
-              });
-        }
-      },
+    return AppScaffold(
+      pageTitle: PageTitles.searchResults,
+      body: FutureBuilder(
+        future: searchProduct(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return Container(
+              child: Center(
+                child: Text("Loading..."),
+              ),
+            );
+          } else if (snapshot.data.length == 0) {
+            return Container(
+              child: Center(
+                child: Text("Not Found"),
+              ),
+            );
+          } else {
+            CartProductsController cartController =
+                new CartProductsController();
+
+            return GridView.builder(
+                physics: ScrollPhysics(), // to disable GridView's scrolling
+                shrinkWrap: true,
+                itemCount: snapshot.data.length,
+                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3, crossAxisSpacing: 50),
+                itemBuilder: (context, index) {
+                  return Single_prod(
+                    prod_id: snapshot.data[index]['id'],
+                    prod_name: snapshot.data[index]['name'],
+                    prod_picture: snapshot.data[index]['imageUrl'],
+                    prod_price: snapshot.data[index]['price'],
+                    prod_quantity: snapshot.data[index]['quantity'],
+                    prod_description: snapshot.data[index]['description'],
+                    prod_category: snapshot.data[index]['category'],
+                    cartController: cartController,
+                  );
+                });
+          }
+        },
+      ),
     );
   }
 }
@@ -64,16 +86,15 @@ class Single_prod extends StatefulWidget {
   final prod_description;
   final prod_category;
   final CartProductsController cartController;
-  Single_prod({
-    this.prod_id,
-    this.prod_name,
-    this.prod_picture,
-    this.prod_price,
-    this.cartController,
-    this.prod_quantity,
-    this.prod_description,
-    this.prod_category,
-  });
+  Single_prod(
+      {this.prod_id,
+      this.prod_name,
+      this.prod_picture,
+      this.prod_price,
+      this.cartController,
+      this.prod_quantity,
+      this.prod_description,
+      this.prod_category});
 
   @override
   State<Single_prod> createState() => _Single_prodState();
@@ -197,8 +218,6 @@ class _Single_prodState extends State<Single_prod> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          // textColor: Colors.white,
-          // color: Colors.red,
           child: const Text('Close'),
         ),
         SizedBox(
