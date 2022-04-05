@@ -78,7 +78,6 @@ class _SignUpState extends State<SignUp> {
     return null;
   }
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -163,7 +162,8 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
                         keyboardType: TextInputType.emailAddress,
-                        onChanged: (enteredEmail) => validateEmail(enteredEmail),
+                        onChanged: (enteredEmail) =>
+                            validateEmail(enteredEmail),
                       ),
                       Text(message, textAlign: TextAlign.left),
                       SizedBox(
@@ -174,35 +174,33 @@ class _SignUpState extends State<SignUp> {
                         obscureText: visible,
                         validator: validatePassword,
                         decoration: InputDecoration(
-                          hintText: 'Password',
-                          labelText: 'Password',
-                          suffixIcon: Icon(
-                            Icons.lock_outline,
-                          ),
+                            hintText: 'Password',
+                            labelText: 'Password',
+                            suffixIcon: Icon(
+                              Icons.lock_outline,
+                            ),
                             suffix: InkWell(
                               child: visible
                                   ? Icon(
-                                Icons.visibility_off,
-                                size: 18,
-                                color: Colors.blue,
-                              )
+                                      Icons.visibility_off,
+                                      size: 18,
+                                      color: Colors.blue,
+                                    )
                                   : Icon(
-                                Icons.visibility,
-                                size: 18,
-                                color: Colors.blueAccent,
-                              ),
+                                      Icons.visibility,
+                                      size: 18,
+                                      color: Colors.blueAccent,
+                                    ),
                               onTap: () {
                                 setState(() {
                                   visible = !visible;
                                 });
                               },
-                            )
-                        ),
+                            )),
                       ),
                       SizedBox(
                         height: 64,
                       ),
-
                       GestureDetector(
                           onTap: () async {
                             // var test = _LogInState.getEmailTextControllerValue();
@@ -238,7 +236,15 @@ class _SignUpState extends State<SignUp> {
                                 // Retrieve the text the that user has entered by using the
                                 // TextEditingController.
                                 content: Text(
-                                    "Success!, please Login with your credentials with different email"),
+                                    "Success! please Login with your credentials"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () => {
+                                            Navigator.pushNamed(
+                                                context, RouteNames.start)
+                                          },
+                                      child: Text("Ok"))
+                                ],
                               );
 
                               showDialog(
@@ -306,12 +312,15 @@ class _SignUpState extends State<SignUp> {
                                   // print("===URL===" + url);
 
                                   var response = await http.post(url,
-                                      headers: {'Content-Type': 'application/json'},
+                                      headers: {
+                                        'Content-Type': 'application/json'
+                                      },
                                       body: body);
                                   print("Response\n" + response.body);
 
                                   if (response.body == "true") {
-                                    AlertDialog signUpResultDialog = AlertDialog(
+                                    AlertDialog signUpResultDialog =
+                                        AlertDialog(
                                       // Retrieve the text the that user has entered by using the
                                       // TextEditingController.
                                       content: Text(
@@ -403,6 +412,4 @@ class _SignUpState extends State<SignUp> {
       ),
     );
   }
-
-
 }
