@@ -281,7 +281,7 @@ class _Single_prodState extends State<Single_prod> {
               suffixIcon: Icon(
                 Icons.input,
               ),
-              errorText: _errorText,
+              //errorText: _errorText,
             ),
 
             keyboardType: TextInputType.text,
@@ -310,9 +310,8 @@ class _Single_prodState extends State<Single_prod> {
           TextField(
               controller: descController..text = widget.prod_description,
               keyboardType: TextInputType.multiline,
-              minLines: null, //Normal textInputField will be displayed
-              maxLines: null,
-              maxLength: 300,
+              minLines: 2, //Normal textInputField will be displayed
+              maxLines: 5,
 
               decoration: InputDecoration(
                 hintText: 'New Description',
@@ -320,7 +319,7 @@ class _Single_prodState extends State<Single_prod> {
                 suffixIcon: Icon(
                   Icons.input,
                 ),
-                errorText: errorDesc,
+                //errorText: errorDesc,
               ),
               onChanged: (newText3) {
                 new_product_desc = newText3;
@@ -334,7 +333,7 @@ class _Single_prodState extends State<Single_prod> {
               suffixIcon: Icon(
                 Icons.image,
               ),
-                errorText: _errorText,
+               // errorText: _errorText,
             ),
             keyboardType: TextInputType.multiline,
             maxLines: null,
