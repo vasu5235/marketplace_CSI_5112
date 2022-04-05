@@ -175,8 +175,8 @@ class _CategoryFilteredProductsPageState
   }
   final _categoryImage = TextEditingController();
   Widget Edit_Category_Popup(BuildContext context) {
-    var new_category_name;
-    var new_image_url = null;
+    var new_category_name = widget._categoryName;
+    var new_image_url = widget._imageLocation;
     return new AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 50,
@@ -188,8 +188,9 @@ class _CategoryFilteredProductsPageState
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TextField(
-            controller: _categoryName..text = widget._categoryName,
+          TextFormField(
+            //controller: _categoryName..text = widget._categoryName,
+
             decoration: InputDecoration(
               hintText: 'New Category Name',
               labelText: 'New Category Name',
@@ -198,13 +199,14 @@ class _CategoryFilteredProductsPageState
               ),
               errorText: _errorValidation,
             ),
+            initialValue: new_category_name,
             keyboardType: TextInputType.text,
             onChanged: (newText) {
               new_category_name = newText;
             },
           ),
-          TextField(
-            controller: _categoryImage..text = widget._imageLocation,
+          TextFormField(
+            //controller: _categoryImage..text = widget._imageLocation,
             decoration: InputDecoration(
               hintText: 'New Image URL',
               labelText: 'New Image URL',
@@ -212,6 +214,7 @@ class _CategoryFilteredProductsPageState
                 Icons.image,
               ),
             ),
+            initialValue: new_image_url,
             keyboardType: TextInputType.text,
             onChanged: (newText2) {
               new_image_url = newText2;
