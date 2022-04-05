@@ -1,7 +1,7 @@
 class ApiUrl {
   //local
-  static const String envUrl = "https://localhost:7136/api";
 
+  static const String envUrl = "https://localhost:7136/api";
   //prod
   //static const String envUrl = "https://services.vlearnings.net/api";
   //static const String envUrl = 'http://3.93.177.49/api';
