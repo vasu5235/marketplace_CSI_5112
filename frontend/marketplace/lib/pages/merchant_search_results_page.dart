@@ -228,10 +228,10 @@ class _Single_prodState extends State<Single_prod> {
   }
 
   Widget Edit_Product_Popup(BuildContext context, categories) {
-    var new_product_name;
-    var new_product_desc;
-    var new_product_price;
-    var new_product_image;
+    var new_product_name = widget.prod_name;
+    var new_product_desc = widget.prod_description;
+    var new_product_price = widget.prod_price.toString();
+    var new_product_image = widget.prod_picture;
     // String new_product_category = categories[0]['name'];
     // var cat_list = List.filled(categories.length, '');
 
@@ -253,8 +253,9 @@ class _Single_prodState extends State<Single_prod> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextField(
+            TextFormField(
               //controller: emailTextFieldController,
+
               decoration: InputDecoration(
                 hintText: 'New Product Name',
                 labelText: 'New Product Name',
@@ -262,13 +263,15 @@ class _Single_prodState extends State<Single_prod> {
                   Icons.input,
                 ),
               ),
+              initialValue: new_product_name,
               keyboardType: TextInputType.text,
               onChanged: (newText1) {
                 new_product_name = newText1;
               },
             ),
-            TextField(
+            TextFormField(
               //controller: emailTextFieldController,
+              initialValue: new_product_price,
               decoration: InputDecoration(
                 hintText: 'New Price',
                 labelText: 'New Price',
@@ -281,12 +284,12 @@ class _Single_prodState extends State<Single_prod> {
                 new_product_price = newText2;
               },
             ),
-            TextField(
+            TextFormField(
               //controller: emailTextFieldController,
               keyboardType: TextInputType.multiline,
               minLines: 2, //Normal textInputField will be displayed
               maxLines: 5,
-
+              initialValue: new_product_desc,
               decoration: InputDecoration(
                 hintText: 'New Description',
                 labelText: 'New Description',
@@ -298,8 +301,9 @@ class _Single_prodState extends State<Single_prod> {
                 new_product_desc = newText3;
               },
             ),
-            TextField(
+            TextFormField(
               //controller: emailTextFieldController,
+              initialValue: new_product_image,
               decoration: InputDecoration(
                 hintText: 'New image URL',
                 labelText: 'New image URL',

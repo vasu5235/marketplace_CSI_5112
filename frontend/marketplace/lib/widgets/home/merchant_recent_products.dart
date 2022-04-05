@@ -96,42 +96,43 @@ class _Single_prodState extends State<Single_prod> {
     return jsonData;
   }
 
-  // String get _errorText {
-  //   // at any time, we can get the text from _controller.value.text
-  //   final text = nameController.value.text;
-  //   // Note: you can do your own custom validation here
-  //   // Move this logic this outside the widget for more testable code
-  //   if (text.isEmpty) {
-  //     return 'Can\'t be empty';
-  //   }
-  //   if (text.length < 4) {
-  //     return 'Minimum 3 Characters required';
-  //   }
-  //   // return null if the text is valid
-  //   return null;
-  // }
-  // String get errorDesc {
-  //   // at any time, we can get the text from _controller.value.text
-  //   final text = descController.value.text;
-  //   // Note: you can do your own custom validation here
-  //   // Move this logic this outside the widget for more testable code
-  //   if (text.isEmpty) {
-  //     return 'Can\'t be empty';
-  //   }
-  //   if (text.length < 4) {
-  //     return 'Minimum 3 Characters required';
-  //   }
-  //   // return null if the text is valid
-  //   return null;
-  //
-  // }
-  //
-  // TextEditingController nameController = TextEditingController();
-  // TextEditingController imageController = TextEditingController();
-  // TextEditingController descController = TextEditingController();
-  // TextEditingController categoryController = TextEditingController();
-  // TextEditingController idController = TextEditingController();
-  // TextEditingController priceController = TextEditingController();
+  String get _errorText {
+    // at any time, we can get the text from _controller.value.text
+    final text = nameController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 3) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+  }
+  String get errorDesc {
+    // at any time, we can get the text from _controller.value.text
+    final text = descController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 3) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+
+  }
+
+  final nameController = TextEditingController();
+  final imageController = TextEditingController();
+  final descController = TextEditingController();
+  final categoryController = TextEditingController();
+  final idController = TextEditingController();
+  final priceController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -247,10 +248,10 @@ class _Single_prodState extends State<Single_prod> {
   }
 
   Widget Edit_Product_Popup(BuildContext context, categories) {
-    var new_product_name;
-    var new_product_desc;
-    var new_product_price;
-    var new_product_image;
+    var new_product_name=widget.prod_name;
+    var new_product_desc=widget.prod_description;
+    var new_product_price=widget.prod_price;
+    var new_product_image=widget.prod_picture;
     // String new_product_category = categories[0]['name'];
     // var cat_list = List.filled(categories.length, '');
 
@@ -274,14 +275,17 @@ class _Single_prodState extends State<Single_prod> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextField(
-              //controller: emailTextFieldController,
+            TextFormField(
+              //controller: nameController,
+              initialValue: new_product_name,
               decoration: InputDecoration(
                 hintText: 'New Product Name',
                 labelText: 'New Product Name',
+
                 suffixIcon: Icon(
                   Icons.input,
                 ),
+                //errorText: _errorText,
               ),
 
               keyboardType: TextInputType.text,
@@ -289,8 +293,13 @@ class _Single_prodState extends State<Single_prod> {
                 new_product_name = newText1;
               },
             ),
-            TextField(
-              //controller: emailTextFieldController,
+            TextFormField(
+              //controller: priceController,
+              initialValue: new_product_price.toString(),
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(
+                    RegExp(r'^(\d+)?\.?\d{0,2}'))
+              ],
               decoration: InputDecoration(
                 hintText: 'New Price',
                 labelText: 'New Price',
@@ -298,7 +307,7 @@ class _Single_prodState extends State<Single_prod> {
                   Icons.input,
                 ),
               ),
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               onChanged: (newText2) {
                 new_product_price = newText2;
               },
@@ -306,8 +315,9 @@ class _Single_prodState extends State<Single_prod> {
             ),
 
 
-          TextField(
-              //controller: descController..text = widget.prod_description,
+          TextFormField(
+              //controller: descController,
+            initialValue: new_product_desc,
               keyboardType: TextInputType.multiline,
               minLines: 2, //Normal textInputField will be displayed
               maxLines: 5,
@@ -333,8 +343,9 @@ class _Single_prodState extends State<Single_prod> {
                 new_product_desc = newText3;
               },
             ),
-          TextField(
-              //controller: imageController..text=widget.prod_picture,
+          TextFormField(
+              //controller: imageController,
+            initialValue: new_product_image,
               decoration: InputDecoration(
               hintText: 'New image URL',
               labelText: 'New image URL',

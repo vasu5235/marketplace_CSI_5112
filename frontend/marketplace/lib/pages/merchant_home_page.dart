@@ -86,18 +86,20 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextField(
-            controller: _categoryName,
+
             decoration: InputDecoration(
               hintText: 'Category Name',
               labelText: 'Category Name',
               suffixIcon: Icon(
                 Icons.input,
               ),
-              errorText: _errorValidation,
+              //errorText: _errorValidation,
             ),
+            controller: _categoryName,
             keyboardType: TextInputType.text,
             onChanged: (newText) {
               new_category_name = newText;
+              // setState(() => new_category_name = newText);
             },
           ),
           TextField(

@@ -480,9 +480,11 @@ class _Single_prodState extends State<Single_prod> {
   }
 
   Widget Edit_Product_Popup(BuildContext context, categories) {
-    var new_product_name;
-    var new_product_desc;
-    var new_product_price;
+    var new_product_name = widget.prod_name;
+    var new_product_desc = widget.prod_description;
+    var new_product_price = widget.prod_price.toString();
+    var new_product_image = widget.prod_picture;
+
     _categoryValues = List.filled(categories.length, '');
     new_prod_category = categories[0]['name'];
 
@@ -515,8 +517,9 @@ class _Single_prodState extends State<Single_prod> {
                   }
                 },
                 child: Text('Delete')),
-            TextField(
+            TextFormField(
               //controller: emailTextFieldController,
+              initialValue: new_product_name,
               decoration: InputDecoration(
                 hintText: 'New Product Name',
                 labelText: 'New Product Name',
@@ -529,8 +532,9 @@ class _Single_prodState extends State<Single_prod> {
                 new_product_name = newText1;
               },
             ),
-            TextField(
+            TextFormField(
               //controller: emailTextFieldController,
+              initialValue: new_product_price,
               decoration: InputDecoration(
                 hintText: 'New Price',
                 labelText: 'New Price',
@@ -543,8 +547,9 @@ class _Single_prodState extends State<Single_prod> {
                 new_product_price = newText2;
               },
             ),
-            TextField(
+            TextFormField(
               //controller: emailTextFieldController,
+              initialValue: new_product_desc,
               keyboardType: TextInputType.multiline,
               minLines: 2, //Normal textInputField will be displayed
               maxLines: 5,
@@ -558,6 +563,21 @@ class _Single_prodState extends State<Single_prod> {
               ),
               onChanged: (newText3) {
                 new_product_desc = newText3;
+              },
+            ),
+            TextFormField(
+              //controller: emailTextFieldController,
+              initialValue: new_product_image,
+              decoration: InputDecoration(
+                hintText: 'New image URL',
+                labelText: 'New image URL',
+                suffixIcon: Icon(
+                  Icons.image,
+                ),
+              ),
+              keyboardType: TextInputType.text,
+              onChanged: (newText4) {
+                new_product_image = newText4;
               },
             ),
             StatefulBuilder(
@@ -590,7 +610,7 @@ class _Single_prodState extends State<Single_prod> {
             Map bodyData = {
               "id": this.widget.prod_id,
               "name": new_product_name,
-              "imageUrl": this.widget.prod_picture,
+              "imageUrl": new_product_image,
               "description": new_product_desc,
               "category": new_prod_category,
               "price": new_product_price,
