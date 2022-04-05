@@ -126,7 +126,7 @@ class _OrdersPageState extends State<OrdersPage> {
   }
 
   Widget BuildOrdersCards(index, order) {
-    print(order[index]);
+    //print(order[index]);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(

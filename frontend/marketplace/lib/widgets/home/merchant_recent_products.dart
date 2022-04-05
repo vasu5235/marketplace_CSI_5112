@@ -260,18 +260,21 @@ class _Single_prodState extends State<Single_prod> {
     //   //print(total_price[i - 1]);
     // }
     return new AlertDialog(
+      // insetPadding: EdgeInsets.fromLTRB(300, 100, 300, 100),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 50,
+
       title: Text(
         this.widget.prod_name,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
       ),
       content: new Column(
+
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextField(
-            //controller: emailTextFieldController,
+            controller: nameController..text = widget.prod_name,
             decoration: InputDecoration(
               hintText: 'New Product Name',
               labelText: 'New Product Name',
@@ -287,7 +290,7 @@ class _Single_prodState extends State<Single_prod> {
             },
           ),
           TextFormField(
-            controller: priceController,
+            controller: priceController..text = widget.prod_price.toString(),
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(
                   RegExp(r'^(\d+)?\.?\d{0,2}'))
@@ -304,12 +307,12 @@ class _Single_prodState extends State<Single_prod> {
               new_product_price = newText2;
             },
           ),
-          Flexible(
-            child: TextField(
-              controller: descController,
+          TextField(
+              controller: descController..text = widget.prod_description,
               keyboardType: TextInputType.multiline,
-              minLines: 2, //Normal textInputField will be displayed
-              maxLines: 5,
+              minLines: null, //Normal textInputField will be displayed
+              maxLines: null,
+              maxLength: 300,
 
               decoration: InputDecoration(
                 hintText: 'New Description',
@@ -323,21 +326,23 @@ class _Single_prodState extends State<Single_prod> {
                 new_product_desc = newText3;
               },
             ),
-          ),
           TextField(
-            //controller: emailTextFieldController,
-            decoration: InputDecoration(
+              controller: imageController..text=widget.prod_picture,
+              decoration: InputDecoration(
               hintText: 'New image URL',
               labelText: 'New image URL',
               suffixIcon: Icon(
                 Icons.image,
               ),
+                errorText: _errorText,
             ),
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
             onChanged: (newText4) {
               new_product_image = newText4;
             },
           ),
+
           StatefulBuilder(
               builder: (BuildContext context, StateSetter dropDownState) {
             return DropdownButton<String>(

@@ -39,12 +39,6 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
     });
   }
 
-  // Future getProductList() async {
-  //   var response = await http.get(Uri.parse(
-  //       ApiUrl.get_product_by_category + widget._productName.toLowerCase()));
-  //   var jsonData = jsonDecode(response.body);
-  //   return jsonData;
-  // }
 
   TextEditingController nameController = TextEditingController();
   TextEditingController imageController = TextEditingController();
@@ -135,43 +129,6 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
                         labelText: 'Product Id',
                         suffixIcon: Icon(
                           Icons.fingerprint,
-
-//     return FutureBuilder(
-//       builder: (context, snapshot) {
-//         return Center(
-//           child: Card(
-//             elevation: 4,
-//             shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.all(
-//                 Radius.circular(25),
-//               ),
-//             ),
-//             child: AnimatedContainer(
-//               duration: Duration(milliseconds: 200),
-//               height: size.height *
-//                   (size.height > 770
-//                       ? 0.9
-//                       : size.height > 670
-//                           ? 0.8
-//                           : 0.9),
-//               width: 800,
-//               color: Colors.white,
-//               child: Center(
-//                 child: SingleChildScrollView(
-//                   child: Padding(
-//                     padding: EdgeInsets.all(20),
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         TextField(
-//                           controller: idController,
-//                           decoration: InputDecoration(
-//                             hintText: 'Product Id',
-//                             labelText: 'Product Id',
-//                             suffixIcon: Icon(
-//                               Icons.fingerprint,
-//                             ),
-//                           ),
 
                         ),
                 )
@@ -377,52 +334,3 @@ class _MerchantEditProductsState extends State<MerchantEditProducts> {
       }
 
   }
-  // Widget Delete_Product_Popup(BuildContext context) {
-  //   var response;
-  //   var jsonData;
-  //   return new AlertDialog(
-  //     // Retrieve the text the that user has entered by using the
-  //     // TextEditingController.
-  //     content: Text("Are you sure you want to delete ?"),
-  //     actions: [
-  //       TextButton(
-  //         //add actions here if needed
-  //           onPressed: () async => {
-  //             //deletehere
-  //             response = await http.delete(Uri.parse(
-  //                 ApiUrl.delete_product + widget.id.toString())),
-  //             jsonData = jsonDecode(response.body),
-  //             //print(jsonData),
-  //             if (jsonData == true)
-  //               {
-  //                 Navigator.pushNamed(context, RouteNames.merchanthome)
-  //                 // AlertDialog(
-  //                 //   // Retrieve the text the that user has entered by using the
-  //                 //   // TextEditingController.
-  //                 //   content: Text("Category deleted!"),
-  //                 //   actions: [
-  //                 //     TextButton(
-  //                 //         onPressed: () => {
-  //                 //               Navigator.pushNamed(
-  //                 //                   context, RouteNames.merchanthome)
-  //                 //             },
-  //                 //         child: Text("Ok"))
-  //                 //   ],
-  //                 // ),
-  //               },
-  //
-  //             //Navigator.pushNamed(context, RouteNames.merchanthome)
-  //           },
-  //           child: Text("Yes")),
-  //       ElevatedButton(
-  //           onPressed: () => {Navigator.of(context).pop()}, child: Text("No"))
-  //     ],
-  //   );
-
-    // showDialog(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return deleteProductSuccessDialog;
-    //   },
-    // );
-

@@ -189,11 +189,7 @@ class _LogInState extends State<LogIn> {
                               if (responseBodyData["isMerchant"] == true) {
                                 Navigator.pushNamed(
                                     context, RouteNames.merchanthome);
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => MerchantHomePage()),
-                                // );
+
                               } else {
                                 Navigator.pushNamed(context, RouteNames.home);
                               }
@@ -212,27 +208,6 @@ class _LogInState extends State<LogIn> {
                               );
                             }
 
-                            // if (response.body == "true") {
-                            //   var session = FlutterSession();
-                            //   await session.set("user_name", "Vasu Mistry");
-                            //   await session.set("user_email", email);
-                            //   await session.set("isLoggedIn", true);
-
-                            //   Navigator.pushNamed(context, RouteNames.home);
-                            // } else {
-                            //   AlertDialog signUpFailure = AlertDialog(
-                            //     // Retrieve the text the that user has entered by using the
-                            //     // TextEditingController.
-                            //     content: Text("Invalid credentials!"),
-                            //   );
-
-                            //   showDialog(
-                            //     context: context,
-                            //     builder: (BuildContext context) {
-                            //       return signUpFailure;
-                            //     },
-                            //   );
-                            // }
                           },
                           child: Container(
                             height: 50,
@@ -287,11 +262,7 @@ class _LogInState extends State<LogIn> {
                                     if (responseBodyData["isMerchant"] == true) {
                                       Navigator.pushNamed(
                                           context, RouteNames.merchanthome);
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //       builder: (context) => MerchantHomePage()),
-                                      // );
+
                                     } else {
                                       Navigator.pushNamed(context, RouteNames.home);
                                     }

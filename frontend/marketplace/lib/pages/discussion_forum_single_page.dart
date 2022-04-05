@@ -150,22 +150,6 @@ class _DiscussionForumSinglePageState extends State<DiscussionForumSinglePage> {
                           )),
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 60.0),
-                  //   child: SizedBox(
-                  //     height: MediaQuery.of(context).size.height * 0.6,
-                  //     width: MediaQuery.of(context).size.width * 0.6,
-                  //     child: ListView.builder(
-                  //       // reverse: true,
-                  //       itemCount: snapshot.data.length,
-                  //       itemBuilder: (context, index) {
-                  //         return BuildAnswerCard(
-                  //             snapshot.data[index]["userName"],
-                  //             snapshot.data[index]["description"]);
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             );
