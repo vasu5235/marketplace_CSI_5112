@@ -325,6 +325,14 @@ class _SignUpState extends State<SignUp> {
                                       // TextEditingController.
                                       content: Text(
                                           "Success!, please Login with your credentials"),
+                                      actions: [
+                                  TextButton(
+                                      onPressed: () => {
+                                            Navigator.pushNamed(
+                                                context, RouteNames.start)
+                                          },
+                                      child: Text("Ok"))
+                                ],
                                     );
 
                                     showDialog(
