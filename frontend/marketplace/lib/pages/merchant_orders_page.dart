@@ -74,13 +74,7 @@ class _mOrdersPageState extends State<mOrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Data from Constants.SAMPLE_ORDERS
-    // Layout:
-    // Container with BoxDecoration
-    //   Column:
-    //     Row (OrderId) + Column (Total+Invoice button)
-    //     Card
-    //       ListView of Card(ListTile)
+
     return AppScaffold(
       pageTitle: PageTitles.mOrders,
       body: Column(
@@ -164,24 +158,9 @@ class _mOrdersPageState extends State<mOrdersPage> {
                                   setState(() {
                                     //_selectedname;
                                     _selectedValue = value;
-                                    //_selectedValue;
-                                    // _selectedname =
-                                    //     users[_selectedValue - 1].name;
-                                    // print(_selectedValue);
-                                    // print("==user name==");
-                                    // print(_selectedname);
-                                    // print("==user name==");
-                                    print("==user id==");
-                                    print(_selectedValue);
-                                    print("==user id==");
-                                  });
+                                                                      });
                                 },
-                                // onChanged: (String value) {
-                                //   prod_category = value;
-                                //   setState(() {
-                                //     prod_category;
-                                //   });
-                                // }
+
                               ),
                               Expanded(
                                 child: ListView.builder(
@@ -369,37 +348,3 @@ class _mOrdersPageState extends State<mOrdersPage> {
     );
   }
 }
-
-/*
-Card(
-        elevation: 20,
-        child: Column(
-          children: [
-            ListTile(
-              title: const Text(
-                '1625 Main Street',
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              subtitle: const Text('My City, CA 99984'),
-              leading: Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 20.0),
-                child: Expanded(
-                  child: Image.asset("images/product_images/iphone.jpg"),
-                  // flex: 8,
-                ),
-              ),
-            ),
-            const Divider(),
-            ListTile(
-              title: const Text(
-                '(408) 555-1212',
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              leading: Icon(
-                Icons.contact_phone,
-                color: Colors.blue[500],
-              ),
-            ),
-          ],
-        ));
-*/

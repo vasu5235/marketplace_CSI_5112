@@ -6,7 +6,7 @@ import '../../constants/api_url.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:marketplace/utils/cart_products_controller.dart';
-//import 'package:marketplace/constants/route_names.dart';
+
 
 class CategoryFilteredProductsPage extends StatefulWidget {
   final String _categoryName;
@@ -107,7 +107,6 @@ class _CategoryFilteredProductsPageState
             } else {
               CartProductsController cartController =
                   new CartProductsController();
-              //print(snapshot.data);
               return GridView.builder(
                   physics: ScrollPhysics(), // to disable GridView's scrolling
                   shrinkWrap: true,
@@ -156,50 +155,25 @@ class _CategoryFilteredProductsPageState
                   if (jsonData == true)
                     {
                       Navigator.pushNamed(context, RouteNames.merchanthome)
-                      // AlertDialog(
-                      //   // Retrieve the text the that user has entered by using the
-                      //   // TextEditingController.
-                      //   content: Text("Category deleted!"),
-                      //   actions: [
-                      //     TextButton(
-                      //         onPressed: () => {
-                      //               Navigator.pushNamed(
-                      //                   context, RouteNames.merchanthome)
-                      //             },
-                      //         child: Text("Ok"))
-                      //   ],
-                      // ),
-                    },
 
-                  //Navigator.pushNamed(context, RouteNames.merchanthome)
+                    },
                 },
             child: Text("Yes")),
         ElevatedButton(
             onPressed: () => {Navigator.of(context).pop()}, child: Text("No"))
       ],
     );
-
-    // showDialog(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return deleteProductSuccessDialog;
-    //   },
-    // );
   }
 
   final _categoryName = TextEditingController();
   String get _errorValidation {
-    // at any time, we can get the text from _controller.value.text
     final text = _categoryName.value.text;
-    // Note: you can do your own custom validation here
-    // Move this logic this outside the widget for more testable code
     if (text.isEmpty) {
       return 'Can\'t be empty';
     }
-    // return null if the text is valid
     return null;
   }
-
+  final _categoryImage = TextEditingController();
   Widget Edit_Category_Popup(BuildContext context) {
     var new_category_name;
     var new_image_url = null;
@@ -215,7 +189,7 @@ class _CategoryFilteredProductsPageState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextField(
-            controller: _categoryName,
+            controller: _categoryName..text = widget._categoryName,
             decoration: InputDecoration(
               hintText: 'New Category Name',
               labelText: 'New Category Name',
@@ -230,14 +204,13 @@ class _CategoryFilteredProductsPageState
             },
           ),
           TextField(
-            //controller: _categoryName,
+            controller: _categoryImage..text = widget._imageLocation,
             decoration: InputDecoration(
               hintText: 'New Image URL',
               labelText: 'New Image URL',
               suffixIcon: Icon(
                 Icons.image,
               ),
-              //errorText: _errorValidation,
             ),
             keyboardType: TextInputType.text,
             onChanged: (newText2) {
@@ -249,7 +222,6 @@ class _CategoryFilteredProductsPageState
       actions: <Widget>[
         new ElevatedButton(
           onPressed: () async {
-            //Navigator.of(context).pop();
             String uri = ApiUrl.edit_category;
             Map bodyData;
             if (new_image_url == null) {
@@ -267,23 +239,16 @@ class _CategoryFilteredProductsPageState
             }
 
             var body = json.encode(bodyData);
-            // print("====body===");
-            // print(body);
             var response = await http.put(uri,
                 headers: {
                   'Content-Type': 'application/json',
                   'accept': 'text/plain'
                 },
                 body: body);
-            //print("Response\n" + response.body);
 
             if (response.body == "true") {
-              //print('=====EDIT SUCCESS');
-              //Navigator.of(context).pop();
-              //AlertDialog(content: Text("Category name updated !"));
+
               AlertDialog editProductSuccessDialog = AlertDialog(
-                // Retrieve the text the that user has entered by using the
-                // TextEditingController.
                 content: Text("Category name updated !"),
                 actions: [
                   TextButton(
@@ -301,19 +266,16 @@ class _CategoryFilteredProductsPageState
                   return editProductSuccessDialog;
                 },
               );
-              //Navigator.pushNamed(context, RouteNames.merchanthome);
             }
           },
-          // textColor: Colors.white,
-          // color: Colors.red,
+
           child: const Text('Save'),
         ),
         new TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          // textColor: Colors.white,
-          // color: Colors.red,
+
           child: const Text('Close'),
         ),
         SizedBox(
@@ -362,12 +324,8 @@ class _Single_prodState extends State<Single_prod> {
     return jsonData;
   }
 
-  // var cat_list = [''];
-  // String new_product_category;
-
   @override
   Widget build(BuildContext context) {
-    //print("description: " + prod_description.toString());
     if (widget.userIsMerchant) {
       return Container(
         margin: EdgeInsets.all(15),
@@ -376,8 +334,6 @@ class _Single_prodState extends State<Single_prod> {
             child: Material(
                 child: InkWell(
               onTap: () {
-                // Navigator.pushNamed(context, RouteNames.product,
-                //     arguments: prod_id);
                 showDialog(
                   context: context,
                   builder: (BuildContext context) => PopupDialog(context),
@@ -415,11 +371,6 @@ class _Single_prodState extends State<Single_prod> {
                             );
                           })),
                   child: Image.network(widget.prod_picture, fit: BoxFit.cover)
-                  // child: Image.asset(
-                  //   widget.prod_picture,
-                  //   fit: BoxFit.cover,
-                  // )
-
                   ),
             ))),
       );
@@ -431,9 +382,7 @@ class _Single_prodState extends State<Single_prod> {
             child: Material(
                 child: InkWell(
               onTap: () {
-                // Navigator.pushNamed(context, RouteNames.product,
-                //     arguments: prod_id);
-                showDialog(
+                  showDialog(
                   context: context,
                   builder: (BuildContext context) => PopupDialog(context),
                 );
@@ -480,11 +429,7 @@ class _Single_prodState extends State<Single_prod> {
                     ),
                   ),
                   child: Image.network(widget.prod_picture, fit: BoxFit.cover)
-                  // child: Image.asset(
-                  //   widget.prod_picture,
-                  //   fit: BoxFit.cover,
-                  // )
-                  ),
+                ),
             ))),
       );
     }
@@ -663,9 +608,7 @@ class _Single_prodState extends State<Single_prod> {
             //print("Response\n" + response.body);
 
             if (response.body == "false") {
-              //print('=====EDIT SUCCESS');
-              //Navigator.of(context).pop();
-              //AlertDialog(content: Text("Category name updated !"));
+
               AlertDialog editProductSuccessDialog = AlertDialog(
                 // Retrieve the text the that user has entered by using the
                 // TextEditingController.
@@ -685,13 +628,7 @@ class _Single_prodState extends State<Single_prod> {
               );
               //Navigator.pushNamed(context, RouteNames.merchanthome);
             } else {
-              //Navigator.of(context).pop();
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => CategoryFilteredProductsPage(
-              //           id, image_caption, image_location),
-              //     ));
+
               Navigator.pushNamed(context, RouteNames.merchanthome);
             }
           },

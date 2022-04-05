@@ -42,12 +42,6 @@ class CustomFormField extends StatelessWidget {
   }
 }
 
-// extension extString on String {
-//   bool get isNotNull{
-//     return this!=null;
-//   }
-// }
-
 class _DiscussionForumPageState extends State<DiscussionForumPage> {
   int _userId = -1;
   var _userName = "default user";

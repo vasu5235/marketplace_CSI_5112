@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marketplace/constants/route_names.dart';
 import 'package:http/http.dart' as http;
 import 'package:marketplace/utils/cart_products_controller.dart';
@@ -94,6 +95,43 @@ class _Single_prodState extends State<Single_prod> {
 
     return jsonData;
   }
+
+  String get _errorText {
+    // at any time, we can get the text from _controller.value.text
+    final text = nameController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 4) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+  }
+  String get errorDesc {
+    // at any time, we can get the text from _controller.value.text
+    final text = descController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (text.isEmpty) {
+      return 'Can\'t be empty';
+    }
+    if (text.length < 4) {
+      return 'Minimum 3 Characters required';
+    }
+    // return null if the text is valid
+    return null;
+
+  }
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+  TextEditingController categoryController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -222,8 +260,10 @@ class _Single_prodState extends State<Single_prod> {
     //   //print(total_price[i - 1]);
     // }
     return new AlertDialog(
+      // insetPadding: EdgeInsets.fromLTRB(300, 100, 300, 100),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 50,
+
       title: Text(
         this.widget.prod_name,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
@@ -262,11 +302,24 @@ class _Single_prodState extends State<Single_prod> {
                 new_product_price = newText2;
               },
             ),
-            TextField(
-              //controller: emailTextFieldController,
+
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (newText2) {
+              new_product_price = newText2;
+            },
+          ),
+          TextField(
+              controller: descController..text = widget.prod_description,
               keyboardType: TextInputType.multiline,
               minLines: 2, //Normal textInputField will be displayed
               maxLines: 5,
+              maxLength: 300,
+
+            //TextField(
+              //controller: emailTextFieldController,
+              //keyboardType: TextInputType.multiline,
+              //minLines: 2, //Normal textInputField will be displayed
+              //maxLines: 5,
 
               decoration: InputDecoration(
                 hintText: 'New Description',
@@ -274,23 +327,59 @@ class _Single_prodState extends State<Single_prod> {
                 suffixIcon: Icon(
                   Icons.input,
                 ),
+
+                errorText: errorDesc,
               ),
               onChanged: (newText3) {
                 new_product_desc = newText3;
               },
             ),
-            TextField(
-              //controller: emailTextFieldController,
+          TextField(
+              controller: imageController..text=widget.prod_picture,
               decoration: InputDecoration(
-                hintText: 'New image URL',
-                labelText: 'New image URL',
-                suffixIcon: Icon(
-                  Icons.image,
-                ),
+              hintText: 'New image URL',
+              labelText: 'New image URL',
+              suffixIcon: Icon(
+                Icons.image,
               ),
-              keyboardType: TextInputType.text,
-              onChanged: (newText4) {
-                new_product_image = newText4;
+                errorText: _errorText,
+            ),
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            onChanged: (newText4) {
+              new_product_image = newText4;
+            },
+          ),
+
+          StatefulBuilder(
+              builder: (BuildContext context, StateSetter dropDownState) {
+            return DropdownButton<String>(
+              hint: Text("Select Category"),
+              value: new_prod_category,
+              underline: Container(),
+              items: _categoryValues.map((String item) {
+                return DropdownMenuItem(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+              onChanged: (String value) {
+                dropDownState(() {
+                  new_prod_category = value;
+                });
+
+            //TextField(
+              //controller: emailTextFieldController,
+              //decoration: InputDecoration(
+                //hintText: 'New image URL',
+                //labelText: 'New image URL',
+                //suffixIcon: Icon(
+                  //Icons.image,
+                //),
+              //),
+              //keyboardType: TextInputType.text,
+              //onChanged: (newText4) {
+                //new_product_image = newText4;
               },
             ),
             StatefulBuilder(
