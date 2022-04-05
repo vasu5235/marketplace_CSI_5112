@@ -110,6 +110,7 @@ class _Single_prodState extends State<Single_prod> {
     // return null if the text is valid
     return null;
   }
+
   String get errorDesc {
     // at any time, we can get the text from _controller.value.text
     final text = descController.value.text;
@@ -123,7 +124,6 @@ class _Single_prodState extends State<Single_prod> {
     }
     // return null if the text is valid
     return null;
-
   }
 
   TextEditingController nameController = TextEditingController();
@@ -303,19 +303,19 @@ class _Single_prodState extends State<Single_prod> {
               },
             ),
 
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (newText2) {
-              new_product_price = newText2;
-            },
-          ),
-          TextField(
+            // keyboardType: TextInputType.numberWithOptions(decimal: true),
+            // onChanged: (newText2) {
+            //   new_product_price = newText2;
+            // },
+
+            TextField(
               controller: descController..text = widget.prod_description,
               keyboardType: TextInputType.multiline,
               minLines: 2, //Normal textInputField will be displayed
               maxLines: 5,
               maxLength: 300,
 
-            //TextField(
+              //TextField(
               //controller: emailTextFieldController,
               //keyboardType: TextInputType.multiline,
               //minLines: 2, //Normal textInputField will be displayed
@@ -327,61 +327,29 @@ class _Single_prodState extends State<Single_prod> {
                 suffixIcon: Icon(
                   Icons.input,
                 ),
-
                 errorText: errorDesc,
               ),
               onChanged: (newText3) {
                 new_product_desc = newText3;
               },
             ),
-          TextField(
-              controller: imageController..text=widget.prod_picture,
+            TextField(
+              controller: imageController..text = widget.prod_picture,
               decoration: InputDecoration(
-              hintText: 'New image URL',
-              labelText: 'New image URL',
-              suffixIcon: Icon(
-                Icons.image,
-              ),
+                hintText: 'New image URL',
+                labelText: 'New image URL',
+                suffixIcon: Icon(
+                  Icons.image,
+                ),
                 errorText: _errorText,
-            ),
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            onChanged: (newText4) {
-              new_product_image = newText4;
-            },
-          ),
-
-          StatefulBuilder(
-              builder: (BuildContext context, StateSetter dropDownState) {
-            return DropdownButton<String>(
-              hint: Text("Select Category"),
-              value: new_prod_category,
-              underline: Container(),
-              items: _categoryValues.map((String item) {
-                return DropdownMenuItem(
-                  value: item,
-                  child: Text(item),
-                );
-              }).toList(),
-              onChanged: (String value) {
-                dropDownState(() {
-                  new_prod_category = value;
-                });
-
-            //TextField(
-              //controller: emailTextFieldController,
-              //decoration: InputDecoration(
-                //hintText: 'New image URL',
-                //labelText: 'New image URL',
-                //suffixIcon: Icon(
-                  //Icons.image,
-                //),
-              //),
-              //keyboardType: TextInputType.text,
-              //onChanged: (newText4) {
-                //new_product_image = newText4;
+              ),
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              onChanged: (newText4) {
+                new_product_image = newText4;
               },
             ),
+
             StatefulBuilder(
                 builder: (BuildContext context, StateSetter dropDownState) {
               return DropdownButton<String>(
@@ -398,6 +366,19 @@ class _Single_prodState extends State<Single_prod> {
                   dropDownState(() {
                     new_prod_category = value;
                   });
+
+                  //TextField(
+                  //controller: emailTextFieldController,
+                  //decoration: InputDecoration(
+                  //hintText: 'New image URL',
+                  //labelText: 'New image URL',
+                  //suffixIcon: Icon(
+                  //Icons.image,
+                  //),
+                  //),
+                  //keyboardType: TextInputType.text,
+                  //onChanged: (newText4) {
+                  //new_product_image = newText4;
                 },
               );
             }),
