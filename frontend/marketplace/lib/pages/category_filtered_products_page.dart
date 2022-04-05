@@ -197,7 +197,7 @@ class _CategoryFilteredProductsPageState
               suffixIcon: Icon(
                 Icons.input,
               ),
-              errorText: _errorValidation,
+              //errorText: _errorValidation,
             ),
             initialValue: new_category_name,
             keyboardType: TextInputType.text,
