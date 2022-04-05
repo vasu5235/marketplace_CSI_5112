@@ -20,16 +20,6 @@ class _OrdersPageState extends State<OrdersPage> {
   var order_keys;
   var total_price;
   static var cartProducts = [
-    // {
-    //   //"id": 10,
-    //   'name': 'iPhone 123',
-    //   'imageUrl': 'images/product_images/iphone.jpg',
-    //   //"description": "asdasd",
-    //   //"category": "cloth",
-    //   'price': 100,
-    //   //"quantity": 1
-    // },
-
     {
       'id': 9999999,
       'name': 'sample Product',
@@ -52,7 +42,8 @@ class _OrdersPageState extends State<OrdersPage> {
     total_price = List.filled(jsonData.keys.length, 0);
     for (var i = 1; i <= jsonData.length; i++) {
       for (var j = 0; j < jsonData['${order_keys[i - 1]}'].length; j++) {
-        total_price[i - 1] += jsonData['${order_keys[i - 1]}'][j]['price'];
+        total_price[i - 1] += jsonData['${order_keys[i - 1]}'][j]['price'] *
+            jsonData['${order_keys[i - 1]}'][j]['quantity'];
       }
       //print(total_price[i - 1]);
     }
@@ -94,7 +85,7 @@ class _OrdersPageState extends State<OrdersPage> {
                         if (snapshot.data == null) {
                           return Container(
                             child: Center(
-                              child: Text("Loading..."),
+                              child: Text("No orders yet."),
                             ),
                           );
                         } else if (snapshot.data.length == 0) {
@@ -108,6 +99,7 @@ class _OrdersPageState extends State<OrdersPage> {
                             //physics: ScrollPhysics(),
                             //shrinkWrap: true,
                             itemCount: snapshot.data.length,
+
                             itemBuilder: (context, index) {
                               return BuildOrdersCards(
                                   index, snapshot.data[order_keys[index]]);
@@ -126,7 +118,6 @@ class _OrdersPageState extends State<OrdersPage> {
   }
 
   Widget BuildOrdersCards(index, order) {
-    print(order[index]);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -162,6 +153,19 @@ class _OrdersPageState extends State<OrdersPage> {
                             icon: Icon(Icons.download),
                             label: Text('Invoice'),
                             onPressed: () async {
+                              cartProducts = [
+                                {
+                                  'id': 9999999,
+                                  'name': 'sample Product',
+                                  'imageUrl':
+                                      'images/product_images/iphone.jpg',
+                                  'price': 400,
+                                  'quantity': 1,
+                                  'description': 'sample desc',
+                                  //add
+                                  'category': 'Food'
+                                },
+                              ];
                               for (var i = 0; i < order.length; i++) {
                                 cartProducts.add({
                                   'id': order[i]['id'],
@@ -255,7 +259,9 @@ class _OrdersPageState extends State<OrdersPage> {
                                     style:
                                         TextStyle(fontWeight: FontWeight.w500),
                                   ),
-                                  subtitle: Text('\$${order[index]["price"]}'),
+                                  subtitle: Text(
+                                      '\$${order[index]["price"]}\nQty:${order[index]["quantity"]}'),
+                                  isThreeLine: true,
                                   leading: Padding(
                                     padding: const EdgeInsets.only(
                                         left: 10.0, right: 20.0),

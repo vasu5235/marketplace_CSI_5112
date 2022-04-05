@@ -10,8 +10,6 @@ class CartProducts extends StatefulWidget {
 }
 
 class _CartProductsState extends State<CartProducts> {
-  // var _productList = Constants.SAMPLE_CART_PRODUCTS;
-  // var _productList = CartProductsController().getProducts();
   @override
   Widget build(BuildContext context) {
     // Return all products displayed using Card in a SizedBox. Iterate using ListView
@@ -31,22 +29,11 @@ class _CartProductsState extends State<CartProducts> {
       child: ListView.builder(
         itemCount: _productList.length,
         itemBuilder: (context, index) {
-          // if (index == 0) return Container();
-          // if (_productList == []) {
-          //   return Text("Your cart is empty");
-
-          // }
-          //return Text("Your cart is empty");
-
           return SingleCartProduct(
               productName: _productList[index]['name'],
               productImageURL: _productList[index]['imageUrl'],
               productPrice: _productList[index]['price'],
               productQuantity: _productList[index]['quantity']);
-
-          //productName: _productList[index]['name'],
-          //productImageURL: _productList[index]['imageUrl'],
-          //productPrice: _productList[index]['price'],
         },
       ),
     );
@@ -93,9 +80,7 @@ class _SingleCartProductState extends State<SingleCartProduct> {
                     ),
                     child:
                         Image.network(widget.productImageURL, fit: BoxFit.fill),
-                    // child:
-                    //     Image.asset(widget.productImageURL, fit: BoxFit.fill),
-                  ),
+                    ),
                 ),
                 Expanded(
                   child: Container(
